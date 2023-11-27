@@ -1,0 +1,21 @@
+body {
+    margin: 1em;
+    background-color: #fff;
+    color: #000;
+}
+
+.headerStyle {
+    color: '#fff';
+    font-size: '30px';
+}
+
+#container {
+    padding: 1em;
+    border: solid 2px #aaa;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.btnDash {
+    
+}
