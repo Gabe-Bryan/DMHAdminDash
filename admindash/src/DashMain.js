@@ -31,7 +31,10 @@ for (let i = 1; i < 100; i++) {
     })
 }
 
-
+/*
+let uriGet = 'https://localhost:5500/music/songs',
+    apiData = fetch(uriGet).then(async response=>console.log(await response.json()));
+*/
 
 function DashMain() {
     return (
