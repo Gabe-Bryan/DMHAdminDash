@@ -1,30 +1,30 @@
 import './DashMain.css'
-import {Table, Button, Layout, Input, Space} from "antd";
-const { Header, Sider, Content } = Layout
+// import {Table, Button, Layout, Input, Space} from "antd";
+// const { Header, Sider, Content } = Layout
 
-let cols = [
-    {
-        title: 'Index',
-        dataIndex: 'key',
-        key: 'key'
-    },
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title'
-    },
-    {
-        title: 'Game',
-        dataIndex: 'game',
-        key: 'game'
-    }
-]
+// let cols = [
+//     {
+//         title: 'Index',
+//         dataIndex: 'key',
+//         key: 'key'
+//     },
+//     {
+//         title: 'Title',
+//         dataIndex: 'title',
+//         key: 'title'
+//     },
+//     {
+//         title: 'Game',
+//         dataIndex: 'game',
+//         key: 'game'
+//     }
+// ]
 
-let data = []
+let fakeData = []
 
 // Generate fake test data
 for (let i = 1; i < 100; i++) {
-    data.push({
+    fakeData.push({
         key: `${i}`,
         title: `Song ${i}`,
         game: `Destiny ${i%2===0?'1':'2'}`
@@ -36,40 +36,52 @@ let uriGet = 'https://localhost:5500/music/songs',
     apiData = fetch(uriGet).then(async response=>console.log(await response.json()));
 */
 
+
+
 function DashMain() {
+
+    function populateDataTable(data) {
+        let table = document.querySelector("table")
+
+        if (!table) return;
+    
+        function addCell(tr, text) {
+            let td = tr.insertCell()
+            td.textContent = text
+            return td
+        }
+    
+        data.forEach(item => {
+            let row = table.insertRow()
+            addCell(row, item.key)
+            addCell(row, item.title)
+            addCell(row, item.game)
+        })
+    }
+
     return (
         <div id='container'>
-            
-            <Header class="headerStyle">
-                <Space direction="vertical" style={{display: 'flex'}}>
-                    <h1>Admin Dashboard</h1>
-                    <Input placeholder="Filter" />
-                </Space>
-            </Header>
-
-            <Layout>
-                <Space direction='horizontal' style={{display: 'flex'}}>
-                    <Content>
-                        <Table
-                            bordered
-                            pagination={false}
-                            virtual scroll={{ x: 1, y: 400 }}
-                            dataSource={data}
-                            columns={cols}
-                        />
-                    </Content>
-                </Space>
-
-                <Sider vertical>
-                    <Space direction="vertical" style={{display: 'block'}}>
-                        <Button class='btnDash' block>Add Song</Button>
-                        <Button class='btnDash' block>Edit song</Button>
-                    </Space>
-                </Sider>
-
-                
-            </Layout>
-            
+            <h1>Admin dashboard</h1>
+            <div id='dataAndFilter'>
+                <input type='search' id='filter'></input>
+                <div class='tableFixHead'>
+                    <table >
+                        <thead>
+                            <th>Index</th>
+                            <th>Title</th>
+                            <th>Game</th>
+                        </thead>
+                        <tbody>
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id='buttons'>
+                <button id='btnAddSong' disabled>Add song</button>
+                <button id='btnEditSong' disabled>Edit song</button>
+            </div>
+            {populateDataTable(fakeData)}
         </div>
     )
 }
