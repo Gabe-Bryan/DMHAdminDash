@@ -22,6 +22,7 @@ function AddSongForm(){
 
     const customDarkTheme={
         token: {
+            
             // Seed Token
             colorPrimary: '#7458e2',
             // Alias Token
@@ -33,14 +34,15 @@ function AddSongForm(){
     const lightMode={
         
             token: {
-              // Seed Token
-              colorPrimary: '#f54245',
-              // Alias Token
-              colorBgContainer: '#f54245',
+            colorText: '#7458e2',
+               // Seed Token
+            colorPrimary: '#7458e2',
+            // Alias Token
+            colorBgContainer: '#fbf3ff',
             },
     }
     
-    const currentTheme=customDarkTheme
+    const currentTheme=lightMode
     return( 
         
         <ConfigProvider theme={currentTheme}>
@@ -56,8 +58,8 @@ function AddSongForm(){
         </Content>
         <div style={{width:"80%"}}>
         <Space>
-        <Button onClick={()=>newSource} ghost>Add New Source</Button>
-        <Button onClick={()=>enterButton('song')} ghost>Enter Song and Sources Into Database</Button>
+        <Button type="default" onClick={()=>newSource} >Add New Source</Button>
+        <Button onClick={()=>enterButton('song')} >Enter Song and Sources Into Database</Button>
         </Space>
         </div>
         </ConfigProvider>
