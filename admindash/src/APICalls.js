@@ -1,7 +1,8 @@
 //uri
-require('dotenv').config();
-const uri = process.env.SERVER_URI||"http://localhost:5000"
-const api_key=process.env.API_KEY||""
+//require('dotenv').config();
+const uri = "http://localhost:5000"
+//process.env.SERVER_URI||
+//const api_key=process.env.REACT_APP_API_KEY||""
 
 const getSongs = async(song_query)=>{
     const uriGet = uri+'/music/songs'
@@ -21,7 +22,7 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data)=>{
         method: "POST",
         headers:{
             'content-type': 'application/json',
-            'api_key':api_key
+            //'api_key':api_key
         },
         body: JSON.stringify({title:song_title, soundtrack_id:_soundtrack_id, meta_data: meta_data})
     }).then(async resp=>{await resp.json()
@@ -50,7 +51,8 @@ const addNewSongURL= async(url, _song_index, source_type, alt_theme, official_ti
     });
 };
 //this is a simple call for frontend
-const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
+//const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
 //addNewSongURL("https://www.youtube.com/watch?v=lzYg5d2KDF0",newSong,"Youtube","Ambient","Thirsty_Bois")
 //console.log(newSong.body)
 //getAllSongs()
+export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL };

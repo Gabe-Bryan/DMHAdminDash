@@ -1,10 +1,12 @@
 import React from "react";
 import {Button, Layout, Input, Space, ConfigProvider, theme,Form} from "antd";
 import { Content } from "antd/es/layout/layout";
+import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 
 const onFinish = (values) => {
   console.log('Success:', values);
   console.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}})
+  addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer})
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
