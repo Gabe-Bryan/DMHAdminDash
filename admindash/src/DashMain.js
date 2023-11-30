@@ -1,28 +1,26 @@
-import './DashMain.css'
-// import {Table, Button, Layout, Input, Space} from "antd";
-// const { Header, Sider, Content } = Layout
+import React from "react";
+import {Table, Button, Layout, Input, Space} from "antd";
+const { Header, Footer, Sider, Content } = Layout
 
-// let cols = [
-//     {
-//         title: 'Index',
-//         dataIndex: 'key',
-//         key: 'key'
-//     },
-//     {
-//         title: 'Title',
-//         dataIndex: 'title',
-//         key: 'title'
-//     },
-//     {
-//         title: 'Game',
-//         dataIndex: 'game',
-//         key: 'game'
-//     }
-// ]
+let cols = [
+    {
+        title: 'Index',
+        dataIndex: 'key',
+        key: 'key'
+    },
+    {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title'
+    },
+    {
+        title: 'Game',
+        dataIndex: 'game',
+        key: 'game'
+    }
+]
 
 let fakeData = []
-
-// Generate fake test data
 for (let i = 1; i < 100; i++) {
     fakeData.push({
         key: `${i}`,
@@ -31,54 +29,55 @@ for (let i = 1; i < 100; i++) {
     })
 }
 
-/*
-let uriGet = 'https://localhost:5500/music/songs',
-    apiData = fetch(uriGet).then(async response=>console.log(await response.json()));
-*/
+let data = [],
+    uriGet = 'https://localhost:5500/music/songs',
+    apiFetch = fetch(uriGet).then(response=>console.log(response.json()));
 
-function populateDataTable(data) {
-    let table = document.querySelector("table");
+console.log(apiFetch)
 
-
-    function addCell(tr, text) {
-        let td = tr.insertCell()
-        td.textContent = text
-        return td
-    }
-
-    data.forEach(item => {
-        let row = table.insertRow()
-        addCell(row, item.key)
-        addCell(row, item.title)
-        addCell(row, item.game)
-    })
+const headerStyle = {
+    color: '#fff',
+    fontSize: '30px',
+    justifyContent: 'left',
 }
 
-
-function DashMain() {
-    
+function Test() {
     return (
-        <div id='container'>
-            <h1>Admin dashboard</h1>
-            <div id='dataAndFilter'>
-                <input type='search' id='filter' placeholder='filter'></input>
-                <div className='tableFixHead'>
-                    <table >
-                        <thead>
-                            <th>Index</th>
-                            <th>Title</th>
-                            <th>Game</th>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-            <div id='buttons'>
-                <button id='btnAddSong' disabled>Add song</button>
-                <button id='btnEditSong' disabled>Edit song</button>
-            </div>
-        </div>
+        <Layout>
+            
+            <Header style={headerStyle}>
+                <Space direction="vertical" style={{display: 'block'}}>
+                    <Input placeholder="Filter" />
+                </Space>
+            </Header>
+
+            <Layout>
+                <Space direction='horizontal' style={{display: 'flex'}}>
+                    <Content>
+                        <Table
+                            bordered
+                            pagination={false}
+                            virtual scroll={{ x: 1, y: 500 }}
+                            dataSource={fakeData}
+                            columns={cols}
+                        />
+                    </Content>
+                </Space>
+
+                <Sider>
+                    <Space direction="vertical" style={{display: 'flex'}}>
+                        <Button block>Add Song</Button>
+                        <Button block>Edit song</Button>
+                    </Space>
+                </Sider>
+
+            </Layout>
+
+            <Footer>
+            </Footer>
+            
+        </Layout>
     )
 }
 
-export default DashMain
+export default Test
