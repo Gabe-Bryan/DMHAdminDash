@@ -40,51 +40,52 @@ let cols = [
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() )
-console.log(data)
+let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() ).catch(()=>[])
 
-const headerStyle = {
-    color: '#fff',
-    fontSize: '30px',
-}
+let styleHFS = {backgroundColor: '#ddd'},
+    styleBtn = {width: '11em'},
+    styleFilter = {paddingRight: '2em'}
+
 
 function Test() {
     return (
-        <Layout>
-            
-            <Header style={headerStyle}>
-                <Space direction="vertical" style={{display: 'block'}}>
-                    <Input placeholder="Filter" />
-                </Space>
-            </Header>
-
+        <div>
+            <center><h1>Admin Dashboard</h1></center>    
+        
             <Layout>
-                <Space direction='horizontal' style={{display: 'flex'}}>
-                    <Content>
-                        <Table
-                            bordered
-                            pagination={false}
-                            virtual scroll={{ x: 1, y: 500 }}
-                            dataSource={data}
-                            columns={cols}
-                            rowKey="_id"
-                        />
-                    </Content>
-                </Space>
-
-                <Sider>
-                    <Space direction="vertical" style={{display: 'flex'}}>
-                        <Button block>Add Song</Button>
-                        <Button block>Edit song</Button>
+                <Header style={styleHFS}>
+                    <Input placeholder="Filter"/>
+                </Header>
+                
+                <Layout>
+                    <Space direction='horizontal'>
+                        <Content style={styleHFS}>
+                            <Table
+                                style={{paddingLeft: '3em'}}
+                                bordered
+                                pagination={false}
+                                virtual scroll={{ x: 1, y: 500 }}
+                                dataSource={data}
+                                columns={cols}
+                                rowKey="_id"
+                            />
+                        </Content>
                     </Space>
-                </Sider>
 
+                    <Sider style={styleHFS}>
+                        <Space direction="vertical">
+                            <Button style={styleBtn} block>Add Song</Button>
+                            <Button style={styleBtn} block>Edit song</Button>
+                        </Space>
+                    </Sider>
+
+                </Layout>
+
+                <Footer style={styleHFS}>
+                </Footer>
+                
             </Layout>
-
-            <Footer>
-            </Footer>
-            
-        </Layout>
+        </div>
     )
 }
 
