@@ -2,7 +2,7 @@
 //require('dotenv').config();
 const uri = "http://localhost:5000"
 //process.env.SERVER_URI||
-//const api_key=process.env.REACT_APP_API_KEY||""
+const api_key=""
 
 const getSongs = async(song_query)=>{
     const uriGet = uri+'/music/songs'
@@ -16,13 +16,13 @@ const getAllSongs = async()=>{
   assumes song has an soundtrack and meta description
   assumes admin inputted song name correctly
 */
-const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data)=>{
+const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, api_key)=>{
     const uriPosts = uri+'/music/songs'
     return await fetch(uriPosts, {
         method: "POST",
         headers:{
             'content-type': 'application/json',
-            //'api_key':api_key
+            'api_key':api_key
         },
         body: JSON.stringify({title:song_title, soundtrack_id:_soundtrack_id, meta_data: meta_data})
     }).then(async resp=>{await resp.json()

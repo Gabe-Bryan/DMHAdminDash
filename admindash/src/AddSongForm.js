@@ -4,9 +4,10 @@ import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 
 const onFinish = (values) => {
-  console.log('Success:', values);
-  console.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}})
-  addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer})
+  //console.log('Success:', values);
+  //sconsole.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}, api_key:values.api_key})
+  getAllSongs();
+  //addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer},values.api_key)
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
@@ -83,6 +84,22 @@ function AddSongForm(){
         <Content>
             <Space.Compact style={{width:'100%'}}>
             <Input placeholder="Lead Composer" />
+            </Space.Compact>
+        </Content>
+        </Form.Item>
+        <Form.Item
+      label="API Key"
+      name="api_key"
+      rules={[
+        {
+          required: true,
+          message: 'Please input the key!',
+        },
+      ]}
+    >
+        <Content>
+            <Space.Compact style={{width:'100%'}}>
+            <Input placeholder="key" />
             </Space.Compact>
         </Content>
         </Form.Item>
