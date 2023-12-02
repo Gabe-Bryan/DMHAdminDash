@@ -1,6 +1,6 @@
 import React from "react";
 import {Table, Button, Layout, Input, Space} from "antd";
-const { Header, Footer, Sider, Content } = Layout
+const { Header, Footer, Content } = Layout
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -8,9 +8,17 @@ function sortStringKey(key) {
     }
 }
 
+function editSong(id) {
+    alert(`song id: ${id}`)
+}
+
+function addSong() {
+    alert('ADD SONG PANEL?')
+}
+
 let cols = [
     {
-        title: 'id (last 4)',
+        title: 'id',
         dataIndex: '_id',
         key: '_id',
         // render: item=>`... ${item.substring(item.length-4,item.length)}`
@@ -22,13 +30,16 @@ let cols = [
         key: 'title',
         sorter: sortStringKey('title')
     },
+    // {
+    //     title: 'Release Date',
+    //     dataIndex: 'release_date',
+    //     key: 'release_date',
+
+    //     sorter: sortStringKey('release_date')
+    // },
     {
-        title: 'Release Date',
-        dataIndex: 'release_date',
-        key: 'release_date',
-        // render: item=>item.substring(0,10)
-        sorter: sortStringKey('release_date')
-    },
+        
+    }
 ]
 
 // let fakeData = []
@@ -40,28 +51,23 @@ let cols = [
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() ).catch(()=>[])
+let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch(()=>[])
 
 let styleHFS = {backgroundColor: '#ddd'},
-    styleBtn = {width: '11em'},
-    styleFilter = {paddingRight: '2em'}
-
+    styleBtn = {width: '11em'}
 
 function Test() {
     return (
         <div>
             <center><h1>Admin Dashboard</h1></center>    
         
-            <Layout>
-                <Header style={styleHFS}>
-                    <Input placeholder="Filter"/>
-                </Header>
+            <Layout style={{margin: '1fr'}}>
+                <Input placeholder="Filter"/>
                 
                 <Layout>
                     <Space direction='horizontal'>
-                        <Content style={styleHFS}>
                             <Table
-                                style={{paddingLeft: '3em'}}
+                                style={{margin: '1em'}}
                                 bordered
                                 pagination={false}
                                 virtual scroll={{ x: 1, y: 500 }}
@@ -69,20 +75,10 @@ function Test() {
                                 columns={cols}
                                 rowKey="_id"
                             />
-                        </Content>
                     </Space>
-
-                    <Sider style={styleHFS}>
-                        <Space direction="vertical">
-                            <Button style={styleBtn} block>Add Song</Button>
-                            <Button style={styleBtn} block>Edit song</Button>
-                        </Space>
-                    </Sider>
-
                 </Layout>
 
-                <Footer style={styleHFS}>
-                </Footer>
+                <Button style={styleBtn} onClick={addSong} block>Add Song</Button>
                 
             </Layout>
         </div>
