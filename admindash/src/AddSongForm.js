@@ -9,6 +9,7 @@ const onFinish = (values) => {
   //getAllSongs();
   console.log({lead_composer:values.lead_composer, game:1, release_year:2021})
   console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
+  //console.log(addNewSongTitleSimple(null,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
@@ -32,7 +33,7 @@ function AddSongForm(){
             colorPrimary: '#7458e2',
             // Alias Token
             colorBgContainer: '#fbf3ff',
-            ghost:true,
+            algorithm: theme.darkAlgorithm,
           },
     };
     
@@ -44,6 +45,8 @@ function AddSongForm(){
             colorPrimary: '#7458e2',
             // Alias Token
             colorBgContainer: '#fbf3ff',
+            algorithm: theme.compactAlgorithm,
+            
             },
     }
     
@@ -64,13 +67,12 @@ function AddSongForm(){
           required: true,
           message: 'Please input your Song Title!',
         },
-      ]}
-    >
-        <Content>
-            <Space.Compact style={{width:'100%'}}>
-            <Input placeholder="Song Title" />
-            </Space.Compact>
-        </Content>
+      ]}>
+            <Content>
+              <Space.Compact style={{width:'100%'}}>
+                <Input placeholder="Song Title" />
+              </Space.Compact>
+            </Content>
         </Form.Item>
         <Form.Item
       label="Lead Composer"
@@ -86,7 +88,7 @@ function AddSongForm(){
             <Space.Compact style={{width:'100%'}}>
             <Input placeholder="Lead Composer" />
             </Space.Compact>
-        </Content>
+            </Content>
         </Form.Item>
         <Form.Item
       label="API Key"
