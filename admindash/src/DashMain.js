@@ -51,7 +51,7 @@ let cols = [
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch(()=>[])
+let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() ).catch(()=>[])
 
 let styleHFS = {backgroundColor: '#ddd'},
     styleBtn = {width: '11em'}
@@ -65,17 +65,15 @@ function Test() {
                 <Input placeholder="Filter"/>
                 
                 <Layout>
-                    <Space direction='horizontal'>
-                            <Table
-                                style={{margin: '1em'}}
-                                bordered
-                                pagination={false}
-                                virtual scroll={{ x: 1, y: 500 }}
-                                dataSource={data}
-                                columns={cols}
-                                rowKey="_id"
-                            />
-                    </Space>
+                    <Table
+                        bordered
+                        pagination={false}
+                        virtual
+                        scroll={{ x: 1, y: 500 }}
+                        dataSource={data}
+                        columns={cols}
+                        rowKey="_id"
+                    />
                 </Layout>
 
                 <Button style={styleBtn} onClick={addSong} block>Add Song</Button>
