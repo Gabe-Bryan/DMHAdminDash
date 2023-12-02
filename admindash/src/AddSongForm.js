@@ -107,12 +107,12 @@ function AddSongForm(){
         </Content>
         </Form.Item>
         <div style={{width:"80%"}}>
+        <SourceForm/>
         <Space>
-        <Button type="default" onClick={()=>newSource} >Add New Source</Button>
+        {/* <Button type="default" onClick={()=>newSource} >Add New Source</Button> */}
         <Button htmlType="submit" >Enter Song and Sources Into Database</Button>
         </Space>
         </div>
-        <SourceForm/>
         </Form>
         </ConfigProvider>
     )
