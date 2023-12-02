@@ -6,8 +6,9 @@ import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './A
 const onFinish = (values) => {
   //console.log('Success:', values);
   //sconsole.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}, api_key:values.api_key})
-  getAllSongs();
-  //addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer},values.api_key)
+  //getAllSongs();
+  console.log({lead_composer:values.lead_composer, game:1, release_year:2021})
+  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
