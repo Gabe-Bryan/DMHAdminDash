@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker} from "antd";
+import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio} from "antd";
 import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 const { YearPicker } = DatePicker;
@@ -10,8 +10,8 @@ const onFinish = (values) => {
   //console.log('Success:', values);
   //sconsole.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}, api_key:values.api_key})
   //getAllSongs();
-  console.log({lead_composer:values.lead_composer, game:1, release_year:values.release_year.format("YYYY")})
-  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:values.release_year.format("YYYY")},values.api_key))
+  console.log({lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")})
+  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key))
   //console.log(addNewSongTitleSimple(null,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
 };
 const onFinishFailed = (errorInfo) => {
@@ -122,6 +122,12 @@ function AddSongForm(){
               </Form.Item>
             </Space.Compact>
         </Content>
+        <Form.Item name="game" label="Game">
+      <Radio.Group>
+        <Radio value="1">Destiny 1</Radio>
+        <Radio value="2">Destiny 2</Radio>
+      </Radio.Group>
+    </Form.Item>
         <div style={{width:"80%"}}>
         <Space>
         <Button type="default" onClick={()=>newSource} >Add New Source</Button>
