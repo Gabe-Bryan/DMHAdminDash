@@ -1,6 +1,5 @@
-import React from "react";
-import {Table, Button, Layout, Input, Space} from "antd";
-const { Header, Footer, Content } = Layout
+import React from "react"
+import {Table, Button, Input} from "antd"
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -53,34 +52,25 @@ let cols = [
 
 let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() ).catch(()=>[])
 
-let styleHFS = {backgroundColor: '#ddd'},
-    styleBtn = {width: '11em'}
-
-function Test() {
+function SongDataTable() {
     return (
-        <div>
+        <div style={{textAlign: 'center', margin: '3em'}}>
             <center><h1>Admin Dashboard</h1></center>    
-        
-            <Layout style={{margin: '1fr'}}>
-                <Input placeholder="Filter"/>
-                
-                <Layout>
-                    <Table
-                        bordered
-                        pagination={false}
-                        virtual
-                        scroll={{ x: 1, y: 500 }}
-                        dataSource={data}
-                        columns={cols}
-                        rowKey="_id"
-                    />
-                </Layout>
-
-                <Button style={styleBtn} onClick={addSong} block>Add Song</Button>
-                
-            </Layout>
+            <Input placeholder="Filter"/>
+            
+                <Table
+                    bordered
+                    pagination={false}
+                    virtual
+                    scroll={{ x: 1, y: 500 }}
+                    dataSource={data}
+                    columns={cols}
+                    rowKey="_id"
+                />
+            
+            <Button style={{width: '11em'}} onClick={addSong} block>Add Song</Button>
         </div>
     )
 }
 
-export default Test
+export default SongDataTable
