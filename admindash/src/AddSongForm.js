@@ -72,6 +72,7 @@ function AddSongForm(){
            onFinishFailed={onFinishFailed}
            autoComplete="off"
   >
+    
     <Form.Item
       label="Song Title"
       name="song_title"
@@ -114,20 +115,25 @@ function AddSongForm(){
             </Space.Compact>
         </Content>
         </Form.Item>
-       
-        <Content>
             <Space.Compact style={{width:'100%'}}>
               <Form.Item name="release_year" label="Year Of Song Released" {...config}>
                 <YearPicker />
               </Form.Item>
+              <Form.Item name="game" label="Game"
+        rules={[
+        {
+          required: true,
+          message: 'Please input the Game!',
+        },]}>
+          
+          <Radio.Group>
+            <Radio value="1">Destiny 1</Radio>
+            <Radio value="2">Destiny 2</Radio>
+          </Radio.Group>
+        </Form.Item>
             </Space.Compact>
-        </Content>
-        <Form.Item name="game" label="Game">
-      <Radio.Group>
-        <Radio value="1">Destiny 1</Radio>
-        <Radio value="2">Destiny 2</Radio>
-      </Radio.Group>
-    </Form.Item>
+        
+
         <div style={{width:"80%"}}>
         <Space>
         <Button type="default" onClick={()=>newSource} >Add New Source</Button>
