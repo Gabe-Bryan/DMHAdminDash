@@ -1,18 +1,30 @@
 import React from "react";
-import {Button, Layout, Input, Space, ConfigProvider, theme,Form} from "antd";
+import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker} from "antd";
 import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
+const { YearPicker } = DatePicker;
 
 const onFinish = (values) => {
+  console.log()
+ 
   //console.log('Success:', values);
   //sconsole.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}, api_key:values.api_key})
   //getAllSongs();
-  console.log({lead_composer:values.lead_composer, game:1, release_year:2021})
-  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
+  console.log({lead_composer:values.lead_composer, game:1, release_year:values.release_year.format("YYYY")})
+  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:values.release_year.format("YYYY")},values.api_key))
   //console.log(addNewSongTitleSimple(null,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
+};
+const config = {
+  rules: [
+    {
+      type: 'object',
+      required: true,
+      message: 'Please select time!',
+    },
+  ],
 };
 function AddSongForm(){
     
@@ -55,6 +67,7 @@ function AddSongForm(){
         
         <ConfigProvider theme={currentTheme}>
            <Form 
+           name="time_related_controls"
            onFinish={onFinish}
            onFinishFailed={onFinishFailed}
            autoComplete="off"
@@ -66,8 +79,7 @@ function AddSongForm(){
         {
           required: true,
           message: 'Please input your Song Title!',
-        },
-      ]}>
+        },]}>
             <Content>
               <Space.Compact style={{width:'100%'}}>
                 <Input placeholder="Song Title" />
@@ -81,9 +93,7 @@ function AddSongForm(){
         {
           required: true,
           message: 'Please input your Lead Composer!',
-        },
-      ]}
-    >
+        },]}>
         <Content>
             <Space.Compact style={{width:'100%'}}>
             <Input placeholder="Lead Composer" />
@@ -97,15 +107,21 @@ function AddSongForm(){
         {
           required: true,
           message: 'Please input the key!',
-        },
-      ]}
-    >
+        },]}>
         <Content>
             <Space.Compact style={{width:'100%'}}>
             <Input placeholder="key" />
             </Space.Compact>
         </Content>
         </Form.Item>
+       
+        <Content>
+            <Space.Compact style={{width:'100%'}}>
+              <Form.Item name="release_year" label="Year Of Song Released" {...config}>
+                <YearPicker />
+              </Form.Item>
+            </Space.Compact>
+        </Content>
         <div style={{width:"80%"}}>
         <Space>
         <Button type="default" onClick={()=>newSource} >Add New Source</Button>
