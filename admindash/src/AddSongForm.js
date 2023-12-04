@@ -6,13 +6,17 @@ import {CloseOutlined} from '@ant-design/icons';
 const { YearPicker } = DatePicker;
 
 const onFinish = (values) => {
-  console.log()
- 
+  let sourcesArray=[]
+  if (values.sources){
+  for (const source of values.sources){
+    sourcesArray.push({video_id:source.video_id,source_type:source.source_type,alt_theme:source.alt_theme,official_title:source.official_title});
+  }
+}
   //console.log('Success:', values);
-  //sconsole.log({title:values.song_title, soundtrack_id:null, meta_data: {lead_composer:values.lead_composer}, api_key:values.api_key})
+  console.log([values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key])
   //getAllSongs();
-  console.log({lead_composer:values.lead_composer, game:1, release_year:2021})
-  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:1, release_year:2021},values.api_key))
+  console.log(sourcesArray)
+  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},sourcesArray,values.api_key))
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
@@ -101,20 +105,7 @@ function AddSongForm(){
             </Space.Compact>
             </Content>
         </Form.Item>
-        <Form.Item
-      label="API Key"
-      name="api_key"
-      rules={[
-        {
-          required: true,
-          message: 'Please input the key!',
-        },]}>
-        <Content>
-            <Space.Compact style={{width:'100%'}}>
-            <Input placeholder="key" />
-            </Space.Compact>
-        </Content>
-        </Form.Item>
+        
             <Space.Compact style={{width:'100%'}}>
               <Form.Item name="release_year" label="Year Of Song Released" {...config}>
                 <YearPicker />
@@ -136,7 +127,24 @@ function AddSongForm(){
 
         <div style={{width:"80%"}}>
         <SourceForm/>
+        <Content>
+            <Space>
+        <Form.Item
+      label="API Key"
+      name="api_key"
+      rules={[
+        {
+          required: true,
+          message: 'Please input the key!',
+        },]}>
+        
+            <Input placeholder="key" />
+           
+        </Form.Item>
+        </Space>
+        </Content>
         <Space>
+        
         {/* <Button type="default" onClick={()=>newSource} >Add New Source</Button> */}
         <Button htmlType="submit" >Enter Song and Sources Into Database</Button>
         </Space>

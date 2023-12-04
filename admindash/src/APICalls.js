@@ -16,15 +16,16 @@ const getAllSongs = async()=>{
   assumes song has an soundtrack and meta description
   assumes admin inputted song name correctly
 */
-const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, api_key)=>{
+const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sourcesArray, api_key)=>{
     const uriPosts = uri+'/music/songs'
+    console.log(api_key)
     return await fetch(uriPosts, {
         method: "POST",
         headers:{
             'content-type': 'application/json',
             'api_key':api_key
         },
-        body: JSON.stringify({title:song_title, soundtrack_id:_soundtrack_id, meta_data: meta_data})
+        body: JSON.stringify({title:song_title, soundtrack_id:_soundtrack_id, meta_data: meta_data,sources:sourcesArray})
     }).then(async resp=>{await resp.json()
     console.log("addNewSong is it working?",resp)});
 };
