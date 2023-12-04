@@ -28,10 +28,11 @@ function addSong() {
 
 function filterDataTable(evt) {
     let filterString = evt.target.value
-    filteredData = data.filter( (entry) => {
-        Object.keys(entry).forEach((key)=>console.log(entry[key]))
-        
+    filteredData = data.filter( (obj) => {
+        if (obj.title.includes(filterString)) return true
+        return false
     })
+    console.log(filterString, filteredData)
 }
 
 // let fakeData = []
@@ -51,7 +52,10 @@ let cols = [
         title: 'Title',
         dataIndex: 'title',
         key: 'title',
-        sorter: sortStringKey('title')
+        sorter: sortStringKey('title'),
+        defaultSortOrder: 'ascend',
+        filters: [{text: 'test',value:'test'}],
+        onFilter: (value, record)=>(record.title.includes(value))
     },
     {
         title: 'Lead Composer',
@@ -106,7 +110,7 @@ function SongDataTable() {
                     pagination={false}
                     virtual
                     scroll={{ x: 1, y: 500 }}
-                    dataSource={filteredData}
+                    dataSource={[...filteredData]}
                     columns={cols}
                     rowKey="_id"
                 />
