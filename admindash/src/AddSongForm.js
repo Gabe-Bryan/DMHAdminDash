@@ -1,11 +1,10 @@
 import React from "react";
-import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card} from "antd";
+import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card, message} from "antd";
 import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 import {CloseOutlined} from '@ant-design/icons';
 const { YearPicker } = DatePicker;
-
-const onFinish = (values) => {
+const onFinish = async (values) => {
   let sourcesArray=[]
   if (values.sources){
   for (const source of values.sources){
@@ -13,10 +12,16 @@ const onFinish = (values) => {
   }
 }
   //console.log('Success:', values);
-  console.log([values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key])
+  //console.log([values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key])
   //getAllSongs();
-  console.log(sourcesArray)
-  console.log(addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},sourcesArray,values.api_key))
+  //console.log(sourcesArray)
+  const addNewSong= await addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},sourcesArray,values.api_key)
+  if(!addNewSong.error){
+   message.success("Song was added to Database")
+  }else{
+    message.error(addNewSong.error)
+  }
+  
 };
 const onFinishFailed = (errorInfo) => {
   console.log('Failed:', errorInfo);
@@ -31,7 +36,8 @@ const config = {
   ],
 };
 function AddSongForm(){
-    
+
+ 
     const [buttonName] = React.useState(false)
     
     
