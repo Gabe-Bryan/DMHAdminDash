@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card, message} from "antd";
+import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card, notification} from "antd";
 import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 import {CloseOutlined} from '@ant-design/icons';
@@ -17,9 +17,18 @@ const onFinish = async (values) => {
   //console.log(sourcesArray)
   const addNewSong= await addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},sourcesArray,values.api_key)
   if(!addNewSong.error){
-   message.success("Song was added to Database")
+    notification.success("Song was added to Database")
   }else{
-    message.error(addNewSong.error)
+    notification.error({
+      message:<div style={{ color: '#7458e2' }}>{addNewSong.error}</div>,
+      
+      style: {
+        color:'#7458e2',
+        backgroundColor:"#CA3C25"
+      },
+      placement:"top",
+      duration:0
+    })
   }
   
 };
@@ -39,14 +48,6 @@ function AddSongForm(){
 
  
     const [buttonName] = React.useState(false)
-    
-    
-    function newSource (){
-        console.log()
-        console.log("function newSource is working")
-        
-    }
-    
 
     const customDarkTheme={
         token: {
