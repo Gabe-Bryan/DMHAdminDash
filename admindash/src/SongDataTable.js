@@ -1,5 +1,5 @@
 import React from "react"
-import {Table, Button, Input} from "antd"
+import {Table, Button, Input, Space} from "antd"
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -7,39 +7,17 @@ function sortStringKey(key) {
     }
 }
 
-function editSong(id) {
-    alert(`song id: ${id}`)
+function editSong(_id) {
+    console.log('edit song, id:',_id)
+}
+
+function deleteSong(_id) {
+    console.log('delete song, id:',_id)
 }
 
 function addSong() {
-    alert('ADD SONG PANEL?')
+    console.log('ADD SONG PANEL?')
 }
-
-let cols = [
-    {
-        title: 'id',
-        dataIndex: '_id',
-        key: '_id',
-        // render: item=>`... ${item.substring(item.length-4,item.length)}`
-        sorter: sortStringKey('_id')
-    },
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-        sorter: sortStringKey('title')
-    },
-    // {
-    //     title: 'Release Date',
-    //     dataIndex: 'release_date',
-    //     key: 'release_date',
-
-    //     sorter: sortStringKey('release_date')
-    // },
-    {
-        
-    }
-]
 
 // let fakeData = []
 // for (let i = 1; i < 100; i++) {
@@ -50,7 +28,55 @@ let cols = [
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/soundtracks').then( res => res.json() ).catch(()=>[])
+let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch( () => [] )
+
+let cols = [
+    {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title',
+        sorter: sortStringKey('title')
+    },
+    {
+        title: 'Lead Composer',
+        dataIndex: 'lead_composer',
+        key: 'lead_composer',
+        sorter: sortStringKey('lead_composer')
+    },
+    {
+        title: 'Soundtrack ID',
+        dataIndex: 'soundtrack_id',
+        key: 'soundtrack_id',
+        // sorter: undefined
+    },
+    {
+        title: 'Game',
+        dataIndex: 'game',
+        key: 'game',
+        // sorter: undefined
+    },
+    {
+        title: 'Release Year',
+        dataIndex: 'release_year',
+        key: 'release_year',
+        // sorter: undefined
+    },
+    {
+        title: 'Action',
+        dataIndex: '',
+        key: 'action',
+        render: (text, record, index) => (
+            <Space size='middle'>
+                <Button onClick={ () => { editSong(record._id) } }>
+                    edit
+                </Button>
+                <Button onClick={ () => { deleteSong(record._id) } }>
+                    delete
+                </Button>
+            </Space>
+        ),
+    },
+]
 
 function SongDataTable() {
     return (
