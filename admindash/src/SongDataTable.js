@@ -5,13 +5,15 @@ import AddSongForm from "./AddSongForm"
 
 function sortStringKey(key) {
     return function(a, b) {
-        return a[key].localeCompare(b[key])
+        if (a[key]===null) return ''
+        return a[key].toString().localeCompare(b[key].toString())
     }
 }
 
 function sortStringMetaKey(key) {
     return function(a, b) {
-        return a['meta_data'][key].localeCompare(b['meta_data'][key])
+        if (a['meta_data'][key]===null) return ''
+        return a['meta_data'][key].toString().localeCompare(b['meta_data'][key].toString())
     }
 }
 
@@ -58,19 +60,19 @@ let cols = [
         title: 'Soundtrack ID',
         dataIndex: 'soundtrack_id',
         key: 'soundtrack_id',
-        // sorter: sortStringKey('soundtrack_id')
+        sorter: sortStringKey('soundtrack_id')
     },
     {
         title: 'Game',
         dataIndex: ['meta_data','game'],
         key: 'game',
-        // sorter: undefined
+        sorter: sortStringMetaKey('game')
     },
     {
         title: 'Release Year',
         dataIndex: ['meta_data','release_year'],
         key: 'release_year',
-        // sorter: undefined
+        sorter: sortStringMetaKey('release_year')
     },
     {
         title: 'Action',

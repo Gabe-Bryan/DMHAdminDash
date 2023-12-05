@@ -4,15 +4,17 @@ import {Table, Button, Input, Space} from "antd"
 
 function sortStringKey(key) {
     return function(a, b) {
+        if (a[key]===null) return ''
         return a[key].toString().localeCompare(b[key].toString())
     }
 }
 
-function sortStringMetaKey(key) {
-    return function(a, b) {
-        return a['meta_data'][key].toString().localeCompare(b['meta_data'][key].toString())
-    }
-}
+// function sortStringMetaKey(key) {
+//     return function(a, b) {
+//         if (a['meta_data'][key]===null) return ''
+//         return a['meta_data'][key].toString().localeCompare(b['meta_data'][key].toString())
+//     }
+// }
 
 function editSoundtrack(_id) {
     console.log('edit song, id:',_id)
@@ -40,13 +42,13 @@ let cols = [
         title: 'Game',
         dataIndex: ['game'],
         key: 'game',
-        // sorter: undefined
+        sorter: sortStringKey('game')
     },
     {
         title: 'Release Date',
         dataIndex: ['release_date'],
         key: 'release_year',
-        // sorter: undefined
+        sorter: sortStringKey('release_date')
     },
     {
         title: 'Action',
