@@ -1,4 +1,5 @@
 import React from "react"
+import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSongForm from "./AddSongForm"
 
@@ -26,14 +27,7 @@ function addSong() {
     console.log('addsong stuff goes here')
 }
 
-function filterDataTable(evt) {
-    let filterString = evt.target.value
-    filteredData = data.filter( (obj) => {
-        if (obj.title.includes(filterString)) return true
-        return false
-    })
-    console.log(filterString, filteredData)
-}
+
 
 // let fakeData = []
 // for (let i = 1; i < 100; i++) {
@@ -44,8 +38,7 @@ function filterDataTable(evt) {
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch( () => [] ),
-    filteredData = Array.from(data)
+let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch( () => [] )
 
 let cols = [
     {
@@ -99,6 +92,19 @@ let cols = [
 ]
 
 function SongDataTable() {
+
+    let [filteredData, setFilteredData] = useState(data)
+
+    function filterDataTable(evt) {
+        let filterString = evt.target.value
+        filteredData = data.filter( (obj) => {
+            if (obj.title.includes(filterString)) return true
+            return false
+        })
+        console.log(filterString, filteredData)
+        setFilteredData(filteredData)
+    }
+
     return (
         <>
         <div style={{textAlign: 'center', margin: '3em'}}>
