@@ -99,7 +99,7 @@ function SongDataTable() {
         let filterString = evt.target.value
         filteredData = data.filter( (obj) => {
             if (
-                    obj.title.includes(filterString)
+                    obj.title.toLowerCase().includes(filterString.toLowerCase())
             ) return true
 
             return false
