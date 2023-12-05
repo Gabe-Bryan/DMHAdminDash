@@ -47,8 +47,6 @@ let cols = [
         key: 'title',
         sorter: sortStringKey('title'),
         defaultSortOrder: 'ascend',
-        filters: [{text: 'test',value:'test'}],
-        onFilter: (value, record)=>(record.title.includes(value))
     },
     {
         title: 'Lead Composer',
@@ -98,10 +96,13 @@ function SongDataTable() {
     function filterDataTable(evt) {
         let filterString = evt.target.value
         filteredData = data.filter( (obj) => {
-            if (obj.title.includes(filterString)) return true
+            if (
+                    obj.title.includes(filterString)
+            ) return true
+
             return false
         })
-        console.log(filterString, filteredData)
+        //console.log(filterString, filteredData)
         setFilteredData(filteredData)
     }
 
@@ -109,7 +110,7 @@ function SongDataTable() {
         <>
         <div style={{textAlign: 'center', margin: '3em'}}>
             <h1 style={{textAlign: 'left'}}>Song Dashboard:</h1>
-            <Input onChange={filterDataTable} placeholder="Filter"/>
+            <Input onChange={filterDataTable} placeholder="Filter by title"/>
             
                 <Table
                     bordered

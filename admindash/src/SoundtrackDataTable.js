@@ -33,24 +33,16 @@ let cols = [
         title: 'Title',
         dataIndex: 'title',
         key: 'title',
-        sorter: sortStringKey('title'),
-        defaultSortOrder: 'ascend',
-    },
-    {
-        title: 'Lead Composer',
-        dataIndex: ['meta_data','lead_composer'],
-        key: 'lead_composer',
-        sorter: sortStringMetaKey('lead_composer')
     },
     {
         title: 'Game',
-        dataIndex: ['meta_data','game'],
+        dataIndex: ['game'],
         key: 'game',
         // sorter: undefined
     },
     {
-        title: 'Release Year',
-        dataIndex: ['meta_data','release_year'],
+        title: 'Release Date',
+        dataIndex: ['release_date'],
         key: 'release_year',
         // sorter: undefined
     },
@@ -89,7 +81,7 @@ function SoundtrackDataTable() {
         <>
         <div style={{textAlign: 'center', margin: '3em'}}>
             <h1 style={{textAlign: 'left'}}>Soundtrack Dashboard:</h1>
-            <Input onChange={filterDataTable} placeholder="Filter"/>
+            <Input onChange={filterDataTable} placeholder="Filter by title"/>
             
                 <Table
                     bordered
