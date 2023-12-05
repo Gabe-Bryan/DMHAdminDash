@@ -44,6 +44,18 @@ const config = {
     },
   ],
 };
+const lightMode={
+        
+  token: {
+  colorText: '#7458e2',
+     // Seed Token
+  colorPrimary: '#7458e2',
+  // Alias Token
+  colorBgContainer: '#fbf3ff',
+  algorithm: theme.compactAlgorithm,
+  
+  },
+}
 function AddSongForm(){
 
  
@@ -60,22 +72,12 @@ function AddSongForm(){
           },
     };
     
-    const lightMode={
-        
-            token: {
-            colorText: '#7458e2',
-               // Seed Token
-            colorPrimary: '#7458e2',
-            // Alias Token
-            colorBgContainer: '#fbf3ff',
-            algorithm: theme.compactAlgorithm,
-            
-            },
-    }
+    
     
     const currentTheme=lightMode
     return( 
-        
+      <div>
+        <Card title="Song Form"     headStyle={{ backgroundColor: '#E8D8E6', color: '#7458e2' }} bodyStyle={{ backgroundColor: '#E8D8E6' }} bordered={false}>
         <ConfigProvider theme={currentTheme}>
            <Form 
            name="time_related_controls"
@@ -158,6 +160,8 @@ function AddSongForm(){
         </div>
         </Form>
         </ConfigProvider>
+        </Card>
+        </div>
     )
 }
 
@@ -165,7 +169,7 @@ function AddSongForm(){
 function SourceForm () {
   return (
   
-  <Card title = 'Sources'>
+  <Card title = 'Sources'  headStyle={{ backgroundColor: '#E8D8E6', color: '#7458e2' , borderColor: '#E8D8E6'}} bodyStyle={{ backgroundColor: '#E8D8E6', borderColor: '#E8D8E6'}} bordered={false} > 
     <Form.List name = 'sources'>
       {(fields, {add, remove}) => (
         <div style={{ display: 'flex', flexDirection: 'column', rowGap: 16 }}>
