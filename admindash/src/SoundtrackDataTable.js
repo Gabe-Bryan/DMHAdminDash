@@ -4,13 +4,13 @@ import {Table, Button, Input, Space} from "antd"
 
 function sortStringKey(key) {
     return function(a, b) {
-        return a[key].localeCompare(b[key])
+        return a[key].toString().localeCompare(b[key].toString())
     }
 }
 
 function sortStringMetaKey(key) {
     return function(a, b) {
-        return a['meta_data'][key].localeCompare(b['meta_data'][key])
+        return a['meta_data'][key].toString().localeCompare(b['meta_data'][key].toString())
     }
 }
 
@@ -33,6 +33,8 @@ let cols = [
         title: 'Title',
         dataIndex: 'title',
         key: 'title',
+        sorter: sortStringKey('title'),
+        defaultSortOrder: 'ascend'
     },
     {
         title: 'Game',
@@ -70,7 +72,10 @@ function SoundtrackDataTable() {
     function filterDataTable(evt) {
         let filterString = evt.target.value
         filteredData = data.filter( (obj) => {
-            if (obj.title.includes(filterString)) return true
+            if (
+                obj.title.includes(filterString)
+            ) return true
+            
             return false
         })
         console.log(filterString, filteredData)
@@ -92,7 +97,7 @@ function SoundtrackDataTable() {
                     columns={cols}
                     rowKey="_id"
                 />
-            
+            <br/>
             <Button style={{width: '11em'}} onClick={addSoundtrack} block>Add Soundtrack</Button>
         </div>
         </>
