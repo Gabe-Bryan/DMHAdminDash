@@ -74,21 +74,22 @@ const lightMode = {
     algorithm: theme.compactAlgorithm,
   },
 };
+const customDarkTheme = {
+  token: {
+    // Seed Token
+    colorPrimary: "#7458e2",
+    // Alias Token
+    colorBgContainer: "#fbf3ff",
+    algorithm: theme.darkAlgorithm,
+  },
+};
 
 function SongForm({ open, onFinish, onCancel }) {
   const [form] = Form.useForm();
 
   const [buttonName] = React.useState(false);
 
-  const customDarkTheme = {
-    token: {
-      // Seed Token
-      colorPrimary: "#7458e2",
-      // Alias Token
-      colorBgContainer: "#fbf3ff",
-      algorithm: theme.darkAlgorithm,
-    },
-  };
+  
 
   const currentTheme = lightMode;
   return (
