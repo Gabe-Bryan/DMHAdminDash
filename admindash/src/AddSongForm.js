@@ -89,8 +89,6 @@ function SongForm({ open, onFinish, onCancel }) {
 
   const [buttonName] = React.useState(false);
 
-  
-
   const currentTheme = lightMode;
   return (
     <Modal
@@ -214,50 +212,9 @@ function SongForm({ open, onFinish, onCancel }) {
   );
 }
 
+//using creating a modal that has all of he functionality
 function AddSongForm() {
   const [open, setOpen] = useState(false);
-  const onCreate = async (values) => {
-    let sourcesArray = [];
-    if (values.sources) {
-      for (const source of values.sources) {
-        sourcesArray.push({
-          video_id: source.video_id,
-          source_type: source.source_type,
-          alt_theme: source.alt_theme,
-          official_title: source.official_title,
-        });
-      }
-    }
-    //console.log('Success:', values);
-    //console.log([values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key])
-    //getAllSongs();
-    console.log(values.release_year);
-    const addNewSong = await addNewSongTitleSimple(
-      values.song_title,
-      null,
-      {
-        lead_composer: values.lead_composer,
-        game: values.game,
-        release_year: values.release_year.format("YYYY"),
-      },
-      sourcesArray,
-      values.api_key
-    );
-    if (!addNewSong.error) {
-      notification.success("Song was added to Database");
-    } else {
-      notification.error({
-        message: <div style={{ color: "#7458e2" }}>{addNewSong.error}</div>,
-
-        style: {
-          color: "#7458e2",
-          backgroundColor: "#CA3C25",
-        },
-        placement: "top",
-        duration: 0,
-      });
-    }
-  };
   return (
     <div>
       <Button
