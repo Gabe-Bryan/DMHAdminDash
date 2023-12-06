@@ -1,10 +1,11 @@
-import React from "react";
-import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card, notification} from "antd";
+import React,{useState} from "react";
+import {Button, Layout, Input, Space, ConfigProvider, theme,Form, DatePicker,Radio, Card, notification, Modal, message} from "antd";
 import { Content } from "antd/es/layout/layout";
 import { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL } from './APICalls';
 import {CloseOutlined} from '@ant-design/icons';
 const { YearPicker } = DatePicker;
 const onFinish = async (values) => {
+  notification.info({message:"Waiting on response from the server", placement:"top"})
   let sourcesArray=[]
   if (values.sources){
   for (const source of values.sources){
@@ -56,8 +57,8 @@ const lightMode={
   
   },
 }
-function AddSongForm(){
-
+function SongForm({ open, onFinish, onCancel }){
+  const [form] = Form.useForm();
  
     const [buttonName] = React.useState(false)
 
@@ -76,10 +77,28 @@ function AddSongForm(){
     
     const currentTheme=lightMode
     return( 
+      <Modal
+  open={open}
+  width={"100%"}
+  okText="Send Music To Database"
+  cancelText="Cancel"
+  onCancel={onCancel}
+  onOk={async() => {
+    form
+      .validateFields()
+      .then(async (values) => {
+        form.resetFields();
+        await onFinish(values);
+      })
+      .catch((info) => {
+        console.log('Validate Failed:', info);
+      });
+  }}>
       <div>
         <Card title="Song Form"     headStyle={{ backgroundColor: '#E8D8E6', color: '#7458e2' }} bodyStyle={{ backgroundColor: '#E8D8E6' }} bordered={false}>
         <ConfigProvider theme={currentTheme}>
            <Form 
+           form={form}
            name="time_related_controls"
            onFinish={onFinish}
            onFinishFailed={onFinishFailed}
@@ -155,20 +174,73 @@ function AddSongForm(){
         <Space>
         
         {/* <Button type="default" onClick={()=>newSource} >Add New Source</Button> */}
-        <Button htmlType="submit" >Enter Song and Sources Into Database</Button>
+        {/* <Button htmlType="submit" >Enter Song and Sources Into Database</Button> */}
         </Space>
         </div>
         </Form>
         </ConfigProvider>
         </Card>
         </div>
+        </Modal>
     )
+}
+
+function AddSongForm(){
+  const [open, setOpen] = useState(false);
+  const onCreate = async(values) => {
+    let sourcesArray=[]
+    if (values.sources){
+    for (const source of values.sources){
+      sourcesArray.push({video_id:source.video_id,source_type:source.source_type,alt_theme:source.alt_theme,official_title:source.official_title});
+    }
+  }
+    //console.log('Success:', values);
+    //console.log([values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},values.api_key])
+    //getAllSongs();
+    console.log(values.release_year)
+    const addNewSong= await addNewSongTitleSimple(values.song_title,null,{lead_composer:values.lead_composer, game:values.game, release_year:values.release_year.format("YYYY")},sourcesArray,values.api_key)
+    if(!addNewSong.error){
+      notification.success("Song was added to Database")
+    }else{
+      notification.error({
+        message:<div style={{ color: '#7458e2' }}>{addNewSong.error}</div>,
+        
+        style: {
+          color:'#7458e2',
+          backgroundColor:"#CA3C25"
+        },
+        placement:"top",
+        duration:0
+      })
+    }
+    
+  };
+  return (
+    <div>
+      <Button
+        type="primary"
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        New Collection
+      </Button>
+      <SongForm
+        open={open}
+        onFinish={onFinish}
+        onCancel={() => {
+          setOpen(false);
+        }}
+      />
+    </div>
+  );
 }
 
 
 function SourceForm () {
+
   return (
-  
+ 
   <Card title = 'Sources'  headStyle={{ backgroundColor: '#E8D8E6', color: '#7458e2' , borderColor: '#E8D8E6'}} bodyStyle={{ backgroundColor: '#E8D8E6', borderColor: '#E8D8E6'}} bordered={false} > 
     <Form.List name = 'sources'>
       {(fields, {add, remove}) => (
@@ -201,6 +273,7 @@ function SourceForm () {
       }
     </Form.List>
   </Card>
+
   )
 }
 
