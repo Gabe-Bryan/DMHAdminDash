@@ -1,6 +1,7 @@
 import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
+import AddSoundtrackForm from './AddSoundtrackForm'
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -100,7 +101,7 @@ function SoundtrackDataTable() {
                     rowKey="_id"
                 />
             <br/>
-            <Button style={{width: '11em'}} onClick={addSoundtrack} block>Add Soundtrack</Button>
+            <AddSoundtrackForm/>
         </div>
         </>
     )

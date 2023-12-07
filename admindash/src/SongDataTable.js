@@ -124,7 +124,7 @@ function SongDataTable() {
                     rowKey="_id"
                 />
             <br/>
-            <Button style={{width: '11em'}} onClick={addSong} block>Add Song</Button>
+            <AddSongForm/>
         </div>
         </>
     )

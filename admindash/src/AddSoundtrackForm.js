@@ -19,7 +19,7 @@ function SoundtrackForm({open, onCancel, onFinish}) {
     return (
         <Modal
             open={open}
-            width={"100%"}
+            width={"50%"}
             okText="Submit"
             cancelText="Cancel"
             onCancel={onCancel}

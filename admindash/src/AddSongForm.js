@@ -223,7 +223,7 @@ function AddSongForm() {
           setOpen(true);
         }}
       >
-        New Collection
+        New Song
       </Button>
       <SongForm
         open={open}
