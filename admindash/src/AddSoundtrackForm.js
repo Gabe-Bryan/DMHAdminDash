@@ -27,7 +27,7 @@ function SoundtrackForm({open, onCancel, onFinish}) {
             form
                 .validateFields()
                 .then(async (values) => {
-                    await onFinish(values);
+                    await onFinish(values, form);
                 })
                 .catch((info) => {
                 console.log("Validate Failed:", info);
@@ -57,11 +57,19 @@ function SoundtrackForm({open, onCancel, onFinish}) {
 
 function AddSoundtrackForm () {
     const [open, setOpen] = useState(false);
-    const submitSoundtrack = async (values) => {
+    const submitSoundtrack = async (values, form) => {
         console.log(values);
         const response = await addNewSoundtrack(values.title, values.release_date.format('DD-MM-YYYY'), values.game, values.api_key);
         console.log('submitted',response);
-        if (!response.errors) {setOpen(false);}
+        if (!response.errors) {
+            notification.success({
+                message: "Successfully inserted soundtrack",
+                placement: 'top',
+                duration: 3
+            })
+            setOpen(false);
+            form.resetFields();
+        }
         else {
             notification.error({
                 message: "Title is already in use!",
