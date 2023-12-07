@@ -31,7 +31,7 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
       return response.json();
     } catch (error) {
       console.error('Error in addNewSongTitleSimple:', error);
-      return {error:"Failed Fetch"}; // Propagate the error for further handling, if needed
+      return {error:"Failed to Connect With Server"}; // Propagate the error for further handling, if needed
     }
   };
   
