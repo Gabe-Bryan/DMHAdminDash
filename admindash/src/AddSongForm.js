@@ -254,16 +254,26 @@ function SourceForm() {
             {fields.map((field) => (
               <Space key={field.key}>
                 <Form.Item
-                  required
                   label="Video Id"
                   name={[field.name, "video_id"]}
+                  rules = {[
+                    {
+                      required: true,
+                      mesage: "Please enter a video id"
+                    }
+                  ]}
                 >
                   <Input></Input>
                 </Form.Item>
                 <Form.Item
-                  required
                   label="Source Type"
                   name={[field.name, "source_type"]}
+                  rules = {[
+                    {
+                      required: true,
+                      mesage: "Please enter a source type"
+                    }
+                  ]}
                 >
                   <Input></Input>
                 </Form.Item>
