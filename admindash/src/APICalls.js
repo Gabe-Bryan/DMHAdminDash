@@ -52,15 +52,28 @@ const addNewSongURL= async(url, _song_index, source_type, alt_theme, official_ti
     return fetch(uriPosts, {
         method: "POST",
         headers:{
-            'content-type': 'application/json'
+            'content-type': 'application/json',
         },
         body: JSON.stringify({url:url, songIndex:_song_index, source_type:source_type, alt_theme:alt_theme, official_title:official_title})
     });
 };
+
+const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
+  const response = fetch(uri + '/music/soundtracks', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'api_key' : apiKey
+    },
+    body: JSON.stringify({title: title, game: game, release_date: releaseDate})
+  }).then(res => res.json());
+  return response;
+}
+
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
 //addNewSongURL("https://www.youtube.com/watch?v=lzYg5d2KDF0",newSong,"Youtube","Ambient","Thirsty_Bois")
 //console.log(newSong.body)
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
-export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL };
+export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack };
