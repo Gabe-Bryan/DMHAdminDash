@@ -5,15 +5,33 @@ import AddSoundtrackForm from './AddSoundtrackForm'
 
 function sortStringKey(key) {
     return function(a, b) {
-        if (a[key]===null) return ''
-        return a[key].toString().localeCompare(b[key].toString())
+        if  ( 
+                a[key] === null       || 
+                a[key] === undefined  ||
+                b[key] === null       ||
+                b[key] === undefined
+            ) return ''
+        
+        let strA = a[key].toString(),
+            strB = b[key].toString()
+            
+        return strA.localeCompare(strB)
     }
 }
 
 // function sortStringMetaKey(key) {
 //     return function(a, b) {
-//         if (a['meta_data'][key]===null) return ''
-//         return a['meta_data'][key].toString().localeCompare(b['meta_data'][key].toString())
+//         if  ( 
+//             a['meta_data'][key] === null       || 
+//             a['meta_data'][key] === undefined  ||
+//             b['meta_data'][key] === null       ||
+//             b['meta_data'][key] === undefined
+//         ) return ''
+        
+//         let strA = a['meta_data'][key].toString(),
+//             strB = b['meta_data'][key].toString()
+        
+//         return strA.localeCompare(strB)
 //     }
 // }
 
