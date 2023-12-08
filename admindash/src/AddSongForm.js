@@ -25,7 +25,7 @@ const onFinish = async (values) => {
 
   const addNewSong = await addNewSongTitleSimple(
     values.song_title,
-    null,
+    '',
     {
       lead_composer: values.lead_composer,
       game: values.game,

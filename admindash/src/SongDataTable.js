@@ -14,7 +14,7 @@ function sortStringKey(key) {
         
         let strA = a[key].toString(),
             strB = b[key].toString()
-            
+
         return strA.localeCompare(strB)
     }
 }
@@ -58,7 +58,9 @@ function addSong() {
 //     })
 // }
 
-let data = await fetch('http://localhost:5000/music/songs').then( res => res.json() ).catch( () => [] )
+let uriAddress = 'http://18.118.161.205:5000'
+// let uriAddress = 'http://localhost:5000'
+let data = await fetch(uriAddress+'/music/songs').then( res => res.json() ).catch( () => [] )
 
 let cols = [
     {
