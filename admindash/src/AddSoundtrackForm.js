@@ -61,7 +61,7 @@ function AddSoundtrackForm () {
         console.log(values);
         const response = await addNewSoundtrack(values.title, values.release_date.format('DD-MM-YYYY'), values.game, values.api_key);
         console.log('submitted',response);
-        if (!response.errors) {
+        if (!response.error) {
             notification.success({
                 message: "Successfully inserted soundtrack",
                 placement: 'top',

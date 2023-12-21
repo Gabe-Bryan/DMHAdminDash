@@ -34,11 +34,11 @@ const onFinish = async (values) => {
     sourcesArray,
     values.api_key
   );
-  if (!addNewSong.error) {
+  if (!addNewSong.errors) {
     notification.success("Song was added to Database");
   } else {
     notification.error({
-      message: <div style={{ color: "#7458e2" }}>{addNewSong.error}</div>,
+      message: <div style={{ color: "#7458e2" }}>{addNewSong.errors}</div>,
 
       style: {
         color: "#7458e2",

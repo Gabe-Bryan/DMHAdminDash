@@ -29,9 +29,9 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
         body: JSON.stringify({ title: song_title, soundtrack_id: _soundtrack_id, meta_data: meta_data, sources: sourcesArray })
       });
       return response.json();
-    } catch (error) {
-      console.error('Error in addNewSongTitleSimple:', error);
-      return {error:"Failed to Connect With Server"}; // Propagate the error for further handling, if needed
+    } catch (errors) {
+      console.error('Error in addNewSongTitleSimple:', errors);
+      return {errors:"Failed to Connect With Server"}; // Propagate the error for further handling, if needed
     }
   };
   
