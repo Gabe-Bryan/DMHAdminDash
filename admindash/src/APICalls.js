@@ -1,6 +1,6 @@
 //uri
 //require('dotenv').config();
-const uri = "http://localhost:5000"
+const uri = "http://3.144.222.38:5000"
 //process.env.SERVER_URI||
 const api_key=""
 

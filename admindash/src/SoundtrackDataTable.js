@@ -47,7 +47,7 @@ function addSoundtrack() {
     console.log('add soundtrack stuff goes here')
 }
 
-let uriAddress = 'http://18.118.161.205:5000'
+let uriAddress = "http://3.144.222.38:5000"
 // let uriAddress = 'http://localhost:5000'
 let data = await fetch(uriAddress+'/music/soundtracks').then( res => res.json() ).catch( () => [] )
 

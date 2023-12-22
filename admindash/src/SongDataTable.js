@@ -58,7 +58,7 @@ function addSong() {
 //     })
 // }
 
-let uriAddress = 'http://18.118.161.205:5000'
+let uriAddress = "http://3.144.222.38:5000"
 // let uriAddress = 'http://localhost:5000'
 let data = await fetch(uriAddress+'/music/songs').then( res => res.json() ).catch( () => [] )
 
