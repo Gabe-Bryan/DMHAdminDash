@@ -2,7 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSoundtrackForm from './AddSoundtrackForm'
-import {getSongs,getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
+import {getAllSoundtracks} from "./APICalls";
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -48,9 +48,7 @@ function addSoundtrack() {
     console.log('add soundtrack stuff goes here')
 }
 
-let uriAddress = "https://3.144.222.38:5000"
-// let uriAddress = 'http://localhost:5000'
-let data = await fetch(uriAddress+'/music/soundtracks').then( res => res.json() ).catch( () => [] )
+let data = await getAllSoundtracks()
 
 let cols = [
     {

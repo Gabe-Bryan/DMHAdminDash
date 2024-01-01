@@ -70,10 +70,15 @@ const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
   return response;
 }
 
+const getAllSoundtracks =  async() => {
+  const uriGet = uri+'/music/soundtracks'
+  fetch(uriGet).then(async response=>console.log(await response.json()));
+}
+
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
 //addNewSongURL("https://www.youtube.com/watch?v=lzYg5d2KDF0",newSong,"Youtube","Ambient","Thirsty_Bois")
 //console.log(newSong.body)
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
-export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack };
+export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks };

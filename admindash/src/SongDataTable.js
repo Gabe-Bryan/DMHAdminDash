@@ -59,8 +59,8 @@ function addSong() {
 //     })
 // }
 
-let uriAddress = "https://3.144.222.38:5000"
-// let uriAddress = 'http://localhost:5000'
+
+
 let data = await getAllSongs()
 
 let cols = [
