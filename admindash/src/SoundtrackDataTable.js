@@ -2,6 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSoundtrackForm from './AddSoundtrackForm'
+import {getSongs,getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
 
 function sortStringKey(key) {
     return function(a, b) {
