@@ -1,7 +1,6 @@
-//uri
-//require('dotenv').config();
+//ALAN CHANGE THIS SINGULAR VARIABLE
 const uri = "https://3.144.222.38:5000"
-//process.env.SERVER_URI||
+
 const api_key=""
 
 const getSongs = async(song_query)=>{
