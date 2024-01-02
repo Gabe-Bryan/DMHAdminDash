@@ -17,7 +17,7 @@ const onFinish = async (values) => {
       sourcesArray.push({
         video_id: source.video_id,
         source_type: source.source_type,
-        alt_theme: source.alt_theme,
+        intensity: source.intensity,
         official_title: source.official_title,
       });
     }
@@ -278,8 +278,8 @@ function SourceForm() {
                   <Input></Input>
                 </Form.Item>
                 <Form.Item
-                  label="Alternative Theme"
-                  name={[field.name, "alt_theme"]}
+                  label="Intensity"
+                  name={[field.name, "intensity"]}
                 >
                   <Input></Input>
                 </Form.Item>

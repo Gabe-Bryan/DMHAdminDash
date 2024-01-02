@@ -47,14 +47,14 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
   special_title = 
   */
 
-const addNewSongURL= async(url, _song_index, source_type, alt_theme, official_title)=>{
+const addNewSongURL= async(url, _song_index, source_type, intensity, official_title)=>{
     const uriPosts = uri+'/music/songs/'+_song_index+'/sources'
     return fetch(uriPosts, {
         method: "POST",
         headers:{
             'content-type': 'application/json',
         },
-        body: JSON.stringify({url:url, songIndex:_song_index, source_type:source_type, alt_theme:alt_theme, official_title:official_title})
+        body: JSON.stringify({url:url, songIndex:_song_index, source_type:source_type, intensity:intensity, official_title:official_title})
     });
 };
 
