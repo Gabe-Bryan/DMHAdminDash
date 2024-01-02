@@ -1,15 +1,16 @@
-//ALAN CHANGE THIS SINGULAR VARIABLE
+//uri
+//require('dotenv').config();
 const uri = "https://3.144.222.38:5000"
-
+//process.env.SERVER_URI||
 const api_key=""
 
 const getSongs = async(song_query)=>{
     const uriGet = uri+'/music/songs'
-    fetch(uriGet).then(async response=>console.log(await response.json())).catch(resp => {throw(resp)});
+    fetch(uriGet).then(async response=>await response.json()).catch(resp => {throw(resp)});
 };
 const getAllSongs = async()=>{
     const uriGet = uri+'/music/songs'
-    fetch(uriGet).then(async response=>console.log(await response.json()));
+    return fetch(uriGet).then(async response=>await response.json());
 };
 /*adds a new song given title and soundtrack/metadata indexes and returns the _song_index
   assumes song has an soundtrack and meta description
@@ -68,11 +69,10 @@ const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
   }).then(res => res.json());
   return response;
 }
-
-const getAllSoundtracks =  async() => {
+const getAllSoundtracks = async()=>{
   const uriGet = uri+'/music/soundtracks'
-  fetch(uriGet).then(async response=>console.log(await response.json()));
-}
+  return fetch(uriGet).then(async response=>await response.json());
+};
 
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})

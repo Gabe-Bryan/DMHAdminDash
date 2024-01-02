@@ -49,7 +49,7 @@ function addSoundtrack() {
 }
 
 let data = await getAllSoundtracks()
-
+console.log(data)
 let cols = [
     {
         title: 'Title',
