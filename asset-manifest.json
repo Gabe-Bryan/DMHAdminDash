@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/DMHAdminDash/static/css/main.f855e6bc.css",
-    "main.js": "/DMHAdminDash/static/js/main.a5f2b6bb.js",
+    "main.js": "/DMHAdminDash/static/js/main.c0c234de.js",
     "index.html": "/DMHAdminDash/index.html",
     "main.f855e6bc.css.map": "/DMHAdminDash/static/css/main.f855e6bc.css.map",
-    "main.a5f2b6bb.js.map": "/DMHAdminDash/static/js/main.a5f2b6bb.js.map"
+    "main.c0c234de.js.map": "/DMHAdminDash/static/js/main.c0c234de.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.a5f2b6bb.js"
+    "static/js/main.c0c234de.js"
   ]
 }
