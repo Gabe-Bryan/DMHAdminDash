@@ -2,7 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSoundtrackForm from './AddSoundtrackForm'
-import {getAllSoundtracks} from "./APICalls";
+import {getAllSoundtracks, deleteSoundtrackRequest} from "./APICalls";
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -41,7 +41,13 @@ function editSoundtrack(_id) {
 }
 
 function deleteSoundtrack(_id) {
-    console.log('delete song, id:',_id)
+    console.log('delete soundtrack, id:',_id)
+    let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "")
+    if (apiKey == null) {
+        console.log(`user cancelled deletion of id ${_id}`)
+    } else {
+        deleteSoundtrackRequest(_id, apiKey)
+    }
 }
 
 function addSoundtrack() {
