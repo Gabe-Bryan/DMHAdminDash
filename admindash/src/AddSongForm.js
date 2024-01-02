@@ -14,7 +14,6 @@ const onFinish = async (values) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
-      source.source_type="Youtube"
       const changedSource={
         video_id: source.video_id,
         source_type: source.source_type,
@@ -280,7 +279,7 @@ function SourceForm() {
                   //   }
                   // ]}
                 >
-                  <Select defaultValue={"Youtube"}>
+                  <Select placeholder="Youtube">
                     <Select.Option value="Youtube">Youtube</Select.Option>
                   </Select>
                 </Form.Item>
@@ -313,7 +312,7 @@ function SourceForm() {
               </Space>
             ))}
 
-            <Button type="default" onClick={add}>
+            <Button type="default" onClick={() => {add({source_type:"Youtube"})}}>
               Add New Source
             </Button>
           </div>
