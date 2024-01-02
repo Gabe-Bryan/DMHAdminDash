@@ -284,8 +284,8 @@ function SourceForm() {
                   <Input></Input>
                 </Form.Item>
                 <Form.Item
-                  label="Official Title"
-                  name={[field.name, "official_title"]}
+                  label="Alternate Title"
+                  name={[field.name, "alternate_title"]}
                 >
                   <Input></Input>
                 </Form.Item>
