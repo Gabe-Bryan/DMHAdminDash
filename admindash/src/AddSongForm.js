@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal} from "antd";
 import { Content } from "antd/es/layout/layout";
-import {getSongs,getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
+import {getSongs,getSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
 
 const { YearPicker } = DatePicker;
@@ -84,9 +84,9 @@ const customDarkTheme = {
   },
 };
 
-function SongForm({ open, onFinish, onCancel }) {
+function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
   const [form] = Form.useForm();
-
+  console.log(contents);
   const [buttonName] = React.useState(false);
 
   const currentTheme = lightMode;
@@ -122,6 +122,7 @@ function SongForm({ open, onFinish, onCancel }) {
               name="time_related_controls"
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
+              initialValues = {contents}
               autoComplete="off"
             >
               <Form.Item
@@ -213,21 +214,34 @@ function SongForm({ open, onFinish, onCancel }) {
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm() {
+function AddSongForm({isEdit = false, _id = undefined}) {
   const [open, setOpen] = useState(false);
+  const [contents, setContents] = useState([]);
+  const openForm = async () =>
+  {
+    if (isEdit && _id) {
+      const values = await getSong(_id);
+      const newContents =  {song_title: 'A song'};
+      setContents(newContents);
+    } else{
+      console.log(_id);
+    }
+    setOpen(true);
+  }
   return (
     <div>
       <Button
         type="primary"
         onClick={() => {
-          setOpen(true);
+          openForm();
         }}
       >
-        New Song
+        {isEdit ? 'edit' : 'New Song'}
       </Button>
       <SongForm
         open={open}
         onFinish={onFinish}
+        contents = {contents}
         onCancel={() => {
           setOpen(false);
         }}

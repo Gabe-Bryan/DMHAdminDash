@@ -12,6 +12,11 @@ const getAllSongs = async()=>{
     const uriGet = uri+'/music/songs'
     fetch(uriGet).then(async response=>console.log(await response.json()));
 };
+const getSong = async (_id) => {
+  const uriGet = uri + '/music/songs/' + _id;
+  const rval = await fetch(uriGet).then(response => response.json());
+  return rval;
+}
 /*adds a new song given title and soundtrack/metadata indexes and returns the _song_index
   assumes song has an soundtrack and meta description
   assumes admin inputted song name correctly
@@ -76,4 +81,4 @@ const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
 //console.log(newSong.body)
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
-export { getSongs, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack };
+export { getSongs, getSong, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack };
