@@ -2,7 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSongForm from "./AddSongForm"
-import { getAllSongs, deleteSongRequest } from "./APICalls"
+import { getAllSongs, deleteSongRequest, getSong } from "./APICalls"
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -36,8 +36,9 @@ function sortStringMetaKey(key) {
     }
 }
 
-function editSong(_id) {
-    console.log('edit song, id:',_id)
+async function editSong(_id) {
+    const values = await getSong(_id);
+    console.log('we got em boiz ', values)
 }
 
 function deleteSong(_id) {
@@ -109,9 +110,11 @@ let cols = [
         key: 'action',
         render: (text, record, index) => (
             <Space size='middle'>
-                <Button onClick={ () => { editSong(record._id) } }>
+                {/* <Button onClick={ () => { editSong(record._id) } }>
                     edit
-                </Button>
+                </Button> */}
+                {console.log(record._id)}
+                <AddSongForm isEdit = {true} _id = {record._id}/>
                 <Button onClick={ () => { deleteSong(record._id) } }>
                     delete
                 </Button>
@@ -153,7 +156,7 @@ function SongDataTable() {
                     rowKey="_id"
                 />
             <br/>
-            <AddSongForm/>
+            <AddSongForm isEdit = {false}/>
         </div>
         </>
     )
