@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal} from "antd";
+import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select} from "antd";
 import { Content } from "antd/es/layout/layout";
 import {getSongs,getSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
@@ -14,12 +14,16 @@ const onFinish = async (values) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
-      sourcesArray.push({
+      const changedSource={
         video_id: source.video_id,
         source_type: source.source_type,
-        alt_theme: source.alt_theme,
+        intensity:source.intensity,
         official_title: source.official_title,
-      });
+      }
+      if(source.intensity==="None"){
+        delete changedSource.intensity
+      }
+      sourcesArray.push(changedSource)
     }
   }
 
@@ -184,7 +188,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
               </Space.Compact>
               <Space direction="vertical" size="large" style={{ display: 'flex' }}>
 
-              <div style={{ width: "80%" }}>
+              <div style={{ width: "90%" }}>
                 <SourceForm />
               </div>
               
@@ -282,24 +286,37 @@ function SourceForm() {
                 <Form.Item
                   label="Source Type"
                   name={[field.name, "source_type"]}
-                  rules = {[
-                    {
-                      required: true,
-                      mesage: "Please enter a source type"
-                    }
-                  ]}
+                  // rules = {[
+                  //   {
+                  //     required: true,
+                  //     mesage: "Please enter a source type"
+                  //   }
+                  // ]}
                 >
-                  <Input></Input>
+                  <Select placeholder="Youtube">
+                    <Select.Option value="Youtube">Youtube</Select.Option>
+                  </Select>
                 </Form.Item>
+                <div>
                 <Form.Item
-                  label="Alternative Theme"
-                  name={[field.name, "alt_theme"]}
+                  label="Intensity"
+                  name={[field.name, "intensity"]}
                 >
-                  <Input></Input>
+                  <Select defaultValue={"None"}>
+                    <Select.Option value="None">Select an Intensity</Select.Option>
+                    <Select.Option value="Ambient">Ambient</Select.Option>
+                    <Select.Option value="Tension">Tension</Select.Option>
+                    <Select.Option value="Action">Action</Select.Option>
+                    <Select.Option value="High Action">High Action</Select.Option>
+                    <Select.Option value="Heavy Action">Heavy Action</Select.Option>
+                    <Select.Option value="Light Action">Light Action</Select.Option>
+                    
+                  </Select>
                 </Form.Item>
+                </div>
                 <Form.Item
-                  label="Official Title"
-                  name={[field.name, "official_title"]}
+                  label="Alternate Title"
+                  name={[field.name, "alternate_title"]}
                 >
                   <Input></Input>
                 </Form.Item>
@@ -309,7 +326,7 @@ function SourceForm() {
               </Space>
             ))}
 
-            <Button type="default" onClick={add}>
+            <Button type="default" onClick={() => {add({source_type:"Youtube"})}}>
               Add New Source
             </Button>
           </div>

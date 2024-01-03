@@ -6,11 +6,11 @@ const api_key=""
 
 const getSongs = async(song_query)=>{
     const uriGet = uri+'/music/songs'
-    fetch(uriGet).then(async response=>console.log(await response.json())).catch(resp => {throw(resp)});
+    fetch(uriGet).then(async response=>await response.json()).catch(resp => {throw(resp)});
 };
 const getAllSongs = async()=>{
     const uriGet = uri+'/music/songs'
-    fetch(uriGet).then(async response=>console.log(await response.json()));
+    return fetch(uriGet).then(async response=>await response.json());
 };
 const getSong = async (_id) => {
   const uriGet = uri + '/music/songs/' + _id;
@@ -52,14 +52,14 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
   special_title = 
   */
 
-const addNewSongURL= async(url, _song_index, source_type, alt_theme, official_title)=>{
+const addNewSongURL= async(url, _song_index, source_type, intensity, official_title)=>{
     const uriPosts = uri+'/music/songs/'+_song_index+'/sources'
     return fetch(uriPosts, {
         method: "POST",
         headers:{
             'content-type': 'application/json',
         },
-        body: JSON.stringify({url:url, songIndex:_song_index, source_type:source_type, alt_theme:alt_theme, official_title:official_title})
+        body: JSON.stringify({url:url, songIndex:_song_index, source_type:source_type, intensity:intensity, official_title:official_title})
     });
 };
 
@@ -74,6 +74,30 @@ const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
   }).then(res => res.json());
   return response;
 }
+const getAllSoundtracks = async()=>{
+  const uriGet = uri+'/music/soundtracks'
+  return fetch(uriGet).then(async response=>await response.json());
+};
+
+const deleteSongRequest = async (itemId, apiKey) => {
+  fetch(`${uri}/music/songs/${itemId}`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      'api_key' : apiKey
+    }
+  }).then(res => res.json())
+}
+
+const deleteSoundtrackRequest = async (itemId, apiKey) => {
+  fetch(`${uri}/music/soundtracks/${itemId}`, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      'api_key' : apiKey
+    }
+  }).then(res => res.json())
+}
 
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
@@ -81,4 +105,5 @@ const addNewSoundtrack = async(title, releaseDate, game, apiKey) => {
 //console.log(newSong.body)
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
-export { getSongs, getSong, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack };
+export { getSongs, getSong, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks, 
+         deleteSongRequest, deleteSoundtrackRequest };

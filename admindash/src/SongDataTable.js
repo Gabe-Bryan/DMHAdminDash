@@ -2,6 +2,7 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSongForm from "./AddSongForm"
+import { getAllSongs, deleteSongRequest } from "./APICalls"
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -41,7 +42,15 @@ function editSong(_id) {
 
 function deleteSong(_id) {
     console.log('delete song, id:',_id)
+    let apiKey = prompt("Please enter the api key to confirm song deletion", "")
+    if (apiKey == null) {
+        console.log(`user cancelled deletion of id ${_id}`)
+    } else {
+        deleteSongRequest(_id, apiKey)
+    }
 }
+
+
 
 function addSong() {
     console.log('addsong stuff goes here')
@@ -58,9 +67,9 @@ function addSong() {
 //     })
 // }
 
-let uriAddress = "https://3.144.222.38:5000"
-// let uriAddress = 'http://localhost:5000'
-let data = await fetch(uriAddress+'/music/songs').then( res => res.json() ).catch( () => [] )
+
+let data = await getAllSongs();
+console.log(data)
 
 let cols = [
     {
