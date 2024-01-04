@@ -99,23 +99,23 @@ const getAllSoundtracks = async()=>{
 };
 
 const deleteSongRequest = async (itemId, apiKey) => {
-  fetch(`${uri}/music/songs/${itemId}`, {
+  return fetch(`${uri}/music/songs/${itemId}`, {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
       'api_key' : apiKey
     }
-  }).then(res => res.json())
+  }).then( res => res.json() )
 }
 
 const deleteSoundtrackRequest = async (itemId, apiKey) => {
-  fetch(`${uri}/music/soundtracks/${itemId}`, {
+  return fetch(`${uri}/music/soundtracks/${itemId}`, {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
       'api_key' : apiKey
     }
-  }).then(res => res.json())
+  }).then( res => res.json() )
 }
 
 //this is a simple call for frontend

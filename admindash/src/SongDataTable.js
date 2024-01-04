@@ -40,13 +40,21 @@ async function editSong(_id) {
     const values = await getSong(_id);
 }
 
-function deleteSong(_id) {
+async function deleteSong(_id, dataCopy, setFunction) {
     console.log('delete song, id:',_id)
     let apiKey = prompt("Please enter the api key to confirm song deletion", "")
     if (apiKey == null) {
         console.log(`user cancelled deletion of id ${_id}`)
     } else {
-        deleteSongRequest(_id, apiKey)
+        let res = await deleteSongRequest(_id, apiKey)
+        if (res.errors)
+            console.log('incorrect api key. please check and try again')
+        else {
+            dataCopy = dataCopy.filter( item => item._id !== _id)
+            setFunction(dataCopy)
+            console.log(`success! item id ${_id} removed from database.`)
+            console.log(dataCopy)
+        }
     }
 }
 
@@ -56,7 +64,12 @@ function addSong() {
     console.log('addsong stuff goes here')
 }
 
+let dataTestIndex = 0
 
+function addDataTest(data, setFunction) {
+    data.push({title:`test${dataTestIndex}`})
+    setFunction(data)
+}
 
 // let fakeData = []
 // for (let i = 1; i < 100; i++) {
@@ -69,67 +82,68 @@ function addSong() {
 
 
 let data = await getAllSongs();
-console.log(data)
 
-let cols = [
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-        sorter: sortStringKey('title'),
-        defaultSortOrder: 'ascend',
-    },
-    {
-        title: 'Lead Composer',
-        dataIndex: ['meta_data','lead_composer'],
-        key: 'lead_composer',
-        sorter: sortStringMetaKey('lead_composer')
-    },
-    {
-        title: 'Soundtrack ID',
-        dataIndex: 'soundtrack_id',
-        key: 'soundtrack_id',
-        sorter: sortStringKey('soundtrack_id')
-    },
-    {
-        title: 'Game',
-        dataIndex: ['meta_data','game'],
-        key: 'game',
-        sorter: sortStringMetaKey('game')
-    },
-    {
-        title: 'Release Year',
-        dataIndex: ['meta_data','release_year'],
-        key: 'release_year',
-        sorter: sortStringMetaKey('release_year')
-    },
-    {
-        title: 'Action',
-        dataIndex: '',
-        key: 'action',
-        render: (text, record, index) => (
-            <Space size='middle'>
-                {/* <Button onClick={ () => { editSong(record._id) } }>
-                    edit
-                </Button> */}
-                <AddSongForm edit_id = {record._id}/>
-                <Button onClick={ () => { deleteSong(record._id) } }>
-                    delete
-                </Button>
-            </Space>
-        ),
-    },
-]
+
 
 function SongDataTable() {
-
     let [filteredData, setFilteredData] = useState(data)
+
+    let cols = [
+        {
+            title: 'Title',
+            dataIndex: 'title',
+            key: 'title',
+            sorter: sortStringKey('title'),
+            defaultSortOrder: 'ascend',
+        },
+        {
+            title: 'Lead Composer',
+            dataIndex: ['meta_data','lead_composer'],
+            key: 'lead_composer',
+            sorter: sortStringMetaKey('lead_composer')
+        },
+        {
+            title: 'Soundtrack ID',
+            dataIndex: 'soundtrack_id',
+            key: 'soundtrack_id',
+            sorter: sortStringKey('soundtrack_id')
+        },
+        {
+            title: 'Game',
+            dataIndex: ['meta_data','game'],
+            key: 'game',
+            sorter: sortStringMetaKey('game')
+        },
+        {
+            title: 'Release Year',
+            dataIndex: ['meta_data','release_year'],
+            key: 'release_year',
+            sorter: sortStringMetaKey('release_year')
+        },
+        {
+            title: 'Action',
+            dataIndex: '',
+            key: 'action',
+            render: (text, record, index) => (
+                <Space size='middle'>
+                    
+                    <Button onClick={ () => { editSong(record._id) } }>
+                        edit
+                    </Button>
+
+                    <Button onClick={ () => { deleteSong(record._id, filteredData, setFilteredData ) } }>
+                        delete
+                    </Button>
+                </Space>
+            ),
+        },
+    ]
 
     function filterDataTable(evt) {
         let filterString = evt.target.value
         filteredData = data.filter( (obj) => {
             if (
-                    obj.title.toLowerCase().includes(filterString.toLowerCase())
+                obj.title.toLowerCase().includes(filterString.toLowerCase())
             ) return true
 
             return false
