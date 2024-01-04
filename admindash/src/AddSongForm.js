@@ -57,15 +57,27 @@ const onFinish = async (values, _id) => {
       values.api_key
     );
   }
-  
+  console.log(response);
   if (!response.errors) {
     notification.success({message: "Song was submitted to Database"});
   } else {
+    console.log("an error was caught");
+    let errorString = '';
+    for (let error of response.errors) {
+      let newError = '';
+      for (let key of Object.keys(error)) {
+        newError += key + ": " + error[key] + ', ';
+      }
+      newError = newError.slice(0, -2);
+      if (errorString.length == 0) {
+        errorString += '\n';
+      }
+      errorString += newError;
+    }
     notification.error({
-      message: <div style={{ color: "#7458e2" }}>{response.errors}</div>,
-
+      message: <div style = {{color: 'white'}}>{errorString}</div>,
+      // message: 'hello there, failure',
       style: {
-        color: "#7458e2",
         backgroundColor: "#CA3C25",
       },
       placement: "top",
