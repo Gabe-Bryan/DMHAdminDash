@@ -48,10 +48,12 @@ async function deleteSong(_id, dataCopy, setFunction) {
         if (res.errors)
             console.log('incorrect api key. please check and try again')
         else {
-            dataCopy = dataCopy.filter( item => item._id !== _id)
+            //dataCopy = dataCopy.filter( item => item._id !== _id)
+            data = await getAllSongs()
+            dataCopy = [...data]
             setFunction(dataCopy)
             console.log(`success! item id ${_id} removed from database.`)
-            console.log(dataCopy)
+            //console.log(dataCopy)
         }
     }
 }
