@@ -39,6 +39,25 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
       return {errors:"Failed to Connect With Server"}; // Propagate the error for further handling, if needed
     }
   };
+
+const editSong = async (_id, songTitle, _soundtrack_id, meta_data, sourcesArray, api_key) => {
+  const uriPatch = uri + '/music/songs/' + _id;
+
+  try{
+    const response = await fetch(uriPatch, {
+      method: "PATCH",
+      headers: {
+        'content-type': 'application/json',
+        'api_key': api_key
+      },
+      body: JSON.stringify({title: songTitle, soundtrack_id: _soundtrack_id, meta_data: meta_data, sources: sourcesArray})
+    });
+    return response.json();
+  } catch (e) {
+    console.error('Error patching song', e);
+    return {errors: "Failed to connect with server"};
+  }
+}
   
 
 /*adds to sources database new url and alt theme and returns the _sources_index
@@ -105,5 +124,5 @@ const deleteSoundtrackRequest = async (itemId, apiKey) => {
 //console.log(newSong.body)
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
-export { getSongs, getSong, getAllSongs, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks, 
+export { getSongs, getSong, getAllSongs, editSong, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks, 
          deleteSongRequest, deleteSoundtrackRequest };

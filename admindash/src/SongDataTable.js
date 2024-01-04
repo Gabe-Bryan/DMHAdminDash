@@ -38,7 +38,6 @@ function sortStringMetaKey(key) {
 
 async function editSong(_id) {
     const values = await getSong(_id);
-    console.log('we got em boiz ', values)
 }
 
 function deleteSong(_id) {
@@ -113,8 +112,7 @@ let cols = [
                 {/* <Button onClick={ () => { editSong(record._id) } }>
                     edit
                 </Button> */}
-                {console.log(record._id)}
-                <AddSongForm isEdit = {true} _id = {record._id}/>
+                <AddSongForm edit_id = {record._id}/>
                 <Button onClick={ () => { deleteSong(record._id) } }>
                     delete
                 </Button>
@@ -156,7 +154,7 @@ function SongDataTable() {
                     rowKey="_id"
                 />
             <br/>
-            <AddSongForm isEdit = {false}/>
+            <AddSongForm/>
         </div>
         </>
     )

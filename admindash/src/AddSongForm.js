@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select} from "antd";
 import { Content } from "antd/es/layout/layout";
-import {getSongs,getSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
+import {getSongs,getSong, editSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
+import dayjs from 'dayjs';
 
 const { YearPicker } = DatePicker;
 
-const onFinish = async (values) => {
+const onFinish = async (values, _id) => {
   notification.info({
     message: "Waiting on response from the server",
     placement: "top",
@@ -27,22 +28,41 @@ const onFinish = async (values) => {
     }
   }
 
-  const addNewSong = await addNewSongTitleSimple(
-    values.song_title,
-    '',
-    {
-      lead_composer: values.lead_composer,
-      game: values.game,
-      release_year: values.release_year.format("YYYY"),
-    },
-    sourcesArray,
-    values.api_key
-  );
-  if (!addNewSong.errors) {
-    notification.success("Song was added to Database");
+  let response;
+  if (_id) {
+    console.log('submitting patch...');
+    response = await editSong(
+      _id,
+      values.song_title,
+      '',
+      {
+        lead_composer: values.lead_composer,
+        game: values.game,
+        release_year: values.release_year.format("YYYY"),
+      },
+      sourcesArray,
+      values.api_key
+    );
+  } else {
+    console.log('sending post request...', _id)
+    response = await addNewSongTitleSimple(
+      values.song_title,
+      '',
+      {
+        lead_composer: values.lead_composer,
+        game: values.game,
+        release_year: values.release_year.format("YYYY"),
+      },
+      sourcesArray,
+      values.api_key
+    );
+  }
+  
+  if (!response.errors) {
+    notification.success({message: "Song was submitted to Database"});
   } else {
     notification.error({
-      message: <div style={{ color: "#7458e2" }}>{addNewSong.errors}</div>,
+      message: <div style={{ color: "#7458e2" }}>{response.errors}</div>,
 
       style: {
         color: "#7458e2",
@@ -88,9 +108,12 @@ const customDarkTheme = {
   },
 };
 
-function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
+function SongForm({ open, onFinish, onCancel, contents = {}, _id = undefined}) {
   const [form] = Form.useForm();
-  console.log(contents);
+  // useEffect(() => {
+  //   // form.setFields([{name : ['song_title'], value : 'a song'}]);
+  //   console.log(form.getFieldValue());
+  // });
   const [buttonName] = React.useState(false);
 
   const currentTheme = lightMode;
@@ -106,7 +129,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
           .validateFields()
           .then(async (values) => {
             form.resetFields();
-            await onFinish(values);
+            await onFinish(values, _id);
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
@@ -123,8 +146,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
           <ConfigProvider theme={currentTheme}>
             <Form
               form={form}
-              name="time_related_controls"
-              onFinish={onFinish}
+              // onFinish={(values) => onFinish(values, _id)}
               onFinishFailed={onFinishFailed}
               initialValues = {contents}
               autoComplete="off"
@@ -132,6 +154,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
               <Form.Item
                 label="Song Title"
                 name="song_title"
+                valuePropName = "value"
                 rules={[
                   {
                     required: true,
@@ -139,15 +162,12 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
                   },
                 ]}
               >
-                <Content>
-                  <Space.Compact style={{ width: "100%" }}>
-                    <Input placeholder="Song Title" />
-                  </Space.Compact>
-                </Content>
+                    <Input placeholder="Song Title"/>
               </Form.Item>
               <Form.Item
                 label="Lead Composer"
                 name="lead_composer"
+                valuePropName = "value"
                 rules={[
                   {
                     required: true,
@@ -155,24 +175,24 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
                   },
                 ]}
               >
-                <Content>
-                  <Space.Compact style={{ width: "100%" }}>
                     <Input placeholder="Lead Composer" />
-                  </Space.Compact>
-                </Content>
               </Form.Item>
 
               <Space.Compact style={{ width: "100%" }}>
                 <Form.Item
                   name="release_year"
                   label="Year Of Song Released"
+                  valuePropName = "value"
                   {...config}
                 >
-                  <YearPicker />
+                  
+                    <YearPicker />
+                  
                 </Form.Item>
                 <Form.Item
                   name="game"
                   label="Game"
+                  valuePropName = "value"
                   rules={[
                     {
                       required: true,
@@ -180,10 +200,11 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
                     },
                   ]}
                 >
-                  <Radio.Group>
-                    <Radio value="1">Destiny 1</Radio>
-                    <Radio value="2">Destiny 2</Radio>
-                  </Radio.Group>
+                    <Radio.Group>
+                      <Radio value="1">Destiny 1</Radio>
+                      <Radio value="2">Destiny 2</Radio>
+                    </Radio.Group>
+                  
                 </Form.Item>
               </Space.Compact>
               <Space direction="vertical" size="large" style={{ display: 'flex' }}>
@@ -197,6 +218,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
                     <Form.Item
                       label="API Key"
                       name="api_key"
+                      valuePropName = "value"
                       rules={[
                         {
                           required: true,
@@ -204,7 +226,7 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
                         },
                       ]}
                     >
-                      <Input placeholder="key" />
+                        <Input placeholder="key" />
                     </Form.Item>
                   </Space>
                 
@@ -218,17 +240,22 @@ function SongForm({ open, onFinish, onCancel, isEdit = false, contents = []}) {
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm({isEdit = false, _id = undefined}) {
+function AddSongForm({edit_id = undefined}) {
   const [open, setOpen] = useState(false);
-  const [contents, setContents] = useState([]);
+  const [contents, setContents] = useState({});
   const openForm = async () =>
   {
-    if (isEdit && _id) {
-      const values = await getSong(_id);
-      const newContents =  {song_title: 'A song'};
-      setContents(newContents);
+    if (edit_id) {
+      const values = await getSong(edit_id);
+      
+      console.log(values);
+      setContents({song_title: values.title,
+                  lead_composer: values.meta_data.lead_composer,
+                  game: values.meta_data.game,
+                  release_year: dayjs(values.meta_data.release_year, 'YYYY'),
+                  sources: values.sources});
     } else{
-      console.log(_id);
+      console.log(edit_id);
     }
     setOpen(true);
   }
@@ -240,12 +267,13 @@ function AddSongForm({isEdit = false, _id = undefined}) {
           openForm();
         }}
       >
-        {isEdit ? 'edit' : 'New Song'}
+        {edit_id ? 'edit' : 'New Song'}
       </Button>
       <SongForm
         open={open}
         onFinish={onFinish}
         contents = {contents}
+        _id = {edit_id}
         onCancel={() => {
           setOpen(false);
         }}
@@ -277,11 +305,11 @@ function SourceForm() {
                   rules = {[
                     {
                       required: true,
-                      mesage: "Please enter a video id"
+                      message: "Please enter a video id"
                     }
                   ]}
                 >
-                  <Input></Input>
+                    <Input></Input>
                 </Form.Item>
                 <Form.Item
                   label="Source Type"
@@ -293,32 +321,36 @@ function SourceForm() {
                   //   }
                   // ]}
                 >
-                  <Select placeholder="Youtube">
-                    <Select.Option value="Youtube">Youtube</Select.Option>
-                  </Select>
+                    <Select placeholder="Youtube">
+                      <Select.Option value="Youtube">Youtube</Select.Option>
+                    </Select>
                 </Form.Item>
                 <div>
                 <Form.Item
                   label="Intensity"
                   name={[field.name, "intensity"]}
                 >
-                  <Select defaultValue={"None"}>
-                    <Select.Option value="None">Select an Intensity</Select.Option>
-                    <Select.Option value="Ambient">Ambient</Select.Option>
-                    <Select.Option value="Tension">Tension</Select.Option>
-                    <Select.Option value="Action">Action</Select.Option>
-                    <Select.Option value="High Action">High Action</Select.Option>
-                    <Select.Option value="Heavy Action">Heavy Action</Select.Option>
-                    <Select.Option value="Light Action">Light Action</Select.Option>
-                    
-                  </Select>
+                  <Content>
+                    <Select defaultValue={"None"}>
+                      <Select.Option value="None">Select an Intensity</Select.Option>
+                      <Select.Option value="Ambient">Ambient</Select.Option>
+                      <Select.Option value="Tension">Tension</Select.Option>
+                      <Select.Option value="Action">Action</Select.Option>
+                      <Select.Option value="High Action">High Action</Select.Option>
+                      <Select.Option value="Heavy Action">Heavy Action</Select.Option>
+                      <Select.Option value="Light Action">Light Action</Select.Option>
+                      
+                    </Select>
+                  </Content>
                 </Form.Item>
                 </div>
                 <Form.Item
                   label="Alternate Title"
                   name={[field.name, "alternate_title"]}
                 >
-                  <Input></Input>
+                  <Content>
+                    <Input></Input>
+                  </Content>
                 </Form.Item>
                 <center>
                   <CloseOutlined onClick={() => remove(field.name)} />
