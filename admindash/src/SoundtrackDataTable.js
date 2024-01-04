@@ -38,16 +38,6 @@ function sortStringKey(key) {
 //     }
 // }
 
-// function deleteSoundtrack(_id) {
-//     console.log('delete soundtrack, id:',_id)
-//     let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "")
-//     if (apiKey == null) {
-//         console.log(`user cancelled deletion of id ${_id}`)
-//     } else {
-//         deleteSoundtrackRequest(_id, apiKey)
-//     }
-// }
-
 async function deleteSoundtrack(_id, dataCopy, setFunction) {
     console.log('delete soundtrack, id:',_id)
     let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "")
@@ -98,9 +88,7 @@ function SoundtrackDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-                    {/* <Button onClick={ () => { editSoundtrack(record._id) } }>
-                        edit
-                    </Button> */}
+                    
                     <Button onClick={ () => { deleteSoundtrack(record._id, filteredData, setFilteredData) } }>
                         delete
                     </Button>
