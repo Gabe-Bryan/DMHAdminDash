@@ -2,7 +2,9 @@ import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import AddSongForm from "./AddSongForm"
-import { getAllSongs, deleteSongRequest, getSong } from "./APICalls"
+import { getAllSongs, deleteSongRequest } from "./APICalls"
+
+let data = await getAllSongs();
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -36,10 +38,6 @@ function sortStringMetaKey(key) {
     }
 }
 
-async function editSong(_id) {
-    const values = await getSong(_id);
-}
-
 async function deleteSong(_id, dataCopy, setFunction) {
     console.log('delete song, id:',_id)
     let apiKey = prompt("Please enter the api key to confirm song deletion", "")
@@ -57,33 +55,6 @@ async function deleteSong(_id, dataCopy, setFunction) {
         }
     }
 }
-
-
-
-function addSong() {
-    console.log('addsong stuff goes here')
-}
-
-let dataTestIndex = 0
-
-function addDataTest(data, setFunction) {
-    data.push({title:`test${dataTestIndex}`})
-    setFunction(data)
-}
-
-// let fakeData = []
-// for (let i = 1; i < 100; i++) {
-//     fakeData.push({
-//         key: `${i}`,
-//         title: `Song ${i}`,
-//         game: `Destiny ${i%2===0?'1':'2'}`
-//     })
-// }
-
-
-let data = await getAllSongs();
-
-
 
 function SongDataTable() {
     let [filteredData, setFilteredData] = useState(data)
@@ -126,10 +97,8 @@ function SongDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-                    
-                    <Button onClick={ () => { editSong(record._id) } }>
-                        edit
-                    </Button>
+
+                    <AddSongForm edit_id={record._id} />
 
                     <Button onClick={ () => { deleteSong(record._id, filteredData, setFilteredData ) } }>
                         delete
