@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select} from "antd";
+import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select,Checkbox} from "antd";
 import { Content } from "antd/es/layout/layout";
 import {getSongs,getSong, editSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
@@ -15,11 +15,12 @@ const onFinish = async (values, _id) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
+      console.log(source.is_official)
       const changedSource={
         video_id: source.video_id,
         source_type: source.source_type,
         intensity:source.intensity,
-        official_title: source.official_title,
+        is_official: source.is_official==="on"?true:false,
       }
       if(source.intensity==="None"){
         delete changedSource.intensity
@@ -357,11 +358,11 @@ function SourceForm() {
                 </Form.Item>
                 </div>
                 <Form.Item
-                  label="Alternate Title"
-                  name={[field.name, "alternate_title"]}
+                  label="Is it an official release"
+                  name={[field.name, "is_official"]}
                 >
                   <Content>
-                    <Input></Input>
+                  <Checkbox></Checkbox>
                   </Content>
                 </Form.Item>
                 <center>
