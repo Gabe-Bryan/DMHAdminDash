@@ -112,8 +112,11 @@ function SoundtrackDataTable() {
 
     return (
         <>
-        <div style={{textAlign: 'center', margin: '3em'}}>
-            <h1 style={{textAlign: 'left'}}>Soundtrack Dashboard:</h1>
+        <div style={{textAlign: 'center', margin: '2em'}}>
+            <h2 style={{textAlign: 'left'}}>Soundtracks:</h2>
+            <div style={{textAlign: 'left', margin: '1em'}}>
+                <AddSoundtrackForm/>
+            </div>
             <Input onChange={filterDataTable} placeholder="Filter by title"/>
             
                 <Table
@@ -125,8 +128,6 @@ function SoundtrackDataTable() {
                     columns={cols}
                     rowKey="_id"
                 />
-            <br/>
-            <AddSoundtrackForm/>
         </div>
         </>
     )
