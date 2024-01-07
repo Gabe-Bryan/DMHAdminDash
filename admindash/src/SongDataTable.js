@@ -38,7 +38,7 @@ function sortStringMetaKey(key) {
     }
 }
 
-async function deleteSong(_id, dataCopy, setFunction) {
+async function deleteSong(_id, dataCopy, refreshFunction) {
     console.log('delete song, id:',_id)
     let apiKey = prompt("Please enter the api key to confirm song deletion", "")
     if (apiKey == null) {
@@ -49,17 +49,23 @@ async function deleteSong(_id, dataCopy, setFunction) {
             console.log('incorrect api key. please check and try again')
         else {
             //dataCopy = dataCopy.filter( item => item._id !== _id)
-            data = await getAllSongs()
-            dataCopy = [...data]
-            setFunction(dataCopy)
-            console.log(`success! item id ${_id} removed from database.`)
+            // data = await getAllSongs()
+            // dataCopy = [...data]
+            // setFunction(dataCopy)
+            // console.log(`success! item id ${_id} removed from database.`)
+            refreshFunction();
             //console.log(dataCopy)
         }
     }
 }
 
 function SongDataTable() {
-    let [filteredData, setFilteredData] = useState(data)
+    let [filteredData, setFilteredData] = useState(data);
+    let [filterString, setStringFilter] = useState('');
+    const refreshDataTable = async () => {
+        data = await getAllSongs();
+        filterDataTable();
+    }
 
     let cols = [
         {
@@ -100,9 +106,9 @@ function SongDataTable() {
             render: (text, record, index) => (
                 <Space size='middle'>
 
-                    <AddSongForm edit_id={record._id} />
+                    <AddSongForm edit_id={record._id} refreshFunction = {refreshDataTable}/>
 
-                    <Button onClick={ () => { deleteSong(record._id, filteredData, setFilteredData ) } }>
+                    <Button onClick={ () => { deleteSong(record._id, filteredData, refreshDataTable ) } }>
                         delete
                     </Button>
                 </Space>
@@ -110,16 +116,19 @@ function SongDataTable() {
         },
     ]
 
-    function filterDataTable(evt) {
-        let filterString = evt.target.value
+    function filterDataTable(value = undefined) {
+        let currFilter = filterString;
+        if(value != undefined){
+            setStringFilter(value);
+            currFilter = value;
+        }
         filteredData = data.filter( (obj) => {
             if (
-                obj.title.toLowerCase().includes(filterString.toLowerCase())
+                obj.title.toLowerCase().includes(currFilter.toLowerCase())
             ) return true
 
             return false
         })
-        //console.log(filterString, filteredData)
         setFilteredData(filteredData)
     }
 
@@ -128,9 +137,9 @@ function SongDataTable() {
         <div style={{textAlign: 'center', margin: '2em'}}>
             <h2 style={{textAlign: 'left'}}>Songs:</h2>
             <div style={{textAlign: 'left', margin: '1em'}}>
-                <AddSongForm/>
+                <AddSongForm refreshFunction={refreshDataTable}/>
             </div>
-            <Input onChange={filterDataTable} placeholder="Filter by title"/>
+            <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
             
                 <Table
                     bordered

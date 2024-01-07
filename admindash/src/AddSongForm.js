@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 
 const { YearPicker } = DatePicker;
 
-const onFinish = async (values, _id) => {
+const onFinish = async (values, _id, refreshFunction, setOpen) => {
   notification.info({
     message: "Waiting on response from the server",
     placement: "top",
@@ -62,7 +62,9 @@ const onFinish = async (values, _id) => {
   }
   console.log(response);
   if (!response.errors) {
-    notification.success({message: "Song was submitted to Database"});
+    notification.success({message: "Song patch/post successful!"});
+    refreshFunction();
+    setOpen(false);
   } else {
     console.log("an error was caught");
     let errorString = '';
@@ -123,7 +125,7 @@ const customDarkTheme = {
   },
 };
 
-function SongForm({ open, onFinish, onCancel, contents = {}, _id = undefined}) {
+function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents = {}, _id = undefined}) {
   const [form] = Form.useForm();
   // useEffect(() => {
   //   // form.setFields([{name : ['song_title'], value : 'a song'}]);
@@ -144,7 +146,7 @@ function SongForm({ open, onFinish, onCancel, contents = {}, _id = undefined}) {
           .validateFields()
           .then(async (values) => {
             form.resetFields();
-            await onFinish(values, _id);
+            await onFinish(values, _id, refreshFunction, setOpen);
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
@@ -261,7 +263,7 @@ function SongForm({ open, onFinish, onCancel, contents = {}, _id = undefined}) {
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm({edit_id = undefined}) {
+function AddSongForm({edit_id = undefined, refreshFunction}) {
   const [open, setOpen] = useState(false);
   const [contents, setContents] = useState({});
   const openForm = async () =>
@@ -291,9 +293,11 @@ function AddSongForm({edit_id = undefined}) {
       </Button>
       <SongForm
         open={open}
+        setOpen = {setOpen}
         onFinish={onFinish}
         contents = {contents}
         _id = {edit_id}
+        refreshFunction = {refreshFunction}
         onCancel={() => {
           setOpen(false);
         }}
