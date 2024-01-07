@@ -38,6 +38,7 @@ const onFinish = async (values, _id) => {
       '',
       {
         lead_composer: values.lead_composer,
+        other_credits:values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
       },
@@ -51,6 +52,7 @@ const onFinish = async (values, _id) => {
       '',
       {
         lead_composer: values.lead_composer,
+        other_credits:values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
       },
@@ -191,6 +193,12 @@ function SongForm({ open, onFinish, onCancel, contents = {}, _id = undefined}) {
                     <Input placeholder="Lead Composer" />
               </Form.Item>
 
+              <Form.Item
+                label="Other Credits"
+                name="other_credits">
+                <Input placeholder="Other Credits"></Input>
+              </Form.Item>
+
               <Space.Compact style={{ width: "100%" }}>
                 <Form.Item
                   name="release_year"
@@ -264,6 +272,7 @@ function AddSongForm({edit_id = undefined}) {
       console.log(values);
       setContents({song_title: values.title,
                   lead_composer: values.meta_data.lead_composer,
+                  other_credits :values.meta_data.other_credits,
                   game: values.meta_data.game,
                   release_year: dayjs(values.meta_data.release_year, 'YYYY'),
                   sources: values.sources});
