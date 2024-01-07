@@ -125,8 +125,11 @@ function SongDataTable() {
 
     return (
         <>
-        <div style={{textAlign: 'center', margin: '3em'}}>
-            <h1 style={{textAlign: 'left'}}>Song Dashboard:</h1>
+        <div style={{textAlign: 'center', margin: '2em'}}>
+            <h2 style={{textAlign: 'left'}}>Songs:</h2>
+            <div style={{textAlign: 'left', margin: '1em'}}>
+                <AddSongForm/>
+            </div>
             <Input onChange={filterDataTable} placeholder="Filter by title"/>
             
                 <Table
@@ -139,7 +142,7 @@ function SongDataTable() {
                     rowKey="_id"
                 />
             <br/>
-            <AddSongForm/>
+            
         </div>
         </>
     )
