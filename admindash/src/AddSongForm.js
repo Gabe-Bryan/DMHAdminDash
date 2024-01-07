@@ -276,9 +276,7 @@ function AddSongForm({edit_id = undefined}) {
     <div>
       <Button
         type="primary"
-        onClick={() => {
-          openForm();
-        }}
+        onClick={openForm}
       >
         {edit_id ? 'edit' : 'New Song'}
       </Button>
