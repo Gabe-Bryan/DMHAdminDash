@@ -20,7 +20,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         video_id: source.video_id,
         source_type: source.source_type,
         intensity:source.intensity,
-        is_official: source.is_official==="on"?true:false,
+        is_official: source.is_official,
+        
       }
       if(source.intensity==="None"){
         delete changedSource.intensity
@@ -41,6 +42,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         other_credits:values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
+        destination:values.destination,
+        faction:values.faction
       },
       sourcesArray,
       values.api_key
@@ -55,6 +58,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         other_credits:values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
+        destination:values.destination,
+        faction:values.faction
       },
       sourcesArray,
       values.api_key
@@ -197,7 +202,8 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
 
               <Form.Item
                 label="Other Credits"
-                name="other_credits">
+                name="other_credits"
+                valuePropName="value">
                 <Input placeholder="Other Credits"></Input>
               </Form.Item>
 
@@ -208,9 +214,7 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
                   valuePropName = "value"
                   {...config}
                 >
-                  
-                    <YearPicker />
-                  
+                    <YearPicker /> 
                 </Form.Item>
                 <Form.Item
                   name="game"
@@ -226,10 +230,26 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
                     <Radio.Group>
                       <Radio value="1">Destiny 1</Radio>
                       <Radio value="2">Destiny 2</Radio>
-                    </Radio.Group>
-                  
+                    </Radio.Group> 
                 </Form.Item>
+                <Form.Item
+                name="destination"
+                label="Destination"
+                valuePropName="value"
+              >
+                <Input placeholder="Destination"></Input>
+              </Form.Item>
+              <Form.Item
+                name="faction"
+                label="Faction"
+                
+                valuePropName="value"
+              >
+                <Input placeholder="Faction"></Input>
+              </Form.Item>
               </Space.Compact>
+              
+              
               <Space direction="vertical" size="large" style={{ display: 'flex' }}>
 
               <div style={{ width: "90%" }}>
@@ -270,7 +290,10 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
   {
     if (edit_id) {
       const values = await getSong(edit_id);
-      
+      values.sources.forEach(source => {
+        console.log(source.is_official)
+        // source.is_official = source.is_official==="true"
+      });
       console.log(values);
       setContents({song_title: values.title,
                   lead_composer: values.meta_data.lead_composer,
@@ -338,18 +361,22 @@ function SourceForm() {
                 <Form.Item
                   label="Source Type"
                   name={[field.name, "source_type"]}
-                  // rules = {[
-                  //   {
-                  //     required: true,
-                  //     mesage: "Please enter a source type"
-                  //   }
-                  // ]}
                 >
                     <Select placeholder="Youtube">
                       <Select.Option value="Youtube">Youtube</Select.Option>
                     </Select>
                 </Form.Item>
-                <div>
+                
+                <Form.Item
+                  label="Track number"
+                  name={[field.name, "track_number"]}
+                  initialValue={"NONE"}
+                  >
+                    <Input></Input>
+                  
+                </Form.Item>
+                
+                
                 <Form.Item
                   label="Intensity"
                   name={[field.name, "intensity"]}
@@ -367,14 +394,14 @@ function SourceForm() {
                     </Select>
                   </Content>
                 </Form.Item>
-                </div>
+                
                 <Form.Item
                   label="Is it an official release"
                   name={[field.name, "is_official"]}
+                  valuePropName="checked"
                 >
-                  <Content>
+                  
                   <Checkbox></Checkbox>
-                  </Content>
                 </Form.Item>
                 <center>
                   <CloseOutlined onClick={() => remove(field.name)} />
