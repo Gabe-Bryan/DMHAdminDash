@@ -290,11 +290,6 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
   {
     if (edit_id) {
       const values = await getSong(edit_id);
-      values.sources.forEach(source => {
-        console.log(source.is_official)
-        // source.is_official = source.is_official==="true"
-      });
-      console.log(values);
       setContents({song_title: values.title,
                   lead_composer: values.meta_data.lead_composer,
                   other_credits :values.meta_data.other_credits,
