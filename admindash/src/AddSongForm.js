@@ -295,7 +295,9 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
                   other_credits :values.meta_data.other_credits,
                   game: values.meta_data.game,
                   release_year: dayjs(values.meta_data.release_year, 'YYYY'),
-                  sources: values.sources});
+                  sources: values.sources,
+                  destination: values.meta_data.destination,
+                  faction: values.meta_data.faction});
     } else{
       console.log(edit_id);
     }
