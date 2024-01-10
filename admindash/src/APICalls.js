@@ -21,7 +21,7 @@ const getSong = async (_id) => {
   assumes song has an soundtrack and meta description
   assumes admin inputted song name correctly
 */
-const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sourcesArray, api_key) => {
+const addNewSongTitleSimple = async (song_title, meta_data, sourcesArray, api_key) => {
     const uriPosts = uri + '/music/songs';
   
     try {
@@ -31,7 +31,7 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
           'content-type': 'application/json',
           'api_key': api_key
         },
-        body: JSON.stringify({ title: song_title, soundtrack_id: _soundtrack_id, meta_data: meta_data, sources: sourcesArray })
+        body: JSON.stringify({ title: song_title, meta_data: meta_data, sources: sourcesArray })
       });
       return response.json();
     } catch (errors) {
@@ -40,17 +40,19 @@ const addNewSongTitleSimple = async (song_title, _soundtrack_id, meta_data, sour
     }
   };
 
-const editSong = async (_id, songTitle, _soundtrack_id, meta_data, sourcesArray, api_key) => {
+const editSong = async (_id, songTitle, meta_data, sourcesArray, api_key) => {
+ console.log(api_key)
   const uriPatch = uri + '/music/songs/' + _id;
 
   try{
+    
     const response = await fetch(uriPatch, {
       method: "PATCH",
       headers: {
         'content-type': 'application/json',
         'api_key': api_key
       },
-      body: JSON.stringify({title: songTitle, soundtrack_id: _soundtrack_id, meta_data: meta_data, sources: sourcesArray})
+      body: JSON.stringify({title: songTitle,  meta_data: meta_data, sources: sourcesArray})
     });
     return response.json();
   } catch (e) {

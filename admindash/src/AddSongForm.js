@@ -15,7 +15,6 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
-      console.log(source.is_official)
       const changedSource={
         video_id: source.video_id,
         source_type: source.source_type,
@@ -33,10 +32,10 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   let response;
   if (_id) {
     console.log('submitting patch...');
+    
     response = await editSong(
       _id,
       values.song_title,
-      '',
       {
         lead_composer: values.lead_composer,
         other_credits:values.other_credits,
@@ -52,7 +51,6 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
     console.log('sending post request...', _id)
     response = await addNewSongTitleSimple(
       values.song_title,
-      '',
       {
         lead_composer: values.lead_composer,
         other_credits:values.other_credits,
