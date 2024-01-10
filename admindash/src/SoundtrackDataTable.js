@@ -38,7 +38,7 @@ function sortStringKey(key) {
 //     }
 // }
 
-async function deleteSoundtrack(_id, dataCopy, setFunction) {
+async function deleteSoundtrack(_id, dataCopy, refreshFunction) {
     console.log('delete soundtrack, id:',_id)
     let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "")
     if (apiKey == null) {
@@ -49,18 +49,24 @@ async function deleteSoundtrack(_id, dataCopy, setFunction) {
             console.log('incorrect api key. please check and try again')
         else {
             //dataCopy = dataCopy.filter( item => item._id !== _id)
-            data = await getAllSoundtracks()
-            dataCopy = [...data]
-            setFunction(dataCopy)
-            console.log(`success! item id ${_id} removed from database.`)
+            // data = await getAllSoundtracks()
+            // dataCopy = [...data]
+            // setFunction(dataCopy)
+            // console.log(`success! item id ${_id} removed from database.`)
             //console.log(dataCopy)
+            refreshFunction();
         }
     }
 }
 
 function SoundtrackDataTable() {
 
-    let [filteredData, setFilteredData] = useState(data)
+    let [filteredData, setFilteredData] = useState(data);
+    let [filterString, setStringFilter] = useState('');
+    const refreshDataTable = async () => {
+        data = await getAllSoundtracks();
+        filterDataTable();
+    }
 
     let cols = [
         {
@@ -88,8 +94,8 @@ function SoundtrackDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-                    
-                    <Button onClick={ () => { deleteSoundtrack(record._id, filteredData, setFilteredData) } }>
+                    <AddSoundtrackForm edit_id={record._id} refreshFunction={refreshDataTable}/>
+                    <Button onClick={ () => { deleteSoundtrack(record._id, filteredData, refreshDataTable) } }>
                         delete
                     </Button>
                 </Space>
@@ -97,16 +103,19 @@ function SoundtrackDataTable() {
         },
     ]
 
-    function filterDataTable(evt) {
-        let filterString = evt.target.value
+    function filterDataTable(value = undefined) {
+        let currFilter = filterString;
+        if(value != undefined){
+            setStringFilter(value);
+            currFilter = value;
+        }
         filteredData = data.filter( (obj) => {
             if (
-                obj.title.toLowerCase().includes(filterString.toLowerCase())
+                obj.title.toLowerCase().includes(currFilter.toLowerCase())
             ) return true
-            
+
             return false
         })
-        // console.log(filterString, filteredData)
         setFilteredData(filteredData)
     }
 
@@ -115,9 +124,9 @@ function SoundtrackDataTable() {
         <div style={{textAlign: 'center', margin: '2em'}}>
             <h2 style={{textAlign: 'left'}}>Soundtracks:</h2>
             <div style={{textAlign: 'left', margin: '1em'}}>
-                <AddSoundtrackForm/>
+                <AddSoundtrackForm refreshFunction={refreshDataTable}/>
             </div>
-            <Input onChange={filterDataTable} placeholder="Filter by title"/>
+            <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
             
                 <Table
                     bordered

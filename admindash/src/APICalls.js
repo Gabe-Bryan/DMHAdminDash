@@ -58,6 +58,25 @@ const editSong = async (_id, songTitle, _soundtrack_id, meta_data, sourcesArray,
     return {errors: "Failed to connect with server"};
   }
 }
+const editSoundtrack = async(_id, soundtrackTitle, game, releaseYear, apiKey) => 
+{
+  const uriPatch = uri + '/music/soundtracks/' + _id;
+  try{
+    const response = await fetch(uriPatch, {
+      method: "PATCH",
+      headers: {
+        'content-type': 'application/json',
+        'api_key': apiKey
+      },
+      body: JSON.stringify({title: soundtrackTitle, game: game, release_date: releaseYear})
+    });
+    return response.json();
+  } catch (e) {
+    console.error('Error patching song', e);
+    return {errors: "Failed to connect with server"};
+  }
+  
+}
   
 
 /*adds to sources database new url and alt theme and returns the _sources_index
@@ -98,6 +117,11 @@ const getAllSoundtracks = async()=>{
   return fetch(uriGet).then(async response=>await response.json());
 };
 
+const getSoundtrack = async (_id)=>{
+  const uriGet = uri+'/music/soundtracks/' +_id;
+  return await fetch(uriGet).then(async response=>await response.json());
+};
+
 const deleteSongRequest = async (itemId, apiKey) => {
   return fetch(`${uri}/music/songs/${itemId}`, {
     method: 'DELETE',
@@ -125,4 +149,4 @@ const deleteSoundtrackRequest = async (itemId, apiKey) => {
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
 export { getSongs, getSong, getAllSongs, editSong, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks, 
-         deleteSongRequest, deleteSoundtrackRequest };
+         getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest };
