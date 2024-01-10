@@ -1,6 +1,7 @@
 import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
+import {ReloadOutlined} from "@ant-design/icons"
 import AddSongForm from "./AddSongForm"
 import { getAllSongs, deleteSongRequest } from "./APICalls"
 
@@ -136,22 +137,27 @@ function SongDataTable() {
         <>
         <div style={{textAlign: 'center', margin: '2em'}}>
             <h2 style={{textAlign: 'left'}}>Songs:</h2>
-            <div style={{textAlign: 'left', margin: '1em'}}>
-                <AddSongForm refreshFunction={refreshDataTable}/>
+            
+            <div style={{display: 'block', margin: '1rem'}}>
+                <div style={{display: 'inline-block', width: '50%', textAlign: 'left'}}>
+                    <AddSongForm refreshFunction={refreshDataTable}/>
+                </div>
+                <div style={{display: 'inline-block', width: '50%', textAlign: 'right'}}>
+                    <Button icon={<ReloadOutlined/>} onClick={refreshDataTable}/>
+                </div>
             </div>
+
             <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
             
-                <Table
-                    bordered
-                    pagination={false}
-                    virtual
-                    scroll={{ x: 1, y: 500 }}
-                    dataSource={[...filteredData]}
-                    columns={cols}
-                    rowKey="_id"
-                />
-            <br/>
-            
+            <Table
+                bordered
+                pagination={false}
+                virtual
+                scroll={{ x: 1, y: 500 }}
+                dataSource={[...filteredData]}
+                columns={cols}
+                rowKey="_id"
+            />
         </div>
         </>
     )
