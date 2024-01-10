@@ -83,9 +83,13 @@ function SongDataTable() {
             sorter: sortStringMetaKey('lead_composer')
         },
         {
-            title: 'Soundtrack ID',
-            dataIndex: 'soundtrack_id',
-            key: 'soundtrack_id',
+            /*
+                TEST THIS AFTER MERGING BRANCH UP TO MAIN
+                (is dataIndex set correctly for whats in database?)
+            */
+            title: 'Soundtrack',
+            dataIndex: ['sources', 'soundtrack'],
+            key: 'soundtrack',
             sorter: sortStringKey('soundtrack_id')
         },
         {
@@ -125,7 +129,11 @@ function SongDataTable() {
         }
         filteredData = data.filter( (obj) => {
             if (
-                obj.title.toLowerCase().includes(currFilter.toLowerCase())
+                /*
+                    ADD MORE FILTERS HERE IF NEEDED
+                */
+                obj.title.toLowerCase().includes(currFilter.toLowerCase()) ||
+                obj.meta_data.lead_composer.toLowerCase().includes(currFilter.toLowerCase())
             ) return true
 
             return false
@@ -147,7 +155,7 @@ function SongDataTable() {
                 </div>
             </div>
 
-            <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
+            <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title, lead composer"/>
             
             <Table
                 bordered
