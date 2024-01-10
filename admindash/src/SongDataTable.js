@@ -3,10 +3,11 @@ import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import {ReloadOutlined} from "@ant-design/icons"
 import AddSongForm from "./AddSongForm"
-import { getAllSongs, deleteSongRequest } from "./APICalls"
+import { getAllSongs, deleteSongRequest, getAllSoundtracks } from "./APICalls"
 
 let data = await getAllSongs();
-
+let soundtrackData = await getAllSoundtracks()
+console.log(soundtrackData)
 function sortStringKey(key) {
     return function(a, b) {
         if  ( 
@@ -107,7 +108,7 @@ function SongDataTable() {
             render: (text, record, index) => (
                 <Space size='middle'>
 
-                    <AddSongForm edit_id={record._id} refreshFunction = {refreshDataTable}/>
+                    <AddSongForm edit_id={record._id} soundtrackData={[...soundtrackData]} refreshFunction = {refreshDataTable}/>
 
                     <Button onClick={ () => { deleteSong(record._id, filteredData, refreshDataTable ) } }>
                         delete
@@ -140,7 +141,7 @@ function SongDataTable() {
             
             <div style={{display: 'block', margin: '1rem'}}>
                 <div style={{display: 'inline-block', width: '50%', textAlign: 'left'}}>
-                    <AddSongForm refreshFunction={refreshDataTable}/>
+                    <AddSongForm soundtrackData={[...soundtrackData]} refreshFunction={refreshDataTable}/>
                 </div>
                 <div style={{display: 'inline-block', width: '50%', textAlign: 'right'}}>
                     <Button icon={<ReloadOutlined/>} onClick={refreshDataTable}/>

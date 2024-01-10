@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select,Checkbox} from "antd";
 import { Content } from "antd/es/layout/layout";
-import {getSongs,getSong, editSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
+import {getSongs,getSong, editSong, getAllSongs,addNewSongTitleSimple,addNewSongURL, getAllSoundtracks} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
 
 const { YearPicker } = DatePicker;
+
 
 const onFinish = async (values, _id, refreshFunction, setOpen) => {
   notification.info({
@@ -128,14 +129,17 @@ const customDarkTheme = {
   },
 };
 
-function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents = {}, _id = undefined}) {
+function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents = {}, _id = undefined, soundtrackData}) {
+  console.log(soundtrackData)
   const [form] = Form.useForm();
   // useEffect(() => {
   //   // form.setFields([{name : ['song_title'], value : 'a song'}]);
   //   console.log(form.getFieldValue());
   // });
   const [buttonName] = React.useState(false);
-
+  const soundtrackCopy = [...soundtrackData]
+  const soundtrackDic =[...new Set(soundtrackCopy.map((item)=>({_id:item._id, title:item.title})))]
+  console.log(soundtrackDic)
   const currentTheme = lightMode;
   return (
     <Modal
@@ -286,6 +290,7 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
   const [contents, setContents] = useState({});
   const openForm = async () =>
   {
+   
     if (edit_id) {
       const values = await getSong(edit_id);
       setContents({song_title: values.title,
@@ -396,6 +401,16 @@ function SourceForm() {
                   name={[field.name, "is_official"]}
                   valuePropName="checked"
                 >
+                <Form.Item
+                  label="Soundtrack"
+                  name={[field.name, "soundtrack"]}>
+                    <Content>
+                    <Select
+                      mode="multiple">
+                      
+                    </Select>
+                    </Content>
+                </Form.Item>
                   
                   <Checkbox></Checkbox>
                 </Form.Item>
