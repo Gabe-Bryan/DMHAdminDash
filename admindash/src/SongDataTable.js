@@ -119,7 +119,7 @@ function SongDataTable() {
 
     function filterDataTable(value = undefined) {
         let currFilter = filterString;
-        if(value != undefined){
+        if(value !== undefined){
             setStringFilter(value);
             currFilter = value;
         }

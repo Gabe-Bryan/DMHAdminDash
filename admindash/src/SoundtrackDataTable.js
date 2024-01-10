@@ -1,6 +1,7 @@
 import React from "react"
 import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
+import {ReloadOutlined} from "@ant-design/icons"
 import AddSoundtrackForm from './AddSoundtrackForm'
 import {getAllSoundtracks, deleteSoundtrackRequest} from "./APICalls";
 
@@ -105,7 +106,7 @@ function SoundtrackDataTable() {
 
     function filterDataTable(value = undefined) {
         let currFilter = filterString;
-        if(value != undefined){
+        if(value !== undefined){
             setStringFilter(value);
             currFilter = value;
         }
@@ -123,8 +124,13 @@ function SoundtrackDataTable() {
         <>
         <div style={{textAlign: 'center', margin: '2em'}}>
             <h2 style={{textAlign: 'left'}}>Soundtracks:</h2>
-            <div style={{textAlign: 'left', margin: '1em'}}>
-                <AddSoundtrackForm refreshFunction={refreshDataTable}/>
+            <div style={{display: 'block', margin: '1rem'}}>
+                <div style={{display: 'inline-block', width: '50%', textAlign: 'left'}}>
+                    <AddSoundtrackForm refreshFunction={refreshDataTable}/>
+                </div>
+                <div style={{display: 'inline-block', width: '50%', textAlign: 'right'}}>
+                    <Button icon={<ReloadOutlined/>} onClick={refreshDataTable}/>
+                </div>
             </div>
             <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
             
