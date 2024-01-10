@@ -143,7 +143,7 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
       width={"100%"}
       okText="Send Music To Database"
       cancelText="Cancel"
-      onCancel={onCancel}
+      onCancel={() => onCancel(form)}
       onOk={async () => {
         form
           .validateFields()
@@ -316,7 +316,8 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
         contents = {contents}
         _id = {edit_id}
         refreshFunction = {refreshFunction}
-        onCancel={() => {
+        onCancel={(form) => {
+          form.resetFields();
           setOpen(false);
         }}
       />

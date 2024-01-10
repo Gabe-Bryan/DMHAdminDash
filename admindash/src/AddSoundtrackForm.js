@@ -23,7 +23,7 @@ function SoundtrackForm({open, onCancel, onFinish, contents}) {
             width={"50%"}
             okText="Submit"
             cancelText="Cancel"
-            onCancel={onCancel}
+            onCancel={() => onCancel(form)}
             onOk={async () => {
             form
                 .validateFields()
@@ -111,8 +111,9 @@ function AddSoundtrackForm ({edit_id = undefined, refreshFunction}) {
           <SoundtrackForm
             open={open}
             onFinish = {submitSoundtrack}
-            onCancel={() => {
-              setOpen(false);
+            onCancel={(form) => {
+                form.resetFields();
+                setOpen(false);
             }}
             contents = {contents}
 
