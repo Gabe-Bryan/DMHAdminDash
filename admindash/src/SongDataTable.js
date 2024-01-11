@@ -7,7 +7,6 @@ import { getAllSongs, deleteSongRequest, getAllSoundtracks } from "./APICalls"
 
 let data = await getAllSongs();
 let soundtrackData = await getAllSoundtracks()
-console.log(soundtrackData)
 function sortStringKey(key) {
     return function(a, b) {
         if  ( 

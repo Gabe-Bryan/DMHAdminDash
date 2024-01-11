@@ -130,7 +130,7 @@ const customDarkTheme = {
 };
 
 function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents = {}, _id = undefined, soundtrackData}) {
-  console.log(soundtrackData)
+  
   const [form] = Form.useForm();
   // useEffect(() => {
   //   // form.setFields([{name : ['song_title'], value : 'a song'}]);
