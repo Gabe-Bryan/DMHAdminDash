@@ -138,8 +138,8 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
   // });
   const [buttonName] = React.useState(false);
   const soundtrackCopy = [...soundtrackData]
-  const soundtrackDic =[...new Set(soundtrackCopy.map((item)=>({_id:item._id, title:item.title})))]
-  console.log(soundtrackDic)
+  const soundtrackOptions =[...new Set(soundtrackCopy.map((item)=>({value:item._id, label:item.title})))]
+
   const currentTheme = lightMode;
   return (
     <Modal
@@ -255,7 +255,7 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
               <Space direction="vertical" size="large" style={{ display: 'flex' }}>
 
               <div style={{ width: "90%" }}>
-                <SourceForm />
+                <SourceForm soundtrackOptions={soundtrackOptions} />
               </div>
               
                 
@@ -285,7 +285,7 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm({edit_id = undefined, refreshFunction}) {
+function AddSongForm({edit_id = undefined, refreshFunction, soundtrackData}) {
   const [open, setOpen] = useState(false);
   const [contents, setContents] = useState({});
   const openForm = async () =>
@@ -321,6 +321,7 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
         contents = {contents}
         _id = {edit_id}
         refreshFunction = {refreshFunction}
+        soundtrackData={soundtrackData}
         onCancel={(form) => {
           form.resetFields();
           setOpen(false);
@@ -330,7 +331,7 @@ function AddSongForm({edit_id = undefined, refreshFunction}) {
   );
 }
 
-function SourceForm() {
+function SourceForm({soundtrackOptions}) {
   return (
     <Card
       title="Sources"
@@ -344,10 +345,14 @@ function SourceForm() {
     >
       <Form.List name="sources">
         {(fields, { add, remove }) => (
-          <div style={{ display: "flex", flexDirection: "column", rowGap: 16 }}>
+          <Space style={{ rowGap: 32 }} direction="vertical">
             {fields.map((field) => (
+              <Card>
+          <center align="right">
+            <CloseOutlined onClick={() => remove(field.name)} />
+          </center>
               <Space key={field.key}>
-                <Form.Item
+              <Form.Item
                   label="Video Id"
                   name={[field.name, "video_id"]}
                   rules = {[
@@ -396,34 +401,36 @@ function SourceForm() {
                   </Content>
                 </Form.Item>
                 
+                </Space>
+                
                 <Form.Item
                   label="Is it an official release"
                   name={[field.name, "is_official"]}
                   valuePropName="checked"
-                >
+                  >
+                  
+                  <Checkbox></Checkbox>
+                </Form.Item>
+                
                 <Form.Item
                   label="Soundtrack"
                   name={[field.name, "soundtrack"]}>
                     <Content>
                     <Select
-                      mode="multiple">
+                      mode="multiple"
+                      options={soundtrackOptions}
+                      >
                       
                     </Select>
                     </Content>
                 </Form.Item>
-                  
-                  <Checkbox></Checkbox>
-                </Form.Item>
-                <center>
-                  <CloseOutlined onClick={() => remove(field.name)} />
-                </center>
-              </Space>
+                </Card>
             ))}
 
             <Button type="default" onClick={() => {add({source_type:"Youtube"})}}>
               Add New Source
             </Button>
-          </div>
+          </Space>
         )}
       </Form.List>
     </Card>
