@@ -106,7 +106,7 @@ function SongDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-
+                    
                     <AddSongForm edit_id={record._id} soundtrackData={[...soundtrackData]} refreshFunction = {refreshDataTable}/>
 
                     <Button onClick={ () => { deleteSong(record._id, filteredData, refreshDataTable ) } }>

@@ -37,12 +37,15 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
+      console.log(source.soundtrack)
+      console.log(source.intensity)
       const changedSource = {
         video_id: source.video_id,
         source_type: source.source_type,
         intensity: source.intensity,
         track_number: parseInt(source.track_number),
         is_official: source.is_official,
+        soundtrack_id: source.soundtrack
       };
       if (source.intensity === "None") {
         delete changedSource.intensity;
@@ -286,7 +289,7 @@ function SongForm({
                 style={{ display: "flex" }}
               >
                 <div style={{ width: "90%" }}>
-                  <SourceForm soundtrackOptions={soundtrackOptions} />
+                  <SourceForm soundtrackOptions={soundtrackOptions} form={form} />
                 </div>
 
                 <Form.Item
@@ -355,7 +358,15 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData }) {
   );
 }
 
-function SourceForm({ soundtrackOptions }) {
+function SourceForm({ soundtrackOptions, form }) {
+  const handleChange=(value,e,form)=> {
+    console.log("value is : ", value);
+    console.log("e : ", e);
+    // // form.setFieldsValue({
+    // //   [e, "intensity"]: value
+    // });
+    
+}
   return (
     <Card
       title="Sources"
@@ -404,9 +415,10 @@ function SourceForm({ soundtrackOptions }) {
                     <Input></Input>
                   </Form.Item>
 
-                  <Form.Item label="Intensity" name={[field.name, "intensity"]}>
+                  <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} key={[field.name, "intensity"]}> 
+                  
                     <Content>
-                      <Select defaultValue={"None"}>
+                      <Select onChange={(value,name)=>handleChange(value,field.name,form)}>
                         <Select.Option value="None">
                           Select an Intensity
                         </Select.Option>
@@ -440,6 +452,8 @@ function SourceForm({ soundtrackOptions }) {
                     <Select
                       mode="multiple"
                       options={soundtrackOptions}
+                      value={soundtrackOptions.value}
+                      onChange={(value,name)=>handleChange(value,field.name,form)}
                     ></Select>
                   </Content>
                 </Form.Item>
