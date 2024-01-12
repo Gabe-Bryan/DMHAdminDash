@@ -418,7 +418,7 @@ function SourceForm({ soundtrackOptions, form }) {
 
                   <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} key={[field.name, "intensity"]}> 
                   
-                    <Content>
+                    
                       <Select onChange={(value,name)=>handleChange(value,field.name,form)}>
                         <Select.Option value="None">
                           Select an Intensity
@@ -436,7 +436,7 @@ function SourceForm({ soundtrackOptions, form }) {
                           Light Action
                         </Select.Option>
                       </Select>
-                    </Content>
+                  
                   </Form.Item>
                 </Space>
 
@@ -449,14 +449,14 @@ function SourceForm({ soundtrackOptions, form }) {
                 </Form.Item>
 
                 <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]}>
-                  <Content>
+                  
                     <Select
-                      mode="multiple"
+                      // mode="multiple"
                       options={soundtrackOptions}
                       value={soundtrackOptions.value}
                       onChange={(value,name)=>handleChange(value,field.name,form)}
                     ></Select>
-                  </Content>
+                  
                 </Form.Item>
               </Card>
             ))}
