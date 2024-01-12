@@ -37,19 +37,20 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
-      console.log(source.soundtrack)
+      console.log(source)
       console.log(source.intensity)
       const changedSource = {
         video_id: source.video_id,
         source_type: source.source_type,
         intensity: source.intensity,
-        track_number: parseInt(source.track_number),
+        track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
         soundtrack_id: source.soundtrack
       };
       if (source.intensity === "None") {
         delete changedSource.intensity;
-      }
+      } 
+      console.log(changedSource)
       sourcesArray.push(changedSource);
     }
   }
