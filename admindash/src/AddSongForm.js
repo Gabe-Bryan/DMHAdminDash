@@ -416,7 +416,7 @@ function SourceForm({ soundtrackOptions, form }) {
                     <Input></Input>
                   </Form.Item>
 
-                  <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} key={[field.name, "intensity"]}> 
+                  <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} noStyle> 
                   
                     
                       <Select onChange={(value,name)=>handleChange(value,field.name,form)}>
@@ -448,7 +448,7 @@ function SourceForm({ soundtrackOptions, form }) {
                   <Checkbox></Checkbox>
                 </Form.Item>
 
-                <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]}>
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]} noStyle>
                   
                     <Select
                       // mode="multiple"
