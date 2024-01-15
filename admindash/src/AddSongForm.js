@@ -45,7 +45,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         intensity: source.intensity,
         track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
-        soundtrack_id: source.soundtrack
+        soundtrack_id: source.soundtrack? source.soundtrack:undefined
       };
       if (source.intensity === "None") {
         delete changedSource.intensity;
@@ -171,7 +171,7 @@ function SongForm({
   // });
   const [buttonName] = React.useState(false);
   const soundtrackCopy = [...soundtrackData];
-  const soundtrackOptions = [
+  const soundtrackOptions = [{value:false,label:"Select a soundtrack"},
     ...new Set(
       soundtrackCopy.map((item) => ({ value: item._id, label: item.title }))
     ),
@@ -448,14 +448,18 @@ function SourceForm({ soundtrackOptions, form }) {
                   <Checkbox></Checkbox>
                 </Form.Item>
 
-                <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]} noStyle>
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]} noStyle initialValue={"655c0603c1a3c64d92514266"} >
                   
                     <Select
                       // mode="multiple"
                       options={soundtrackOptions}
-                      value={soundtrackOptions.value}
+                      //value={soundtrackOptions.value}
+                    
                       onChange={(value,name)=>handleChange(value,field.name,form)}
-                    ></Select>
+                    >
+                    
+
+                    </Select>
                   
                 </Form.Item>
               </Card>
