@@ -163,6 +163,8 @@ function SongForm({
   contents = {},
   _id = undefined,
   soundtrackData,
+  values,
+  songObject
 }) {
   const [form] = Form.useForm();
   // useEffect(() => {
@@ -290,7 +292,7 @@ function SongForm({
                 style={{ display: "flex" }}
               >
                 <div style={{ width: "90%" }}>
-                  <SourceForm soundtrackOptions={soundtrackOptions} form={form} />
+                  <SourceForm soundtrackOptions={soundtrackOptions} form={form} songObject={songObject} />
                 </div>
 
                 <Form.Item
@@ -316,7 +318,10 @@ function SongForm({
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData }) {
+function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, songObject }) {
+  
+  
+
   const [open, setOpen] = useState(false);
   const [contents, setContents] = useState({});
   const openForm = async () => {
@@ -354,12 +359,22 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData }) {
           form.resetFields();
           setOpen(false);
         }}
+        songObject={songObject}
       />
     </div>
   );
 }
 
-function SourceForm({ soundtrackOptions, form }) {
+function SourceForm({ soundtrackOptions, form, songObject }) {
+  
+  function getSongSources(songObject) {
+    let sourceList = []
+    songObject.sources.forEach((source)=>{sourceList.push(source)})
+    return sourceList
+  }
+
+  console.log(getSongSources(songObject))
+  
   const handleChange=(value,e,form)=> {
     console.log("value is : ", value);
     console.log("e : ", e);
