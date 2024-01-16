@@ -103,7 +103,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         newError += key + ": " + error[key] + ", ";
       }
       newError = newError.slice(0, -2);
-      if (errorString.length == 0) {
+      if (errorString.length === 0) {
         errorString += "\n";
       }
       errorString += newError;
