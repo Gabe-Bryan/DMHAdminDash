@@ -45,7 +45,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         intensity: source.intensity,
         track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
-        soundtrack_id: source.soundtrack? source.soundtrack:undefined
+        soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined
       };
       if (source.intensity === "None") {
         delete changedSource.intensity;
@@ -180,6 +180,7 @@ function SongForm({
   ];
 
   const currentTheme = lightMode;
+  console.log(contents)
   return (
     <Modal
       open={open}
@@ -246,7 +247,7 @@ function SongForm({
                 name="other_credits"
                 valuePropName="value"
               >
-                <Input placeholder="Other Credits"></Input>
+                <Input placeholder="Other Credits" disabled></Input>
               </Form.Item>
 
               <Space.Compact style={{ width: "100%" }}>
@@ -292,7 +293,7 @@ function SongForm({
                 style={{ display: "flex" }}
               >
                 <div style={{ width: "90%" }}>
-                  <SourceForm soundtrackOptions={soundtrackOptions} form={form} songObject={songObject} />
+                  <SourceForm soundtrackOptions={soundtrackOptions} songObject={songObject} />
                 </div>
 
                 <Form.Item
@@ -326,7 +327,7 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, son
   const [contents, setContents] = useState({});
   const openForm = async () => {
     if (edit_id) {
-      const values = await getSong(edit_id);
+      const values = songObject
       setContents({
         song_title: values.title,
         lead_composer: values.meta_data.lead_composer,
@@ -365,17 +366,17 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, son
   );
 }
 
-function SourceForm({ soundtrackOptions, form, songObject }) {
+function SourceForm({ soundtrackOptions, songObject }) {
   
   function getSongSources(songObject) {
     let sourceList = []
-    songObject.sources.forEach((source)=>{sourceList.push(source)})
+    songObject.sources.forEach((source)=>{sourceList.push(source.soundtrack_id)})
     return sourceList
   }
 
-  console.log(getSongSources(songObject))
   
-  const handleChange=(value,e,form)=> {
+  
+  const handleChange=(value,e)=> {
     console.log("value is : ", value);
     console.log("e : ", e);
     // // form.setFieldsValue({
@@ -394,7 +395,7 @@ function SourceForm({ soundtrackOptions, form, songObject }) {
       bodyStyle={{ backgroundColor: "#E8D8E6", borderColor: "#E8D8E6" }}
       bordered={false}
     >
-      <Form.List name="sources">
+      <Form.List name="sources" >
         {(fields, { add, remove }) => (
           <Space style={{ rowGap: 32 }} direction="vertical">
             {fields.map((field) => (
@@ -434,7 +435,7 @@ function SourceForm({ soundtrackOptions, form, songObject }) {
                   <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} noStyle> 
                   
                     
-                      <Select onChange={(value,name)=>handleChange(value,field.name,form)}>
+                      <Select onChange={(value,name)=>handleChange(value,field.name)}>
                         <Select.Option value="None">
                           Select an Intensity
                         </Select.Option>
@@ -463,14 +464,14 @@ function SourceForm({ soundtrackOptions, form, songObject }) {
                   <Checkbox></Checkbox>
                 </Form.Item>
 
-                <Form.Item label="Soundtrack" name={[field.name, "soundtrack"]} noStyle initialValue={"655c0603c1a3c64d92514266"} >
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} noStyle initialValue={false} >
                   
                     <Select
                       // mode="multiple"
                       options={soundtrackOptions}
                       //value={soundtrackOptions.value}
                     
-                      onChange={(value,name)=>handleChange(value,field.name,form)}
+                      onChange={(value,name)=>handleChange(value,field.name)}
                     >
                     
 
