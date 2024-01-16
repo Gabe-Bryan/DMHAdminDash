@@ -41,7 +41,7 @@ const addNewSongTitleSimple = async (song_title, meta_data, sourcesArray, api_ke
   };
 
 const editSong = async (_id, songTitle, meta_data, sourcesArray, api_key) => {
- console.log(api_key)
+ //console.log(api_key)
   const uriPatch = uri + '/music/songs/' + _id;
 
   try{

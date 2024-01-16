@@ -3,9 +3,18 @@ import {useState} from "react"
 import {Table, Button, Input, Space} from "antd"
 import {ReloadOutlined} from "@ant-design/icons"
 import AddSongForm from "./AddSongForm"
-import { getAllSongs, deleteSongRequest } from "./APICalls"
+import { getAllSongs, deleteSongRequest, getAllSoundtracks, getSong } from "./APICalls"
 
-let data = await getAllSongs();
+let data = await getAllSongs()
+let soundtrackData = await getAllSoundtracks()
+
+function getSongObject(_id) {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i]._id === _id) {
+            return data[i] 
+        }
+    }
+}
 
 function sortStringKey(key) {
     return function(a, b) {
@@ -110,8 +119,8 @@ function SongDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-
-                    <AddSongForm edit_id={record._id} refreshFunction = {refreshDataTable}/>
+                    
+                    <AddSongForm edit_id={record._id} soundtrackData={[...soundtrackData]} refreshFunction = {refreshDataTable} songObject={getSongObject(record._id)} />
 
                     <Button onClick={ () => { deleteSong(record._id, filteredData, refreshDataTable ) } }>
                         delete
@@ -148,7 +157,7 @@ function SongDataTable() {
             
             <div style={{display: 'block', margin: '1rem'}}>
                 <div style={{display: 'inline-block', width: '50%', textAlign: 'left'}}>
-                    <AddSongForm refreshFunction={refreshDataTable}/>
+                    <AddSongForm soundtrackData={[...soundtrackData]} refreshFunction={refreshDataTable}/>
                 </div>
                 <div style={{display: 'inline-block', width: '50%', textAlign: 'right'}}>
                     <Button icon={<ReloadOutlined/>} onClick={refreshDataTable}/>

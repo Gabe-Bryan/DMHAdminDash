@@ -1,9 +1,31 @@
 import React, { useState, useEffect } from "react";
-import {Button,Input,Space,ConfigProvider,theme,Form,DatePicker,Radio,Card,notification,Modal,Select,Checkbox} from "antd";
+import {
+  Button,
+  Input,
+  Space,
+  ConfigProvider,
+  theme,
+  Form,
+  DatePicker,
+  Radio,
+  Card,
+  notification,
+  Modal,
+  Select,
+  Checkbox,
+} from "antd";
 import { Content } from "antd/es/layout/layout";
-import {getSongs,getSong, editSong, getAllSongs,addNewSongTitleSimple,addNewSongURL} from "./APICalls";
+import {
+  getSongs,
+  getSong,
+  editSong,
+  getAllSongs,
+  addNewSongTitleSimple,
+  addNewSongURL,
+  getAllSoundtracks,
+} from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 const { YearPicker } = DatePicker;
 
@@ -15,49 +37,53 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   let sourcesArray = [];
   if (values.sources) {
     for (const source of values.sources) {
-      const changedSource={
+      console.log(source)
+      console.log(source.intensity)
+      const changedSource = {
         video_id: source.video_id,
         source_type: source.source_type,
-        intensity:source.intensity,
+        intensity: source.intensity,
+        track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
-        
-      }
-      if(source.intensity==="None"){
-        delete changedSource.intensity
-      }
-      sourcesArray.push(changedSource)
+        soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined
+      };
+      if (source.intensity === "None") {
+        delete changedSource.intensity;
+      } 
+      console.log(changedSource)
+      sourcesArray.push(changedSource);
     }
   }
 
   let response;
   if (_id) {
-    console.log('submitting patch...');
-    
+    console.log("submitting patch...");
+
     response = await editSong(
       _id,
       values.song_title,
       {
         lead_composer: values.lead_composer,
-        other_credits:values.other_credits,
+        other_credits: values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
-        destination:values.destination,
-        faction:values.faction
+        destination: values.destination,
+        faction: values.faction,
       },
       sourcesArray,
       values.api_key
     );
   } else {
-    console.log('sending post request...', _id)
+    console.log("sending post request...", _id);
     response = await addNewSongTitleSimple(
       values.song_title,
       {
         lead_composer: values.lead_composer,
-        other_credits:values.other_credits,
+        other_credits: values.other_credits,
         game: values.game,
         release_year: values.release_year.format("YYYY"),
-        destination:values.destination,
-        faction:values.faction
+        destination: values.destination,
+        faction: values.faction,
       },
       sourcesArray,
       values.api_key
@@ -65,25 +91,25 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   }
   console.log(response);
   if (!response.errors) {
-    notification.success({message: "Song patch/post successful!"});
+    notification.success({ message: "Song patch/post successful!" });
     refreshFunction();
     setOpen(false);
   } else {
     console.log("an error was caught");
-    let errorString = '';
+    let errorString = "";
     for (let error of response.errors) {
-      let newError = '';
+      let newError = "";
       for (let key of Object.keys(error)) {
-        newError += key + ": " + error[key] + ', ';
+        newError += key + ": " + error[key] + ", ";
       }
       newError = newError.slice(0, -2);
-      if (errorString.length == 0) {
-        errorString += '\n';
+      if (errorString.length === 0) {
+        errorString += "\n";
       }
       errorString += newError;
     }
     notification.error({
-      message: <div style = {{color: 'white'}}>{errorString}</div>,
+      message: <div style={{ color: "white" }}>{errorString}</div>,
       // message: 'hello there, failure',
       style: {
         backgroundColor: "#CA3C25",
@@ -128,15 +154,33 @@ const customDarkTheme = {
   },
 };
 
-function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents = {}, _id = undefined}) {
+function SongForm({
+  open,
+  setOpen,
+  onFinish,
+  onCancel,
+  refreshFunction,
+  contents = {},
+  _id = undefined,
+  soundtrackData,
+  values,
+  songObject
+}) {
   const [form] = Form.useForm();
   // useEffect(() => {
   //   // form.setFields([{name : ['song_title'], value : 'a song'}]);
   //   console.log(form.getFieldValue());
   // });
   const [buttonName] = React.useState(false);
+  const soundtrackCopy = [...soundtrackData];
+  const soundtrackOptions = [{value:false,label:"Select a soundtrack"},
+    ...new Set(
+      soundtrackCopy.map((item) => ({ value: item._id, label: item.title }))
+    ),
+  ];
 
   const currentTheme = lightMode;
+  console.log(contents)
   return (
     <Modal
       open={open}
@@ -168,13 +212,13 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
               form={form}
               // onFinish={(values) => onFinish(values, _id)}
               onFinishFailed={onFinishFailed}
-              initialValues = {contents}
+              initialValues={contents}
               autoComplete="off"
             >
               <Form.Item
                 label="Song Title"
                 name="song_title"
-                valuePropName = "value"
+                valuePropName="value"
                 rules={[
                   {
                     required: true,
@@ -182,12 +226,12 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
                   },
                 ]}
               >
-                    <Input placeholder="Song Title"/>
+                <Input placeholder="Song Title" />
               </Form.Item>
               <Form.Item
                 label="Lead Composer"
                 name="lead_composer"
-                valuePropName = "value"
+                valuePropName="value"
                 rules={[
                   {
                     required: true,
@@ -195,29 +239,30 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
                   },
                 ]}
               >
-                    <Input placeholder="Lead Composer" />
+                <Input placeholder="Lead Composer" />
               </Form.Item>
 
               <Form.Item
                 label="Other Credits"
                 name="other_credits"
-                valuePropName="value">
-                <Input placeholder="Other Credits"></Input>
+                valuePropName="value"
+              >
+                <Input placeholder="Other Credits" disabled></Input>
               </Form.Item>
 
               <Space.Compact style={{ width: "100%" }}>
                 <Form.Item
                   name="release_year"
                   label="Year Of Song Released"
-                  valuePropName = "value"
+                  valuePropName="value"
                   {...config}
                 >
-                    <YearPicker /> 
+                  <YearPicker />
                 </Form.Item>
                 <Form.Item
                   name="game"
                   label="Game"
-                  valuePropName = "value"
+                  valuePropName="value"
                   rules={[
                     {
                       required: true,
@@ -225,53 +270,46 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
                     },
                   ]}
                 >
-                    <Radio.Group>
-                      <Radio value="1">Destiny 1</Radio>
-                      <Radio value="2">Destiny 2</Radio>
-                    </Radio.Group> 
+                  <Radio.Group>
+                    <Radio value="1">Destiny 1</Radio>
+                    <Radio value="2">Destiny 2</Radio>
+                  </Radio.Group>
                 </Form.Item>
                 <Form.Item
-                name="destination"
-                label="Destination"
-                valuePropName="value"
-              >
-                <Input placeholder="Destination"></Input>
-              </Form.Item>
-              <Form.Item
-                name="faction"
-                label="Faction"
-                
-                valuePropName="value"
-              >
-                <Input placeholder="Faction"></Input>
-              </Form.Item>
+                  name="destination"
+                  label="Destination"
+                  valuePropName="value"
+                >
+                  <Input placeholder="Destination"></Input>
+                </Form.Item>
+                <Form.Item name="faction" label="Faction" valuePropName="value">
+                  <Input placeholder="Faction"></Input>
+                </Form.Item>
               </Space.Compact>
-              
-              
-              <Space direction="vertical" size="large" style={{ display: 'flex' }}>
 
-              <div style={{ width: "90%" }}>
-                <SourceForm />
-              </div>
-              
-                
-                  
-                    <Form.Item
-                      label="API Key"
-                      name="api_key"
-                      valuePropName = "value"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input the key!",
-                        },
-                      ]}
-                    >
-                        <Input placeholder="key" />
-                    </Form.Item>
-                  </Space>
-                
-              
+              <Space
+                direction="vertical"
+                size="large"
+                style={{ display: "flex" }}
+              >
+                <div style={{ width: "90%" }}>
+                  <SourceForm soundtrackOptions={soundtrackOptions} songObject={songObject} />
+                </div>
+
+                <Form.Item
+                  label="API Key"
+                  name="api_key"
+                  valuePropName="value"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input the key!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="key" />
+                </Form.Item>
+              </Space>
             </Form>
           </ConfigProvider>
         </Card>
@@ -281,51 +319,71 @@ function SongForm({ open, setOpen, onFinish, onCancel, refreshFunction, contents
 }
 
 //using creating a modal that has all of he functionality
-function AddSongForm({edit_id = undefined, refreshFunction}) {
+function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, songObject }) {
+  
+  
+
   const [open, setOpen] = useState(false);
   const [contents, setContents] = useState({});
-  const openForm = async () =>
-  {
+  const openForm = async () => {
     if (edit_id) {
-      const values = await getSong(edit_id);
-      setContents({song_title: values.title,
-                  lead_composer: values.meta_data.lead_composer,
-                  other_credits :values.meta_data.other_credits,
-                  game: values.meta_data.game,
-                  release_year: dayjs(values.meta_data.release_year, 'YYYY'),
-                  sources: values.sources,
-                  destination: values.meta_data.destination,
-                  faction: values.meta_data.faction});
-    } else{
+      const values = songObject
+      setContents({
+        song_title: values.title,
+        lead_composer: values.meta_data.lead_composer,
+        other_credits: values.meta_data.other_credits,
+        game: values.meta_data.game,
+        release_year: dayjs(values.meta_data.release_year, "YYYY"),
+        sources: values.sources,
+        destination: values.meta_data.destination,
+        faction: values.meta_data.faction,
+      });
+    } else {
       console.log(edit_id);
     }
     setOpen(true);
-  }
+  };
   return (
     <div>
-      <Button
-        type="primary"
-        onClick={openForm}
-      >
-        {edit_id ? 'edit' : 'New Song'}
+      <Button type="primary" onClick={openForm}>
+        {edit_id ? "edit" : "New Song"}
       </Button>
       <SongForm
         open={open}
-        setOpen = {setOpen}
+        setOpen={setOpen}
         onFinish={onFinish}
-        contents = {contents}
-        _id = {edit_id}
-        refreshFunction = {refreshFunction}
+        contents={contents}
+        _id={edit_id}
+        refreshFunction={refreshFunction}
+        soundtrackData={soundtrackData}
         onCancel={(form) => {
           form.resetFields();
           setOpen(false);
         }}
+        songObject={songObject}
       />
     </div>
   );
 }
 
-function SourceForm() {
+function SourceForm({ soundtrackOptions, songObject }) {
+  
+  function getSongSources(songObject) {
+    let sourceList = []
+    songObject.sources.forEach((source)=>{sourceList.push(source.soundtrack_id)})
+    return sourceList
+  }
+
+  
+  
+  const handleChange=(value,e)=> {
+    console.log("value is : ", value);
+    console.log("e : ", e);
+    // // form.setFieldsValue({
+    // //   [e, "intensity"]: value
+    // });
+    
+}
   return (
     <Card
       title="Sources"
@@ -337,78 +395,101 @@ function SourceForm() {
       bodyStyle={{ backgroundColor: "#E8D8E6", borderColor: "#E8D8E6" }}
       bordered={false}
     >
-      <Form.List name="sources">
+      <Form.List name="sources" >
         {(fields, { add, remove }) => (
-          <div style={{ display: "flex", flexDirection: "column", rowGap: 16 }}>
+          <Space style={{ rowGap: 32 }} direction="vertical">
             {fields.map((field) => (
-              <Space key={field.key}>
-                <Form.Item
-                  label="Video Id"
-                  name={[field.name, "video_id"]}
-                  rules = {[
-                    {
-                      required: true,
-                      message: "Please enter a video id"
-                    }
-                  ]}
-                >
+              <Card key={field.key}>
+                <center align="right">
+                  <CloseOutlined onClick={() => remove(field.name)} />
+                </center>
+                <Space>
+                  <Form.Item
+                    label="Video Id"
+                    name={[field.name, "video_id"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter a video id",
+                      },
+                    ]}
+                  >
                     <Input></Input>
-                </Form.Item>
-                <Form.Item
-                  label="Source Type"
-                  name={[field.name, "source_type"]}
-                >
+                  </Form.Item>
+                  <Form.Item
+                    label="Source Type"
+                    name={[field.name, "source_type"]}
+                  >
                     <Select placeholder="Youtube">
                       <Select.Option value="Youtube">Youtube</Select.Option>
                     </Select>
-                </Form.Item>
-                
-                <Form.Item
-                  label="Track number"
-                  name={[field.name, "track_number"]}
-                  initialValue={"NONE"}
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Track number"
+                    name={[field.name, "track_number"]}
                   >
                     <Input></Input>
+                  </Form.Item>
+
+                  <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} noStyle> 
                   
-                </Form.Item>
-                
-                
-                <Form.Item
-                  label="Intensity"
-                  name={[field.name, "intensity"]}
-                >
-                  <Content>
-                    <Select defaultValue={"None"}>
-                      <Select.Option value="None">Select an Intensity</Select.Option>
-                      <Select.Option value="Ambient">Ambient</Select.Option>
-                      <Select.Option value="Tension">Tension</Select.Option>
-                      <Select.Option value="Action">Action</Select.Option>
-                      <Select.Option value="High Action">High Action</Select.Option>
-                      <Select.Option value="Heavy Action">Heavy Action</Select.Option>
-                      <Select.Option value="Light Action">Light Action</Select.Option>
-                      
-                    </Select>
-                  </Content>
-                </Form.Item>
-                
+                    
+                      <Select onChange={(value,name)=>handleChange(value,field.name)}>
+                        <Select.Option value="None">
+                          Select an Intensity
+                        </Select.Option>
+                        <Select.Option value="Ambient">Ambient</Select.Option>
+                        <Select.Option value="Tension">Tension</Select.Option>
+                        <Select.Option value="Action">Action</Select.Option>
+                        <Select.Option value="High Action">
+                          High Action
+                        </Select.Option>
+                        <Select.Option value="Heavy Action">
+                          Heavy Action
+                        </Select.Option>
+                        <Select.Option value="Light Action">
+                          Light Action
+                        </Select.Option>
+                      </Select>
+                  
+                  </Form.Item>
+                </Space>
+
                 <Form.Item
                   label="Is it an official release"
                   name={[field.name, "is_official"]}
                   valuePropName="checked"
                 >
-                  
                   <Checkbox></Checkbox>
                 </Form.Item>
-                <center>
-                  <CloseOutlined onClick={() => remove(field.name)} />
-                </center>
-              </Space>
+
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} noStyle initialValue={false} >
+                  
+                    <Select
+                      // mode="multiple"
+                      options={soundtrackOptions}
+                      //value={soundtrackOptions.value}
+                    
+                      onChange={(value,name)=>handleChange(value,field.name)}
+                    >
+                    
+
+                    </Select>
+                  
+                </Form.Item>
+              </Card>
             ))}
 
-            <Button type="default" onClick={() => {add({source_type:"Youtube"})}}>
+            <Button
+              type="default"
+              onClick={() => {
+                add({ source_type: "Youtube" });
+              }}
+            >
               Add New Source
             </Button>
-          </div>
+          </Space>
         )}
       </Form.List>
     </Card>
