@@ -36,7 +36,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   });
   let sourcesArray = [];
   if (values.sources) {
-    let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{40})/
+    let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
     for (const source of values.sources) {
       
       source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id
