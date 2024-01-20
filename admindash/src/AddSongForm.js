@@ -36,15 +36,17 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   });
   let sourcesArray = [];
   if (values.sources) {
+    let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
     for (const source of values.sources) {
-      console.log(source)
-      console.log(source.intensity)
+      
+      source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id
       const changedSource = {
         video_id: source.video_id,
         source_type: source.source_type,
         intensity: source.intensity,
         track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
+        version_title:source.version_title,
         soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined
       };
       if (source.intensity === "None") {
@@ -56,6 +58,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   }
 
   let response;
+  console.log(values.release_year.format("YYYY"))
   if (_id) {
     console.log("submitting patch...");
 
@@ -66,7 +69,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         lead_composer: values.lead_composer,
         other_credits: values.other_credits,
         game: values.game,
-        release_year: values.release_year.format("YYYY"),
+        release_year: values.release_year===undefined?undefined:values.release_year.format("YYYY"),
+        implementation_year: values.implementation_year===undefined?undefined:values.implementation_year.format("YYYY"),
         destination: values.destination,
         faction: values.faction,
       },
@@ -81,7 +85,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         lead_composer: values.lead_composer,
         other_credits: values.other_credits,
         game: values.game,
-        release_year: values.release_year.format("YYYY"),
+        release_year: values.release_year===undefined?undefined:values.release_year.format("YYYY"),
+        implementation_year: values.implementation_year===undefined?undefined:values.implementation_year.format("YYYY"),
         destination: values.destination,
         faction: values.faction,
       },
@@ -128,7 +133,7 @@ const config = {
   rules: [
     {
       type: "object",
-      required: true,
+      required: false,
       message: "Please select time!",
     },
   ],
@@ -260,6 +265,15 @@ function SongForm({
                   <YearPicker />
                 </Form.Item>
                 <Form.Item
+                  name="implementation_year"
+                  label="Game Implementation Year"
+                  valuePropName="value"
+                  {...config}
+                >
+                  <YearPicker />
+                </Form.Item>
+              </Space.Compact>
+                <Form.Item
                   name="game"
                   label="Game"
                   valuePropName="value"
@@ -285,7 +299,7 @@ function SongForm({
                 <Form.Item name="faction" label="Faction" valuePropName="value">
                   <Input placeholder="Faction"></Input>
                 </Form.Item>
-              </Space.Compact>
+              
 
               <Space
                 direction="vertical"
@@ -333,7 +347,8 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, son
         lead_composer: values.meta_data.lead_composer,
         other_credits: values.meta_data.other_credits,
         game: values.meta_data.game,
-        release_year: dayjs(values.meta_data.release_year, "YYYY"),
+        release_year: values.meta_data.release_year===undefined?undefined:dayjs(values.meta_data.release_year, "YYYY"),
+        implementation_year:values.meta_data.implementation_year===undefined?undefined:dayjs(values.meta_data.implementation_year,"YYYY"),
         sources: values.sources,
         destination: values.meta_data.destination,
         faction: values.meta_data.faction,
@@ -405,14 +420,8 @@ function SourceForm({ soundtrackOptions, songObject }) {
                 </center>
                 <Space>
                   <Form.Item
-                    label="Video Id"
+                    label="video id/url"
                     name={[field.name, "video_id"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please enter a video id",
-                      },
-                    ]}
                   >
                     <Input></Input>
                   </Form.Item>
@@ -455,7 +464,12 @@ function SourceForm({ soundtrackOptions, songObject }) {
                   
                   </Form.Item>
                 </Space>
-
+                <Form.Item
+                  label="version title"
+                  name={[field.name, "version_title"]}
+                >
+                <Input></Input>
+                </Form.Item>
                 <Form.Item
                   label="Is it an official release"
                   name={[field.name, "is_official"]}
