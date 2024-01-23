@@ -23,6 +23,7 @@ import {
   addNewSongTitleSimple,
   addNewSongURL,
   getAllSoundtracks,
+  getVideoDuration,
 } from "./APICalls";
 import { CloseOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
@@ -33,13 +34,29 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   notification.info({
     message: "Waiting on response from the server",
     placement: "top",
+    duration: 3
   });
   let sourcesArray = [];
   if (values.sources) {
     let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
     for (const source of values.sources) {
-      
-      source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id
+      source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id;
+      if (source.video_id){
+        source.duration = await getVideoDuration(source.video_id);
+        //Replace this jank error solution at some point (we want all errors to be displayed together)
+        if (source.duration.error){
+          console.log(source.duration);
+          notification.error({
+            message: <div style={{ color: "white" }}>{source.duration.error}</div>,
+            style: {
+              backgroundColor: "#CA3C25",
+            },
+            placement: "top",
+            duration: 3,
+          });
+          throw new Error(source.duration.error);
+        }
+      }
       const changedSource = {
         video_id: source.video_id,
         source_type: source.source_type,
@@ -47,7 +64,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
         is_official: source.is_official,
         version_title:source.version_title,
-        soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined
+        soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined,
+        duration: source.duration
       };
       if (source.intensity === "None") {
         delete changedSource.intensity;
@@ -58,7 +76,6 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   }
 
   let response;
-  console.log(values.release_year.format("YYYY"))
   if (_id) {
     console.log("submitting patch...");
 
@@ -96,7 +113,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   }
   console.log(response);
   if (!response.errors) {
-    notification.success({ message: "Song patch/post successful!" });
+    notification.success({ message: "Song patch/post successful!", duration: 3});
     refreshFunction();
     setOpen(false);
   } else {
@@ -115,13 +132,13 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
     }
     notification.error({
       message: <div style={{ color: "white" }}>{errorString}</div>,
-      // message: 'hello there, failure',
       style: {
         backgroundColor: "#CA3C25",
       },
       placement: "top",
-      duration: 0,
+      duration: 3,
     });
+    throw new Error('Schema validation failed');
   }
 };
 
@@ -197,8 +214,8 @@ function SongForm({
         form
           .validateFields()
           .then(async (values) => {
-            form.resetFields();
             await onFinish(values, _id, refreshFunction, setOpen);
+            form.resetFields();
           })
           .catch((info) => {
             console.log("Validate Failed:", info);

@@ -1,8 +1,9 @@
 //uri
 //require('dotenv').config();
-const uri = "https://3.144.222.38:5000"
+const uri = "https://3.144.222.38:5000";
 //process.env.SERVER_URI||
-const api_key=""
+const api_key="";
+const ytApiKey = "AIzaSyDRizHQVubn1TT7etyYzOQvJwvyUmQuWx4";
 
 const getSongs = async(song_query)=>{
     const uriGet = uri+'/music/songs'
@@ -144,6 +145,22 @@ const deleteSoundtrackRequest = async (itemId, apiKey) => {
   }).then( res => res.json() )
 }
 
+const getVideoDuration = async (videoId) => {
+  const uri = "https://www.googleapis.com/youtube/v3/videos?id=" + videoId + "&part=contentDetails&key=" + ytApiKey;
+  const contentDetails = await fetch(uri).then(async (resp) => await resp.json());
+  console.log(contentDetails);
+  if (contentDetails !== undefined && contentDetails.items && contentDetails.items[0]){
+      const rawDuration = contentDetails.items[0].contentDetails.duration;
+      const reg = /PT([0-9]+)M([0-9]+)S/;
+      const match = rawDuration.match(reg);
+  
+      return parseInt(match[1]) * 60 + parseInt(match[2]);
+  } else {
+      return {error: "Invalid video id, not on youtube!"};
+  }
+
+}
+
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
 //addNewSongURL("https://www.youtube.com/watch?v=lzYg5d2KDF0",newSong,"Youtube","Ambient","Thirsty_Bois")
@@ -151,4 +168,4 @@ const deleteSoundtrackRequest = async (itemId, apiKey) => {
 //getAllSongs()
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
 export { getSongs, getSong, getAllSongs, editSong, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack,getAllSoundtracks, 
-         getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest };
+         getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest, getVideoDuration };
