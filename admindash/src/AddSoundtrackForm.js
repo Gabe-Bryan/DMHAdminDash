@@ -76,7 +76,8 @@ function AddSoundtrackForm ({edit_id = undefined, refreshFunction}) {
                 duration: 3
             })
             setOpen(false);
-            form.resetFields();
+            if (!edit_id)
+                form.resetFields();
             refreshFunction();
         }
         else {

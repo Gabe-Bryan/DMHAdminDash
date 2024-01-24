@@ -30,7 +30,7 @@ import dayjs from "dayjs";
 
 const { YearPicker } = DatePicker;
 
-const onFinish = async (values, _id, refreshFunction, setOpen) => {
+const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
   notification.info({
     message: "Waiting on response from the server",
     placement: "top",
@@ -40,8 +40,8 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
   if (values.sources) {
     let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
     for (const source of values.sources) {
-      source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id;
       if (source.video_id){
+        source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id;
         source.duration = await getVideoDuration(source.video_id);
         //Replace this jank error solution at some point (we want all errors to be displayed together)
         if (source.duration.error){
@@ -115,6 +115,9 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
     notification.success({ message: "Song patch/post successful!", duration: 3});
     refreshFunction();
     setOpen(false);
+    if(!_id) {
+      resetFields();
+    }
   } else {
     console.log("an error was caught");
     let errorString = "";
@@ -213,8 +216,7 @@ function SongForm({
         form
           .validateFields()
           .then(async (values) => {
-            await onFinish(values, _id, refreshFunction, setOpen);
-            form.resetFields();
+            await onFinish(values, _id, refreshFunction, setOpen, form.resetFields);
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
@@ -457,34 +459,35 @@ function SourceForm({ soundtrackOptions, songObject }) {
                     <Input></Input>
                   </Form.Item>
 
-                  <Form.Item label="Intensity" name={[field.name, "intensity"]} initialValue={"None"} noStyle> 
                   
-                    
-                      <Select onChange={(value,name)=>handleChange(value,field.name)}>
-                        <Select.Option value="None">
-                          Select an Intensity
-                        </Select.Option>
-                        <Select.Option value="Ambient">Ambient</Select.Option>
-                        <Select.Option value="Tension">Tension</Select.Option>
-                        <Select.Option value="Action">Action</Select.Option>
-                        <Select.Option value="High Action">
-                          High Action
-                        </Select.Option>
-                        <Select.Option value="Heavy Action">
-                          Heavy Action
-                        </Select.Option>
-                        <Select.Option value="Light Action">
-                          Light Action
-                        </Select.Option>
-                      </Select>
-                  
-                  </Form.Item>
                 </Space>
+                <Form.Item label="Intensity" name={[field.name, "intensity"]}> 
+                
+                  
+                  <Select onChange={(value,name)=>handleChange(value,field.name)} mode = "multiple" placeholder = "Select an Intensity">
+                    <Select.Option value="Ambient">Ambient</Select.Option>
+                    <Select.Option value="Tension">Tension</Select.Option>
+                    <Select.Option value="Action">Action</Select.Option>
+                    <Select.Option value="High Action">
+                      High Action
+                    </Select.Option>
+                    <Select.Option value="Heavy Action">
+                      Heavy Action
+                    </Select.Option>
+                    <Select.Option value="Light Action">
+                      Light Action
+                    </Select.Option>
+                    <Select.Option value="Soundtrack Edition">
+                      Soundtrack Edition
+                    </Select.Option>
+                  </Select>
+                
+                </Form.Item>
                 <Form.Item
                   label="version title"
                   name={[field.name, "version_title"]}
                 >
-                <Input></Input>
+                  <Input></Input>
                 </Form.Item>
                 <Form.Item
                   label="Is it an official release"
@@ -494,7 +497,7 @@ function SourceForm({ soundtrackOptions, songObject }) {
                   <Checkbox></Checkbox>
                 </Form.Item>
 
-                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} noStyle initialValue={false} >
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} >
                   
                     <Select
                       // mode="multiple"
