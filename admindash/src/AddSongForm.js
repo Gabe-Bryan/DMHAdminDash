@@ -45,7 +45,6 @@ const onFinish = async (values, _id, refreshFunction, setOpen) => {
         source.duration = await getVideoDuration(source.video_id);
         //Replace this jank error solution at some point (we want all errors to be displayed together)
         if (source.duration.error){
-          console.log(source.duration);
           notification.error({
             message: <div style={{ color: "white" }}>{source.duration.error}</div>,
             style: {
