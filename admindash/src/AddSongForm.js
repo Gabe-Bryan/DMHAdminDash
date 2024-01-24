@@ -483,19 +483,22 @@ function SourceForm({ soundtrackOptions, songObject }) {
                   </Select>
                 
                 </Form.Item>
-                <Form.Item
-                  label="version title"
-                  name={[field.name, "version_title"]}
-                >
-                  <Input></Input>
-                </Form.Item>
-                <Form.Item
-                  label="Is it an official release"
-                  name={[field.name, "is_official"]}
-                  valuePropName="checked"
-                >
-                  <Checkbox></Checkbox>
-                </Form.Item>
+                <Space>
+                  <Form.Item
+                    label="Alternate Version Title"
+                    name={[field.name, "version_title"]}
+                  >
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item
+                    label="Is it an official release"
+                    name={[field.name, "is_official"]}
+                    valuePropName="checked"
+                  >
+                    <Checkbox></Checkbox>
+                  </Form.Item>
+                </Space>
+                
 
                 <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} >
                   
