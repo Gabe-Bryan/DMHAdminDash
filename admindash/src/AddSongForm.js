@@ -204,7 +204,6 @@ function SongForm({
   ];
 
   const currentTheme = lightMode;
-  console.log(contents)
   return (
     <Modal
       open={open}

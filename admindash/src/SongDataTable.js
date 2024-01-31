@@ -5,8 +5,28 @@ import {ReloadOutlined} from "@ant-design/icons"
 import AddSongForm from "./AddSongForm"
 import { getAllSongs, deleteSongRequest, getAllSoundtracks, getSong } from "./APICalls"
 
-let data = await getAllSongs()
-let soundtrackData = await getAllSoundtracks()
+let soundtrackData = await getAllSoundtracks();
+let data = processSongData(await getAllSongs());
+
+function processSongData(data){
+    for(let i = 0; i < data.length; i++) {
+        let e = data[i];
+        e.soundtrack = '';
+        let visited = new Set();
+
+        for(let source of e.sources){
+            const soundtrackTitle = soundtrackData.find((soundtrack) => soundtrack._id == source.soundtrack_id).title;
+            if(!visited.has(soundtrackTitle)){
+                visited.add(soundtrackTitle);
+                if(e.soundtrack.length > 0){
+                    e.soundtrack += ', ';
+                }
+                e.soundtrack += soundtrackTitle;
+            }
+        }
+    }
+    return data;
+}
 
 function getSongObject(_id) {
     for (let i = 0; i < data.length; i++) {
@@ -73,7 +93,7 @@ function SongDataTable() {
     let [filteredData, setFilteredData] = useState(data);
     let [filterString, setStringFilter] = useState('');
     const refreshDataTable = async () => {
-        data = await getAllSongs();
+        data = processSongData(await getAllSongs());
         filterDataTable();
     }
 
@@ -97,7 +117,7 @@ function SongDataTable() {
                 (is dataIndex set correctly for whats in database?)
             */
             title: 'Soundtrack',
-            dataIndex: ['sources', 'soundtrack'],
+            dataIndex: ['soundtrack'],
             key: 'soundtrack',
             sorter: sortStringKey('soundtrack_id')
         },
@@ -149,7 +169,6 @@ function SongDataTable() {
         })
         setFilteredData(filteredData)
     }
-
     return (
         <>
         <div style={{textAlign: 'center', margin: '2em'}}>
