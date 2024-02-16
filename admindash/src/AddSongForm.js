@@ -499,7 +499,7 @@ function SourceForm({ soundtrackOptions, songObject }) {
                 </Space>
                 
 
-                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} >
+                <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} required>
                   
                     <Select
                       // mode="multiple"
