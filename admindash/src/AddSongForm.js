@@ -90,8 +90,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
         destination: values.destination,
         faction: values.faction,
       },
-      sourcesArray,
-      values.api_key
+      sourcesArray
     );
   } else {
     console.log("sending post request...", _id);
@@ -107,7 +106,6 @@ const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
         faction: values.faction,
       },
       sourcesArray,
-      values.api_key
     );
   }
   console.log(response);
@@ -326,20 +324,6 @@ function SongForm({
                 <div style={{ width: "90%" }}>
                   <SourceForm soundtrackOptions={soundtrackOptions} songObject={songObject} />
                 </div>
-
-                <Form.Item
-                  label="API Key"
-                  name="api_key"
-                  valuePropName="value"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input the key!",
-                    },
-                  ]}
-                >
-                  <Input placeholder="key" />
-                </Form.Item>
               </Space>
             </Form>
           </ConfigProvider>
