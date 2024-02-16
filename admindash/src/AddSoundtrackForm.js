@@ -48,9 +48,6 @@ function SoundtrackForm({open, onCancel, onFinish, contents}) {
                         <Radio value={2}>Destiny 2</Radio>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item label = 'API Key' name = 'api_key' rules = {reqRules}>
-                    <Input />
-                </Form.Item>
             </Form>
         </Modal>
     )
@@ -63,10 +60,10 @@ function AddSoundtrackForm ({edit_id = undefined, refreshFunction}) {
         console.log(values);
         let response;
         if (edit_id){
-            response = await editSoundtrack(edit_id, values.title, values.game, values.release_date.format('MM-DD-YYYY'), values.api_key);
+            response = await editSoundtrack(edit_id, values.title, values.game, values.release_date.format('MM-DD-YYYY'));
         }
         else {
-            response = await addNewSoundtrack(values.title, values.release_date.format('MM-DD-YYYY'), values.game, values.api_key);
+            response = await addNewSoundtrack(values.title, values.release_date.format('MM-DD-YYYY'), values.game);
         }
         console.log('submitted',response);
         if (!response.error) {
