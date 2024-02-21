@@ -31,48 +31,52 @@ import dayjs from "dayjs";
 const { YearPicker } = DatePicker;
 
 const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
-	notification.info({
-		message: "Waiting on response from the server",
-		placement: "top",
-		duration: 3
-	});
-	let sourcesArray = [];
-	if (values.sources) {
-		let regex = /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
-		for (const source of values.sources) {
-			if (source.video_id) {
-				source.video_id = source.video_id.match(regex) ? source.video_id.match(regex)[1] : source.video_id;
-				source.duration = await getVideoDuration(source.video_id);
-				//Replace this jank error solution at some point (we want all errors to be displayed together)
-				if (source.duration.error) {
-					notification.error({
-						message: <div style={{ color: "white" }}>{source.duration.error}</div>,
-						style: {
-							backgroundColor: "#CA3C25",
-						},
-						placement: "top",
-						duration: 3,
-					});
-					throw new Error(source.duration.error);
-				}
-			}
-			const changedSource = {
-				video_id: source.video_id,
-				source_type: source.source_type,
-				intensity: source.intensity,
-				track_number: parseInt(source.track_number) ? parseInt(source.track_number) : undefined,
-				is_official: source.is_official,
-				version_title: source.version_title,
-				soundtrack_id: source.soundtrack_id ? source.soundtrack_id : undefined,
-				duration: source.duration
-			};
-			if (source.intensity === "None") {
-				delete changedSource.intensity;
-			}
-			console.log(changedSource)
-			sourcesArray.push(changedSource);
-		}
-	}
+  notification.info({
+    message: "Waiting on response from the server",
+    placement: "top",
+    duration: 3
+  });
+  let sourcesArray = [];
+  if (values.sources) {
+    let regex= /youtu(?:.*\/v\/|.*v\=|\.be\/)([A-Za-z0-9_\-]{11})/
+    for (const source of values.sources) {
+      if (source.video_id){
+        source.video_id=source.video_id.match(regex)?source.video_id.match(regex)[1]:source.video_id;
+        source.duration = await getVideoDuration(source.video_id);
+        //Replace this jank error solution at some point (we want all errors to be displayed together)
+        if (source.duration.error){
+          notification.error({
+            message: <div style={{ color: "white" }}>{source.duration.error}</div>,
+            style: {
+              backgroundColor: "#CA3C25",
+            },
+            placement: "top",
+            duration: 3,
+          });
+          throw new Error(source.duration.error);
+        }
+      }
+      const changedSource = {
+        video_id: source.video_id,
+        source_type: source.source_type,
+        intensity: source.intensity,
+        add_layers: source.add_layers,
+        track_number: parseInt(source.track_number) ? parseInt(source.track_number):undefined ,
+        is_official: source.is_official,
+        version_title:source.version_title,
+        soundtrack_id: source.soundtrack_id? source.soundtrack_id:undefined,
+        duration: source.duration
+      };
+      if (source.intensity === "None") {
+        delete changedSource.intensity;
+      }
+      if (source.add_layers === "None") {
+        delete changedSource.add_layers;
+      }
+      console.log(changedSource)
+      sourcesArray.push(changedSource);
+    }
+  }
 
 	let response;
 	if (_id) {
@@ -355,48 +359,48 @@ function AddSongForm({ edit_id = undefined, refreshFunction, soundtrackData, son
 
 
 
-	const [open, setOpen] = useState(false);
-	const [contents, setContents] = useState({});
-	const openForm = async () => {
-		if (edit_id) {
-			const values = songObject
-			setContents({
-				song_title: values.title,
-				lead_composer: values.meta_data.lead_composer,
-				other_credits: values.meta_data.other_credits,
-				game: values.meta_data.game,
-				release_year: values.meta_data.release_year === undefined ? undefined : dayjs(values.meta_data.release_year, "YYYY"),
-				implementation_year: values.meta_data.implementation_year === undefined ? undefined : dayjs(values.meta_data.implementation_year, "YYYY"),
-				sources: values.sources,
-				destination: values.meta_data.destination,
-				faction: values.meta_data.faction,
-			});
-		} else {
-			console.log(edit_id);
-		}
-		setOpen(true);
-	};
-	return (
-		<div>
-			<Button type="primary" onClick={openForm}>
-				{edit_id ? "edit" : "New Song"}
-			</Button>
-			<SongForm
-				open={open}
-				setOpen={setOpen}
-				onFinish={onFinish}
-				contents={contents}
-				_id={edit_id}
-				refreshFunction={refreshFunction}
-				soundtrackData={soundtrackData}
-				onCancel={(form) => {
-					form.resetFields();
-					setOpen(false);
-				}}
-				songObject={songObject}
-			/>
-		</div>
-	);
+  const [open, setOpen] = useState(false);
+  const [contents, setContents] = useState({});
+  const openForm = async () => {
+    if (edit_id) {
+      const values = songObject;
+      setContents({
+        song_title: values.title,
+        lead_composer: values.meta_data.lead_composer,
+        other_credits: values.meta_data.other_credits,
+        game: values.meta_data.game,
+        release_year: values.meta_data.release_year===undefined?undefined:dayjs(values.meta_data.release_year, "YYYY"),
+        implementation_year:values.meta_data.implementation_year===undefined?undefined:dayjs(values.meta_data.implementation_year,"YYYY"),
+        sources: values.sources,
+        destination: values.meta_data.destination,
+        faction: values.meta_data.faction,
+      });
+    } else {
+      console.log(edit_id);
+    }
+    setOpen(true);
+  };
+  return (
+    <div>
+      <Button type="primary" onClick={openForm}>
+        {edit_id ? "edit" : "New Song"}
+      </Button>
+      <SongForm
+        open={open}
+        setOpen={setOpen}
+        onFinish={onFinish}
+        contents={contents}
+        _id={edit_id}
+        refreshFunction={refreshFunction}
+        soundtrackData={soundtrackData}
+        onCancel={(form) => {
+          form.resetFields();
+          setOpen(false);
+        }}
+        songObject={songObject}
+      />
+    </div>
+  );
 }
 
 function SourceForm({ soundtrackOptions, songObject }) {
@@ -461,46 +465,53 @@ function SourceForm({ soundtrackOptions, songObject }) {
 										<Input style={inputStyle} ></Input>
 									</Form.Item>
 
-
-									{/* </Space> */}
-									<Form.Item label="Intensity" name={[field.name, "intensity"]}>
-
-
-										<Select onChange={(value, name) => handleChange(value, field.name)} mode="multiple" placeholder="Select an Intensity">
-											<Select.Option value="Ambient">Ambient</Select.Option>
-											<Select.Option value="Tension">Tension</Select.Option>
-											<Select.Option value="Action">Action</Select.Option>
-											<Select.Option value="High Action">
-												High Action
-											</Select.Option>
-											<Select.Option value="Heavy Action">
-												Heavy Action
-											</Select.Option>
-											<Select.Option value="Light Action">
-												Light Action
-											</Select.Option>
-											<Select.Option value="Soundtrack Edition">
-												Soundtrack Edition
-											</Select.Option>
-										</Select>
-
-									</Form.Item>
-									{/* <Space> */}
-									<Form.Item
-										label="Track Title"
-										name={[field.name, "version_title"]}
-									>
-										<Input style={inputStyle} ></Input>
-									</Form.Item>
-									<Form.Item
-										label="Is official?"
-										name={[field.name, "is_official"]}
-										valuePropName="checked"
-									>
-										<Checkbox></Checkbox>
-									</Form.Item>
-									{/* </Space> */}
-
+                  
+                </Space>
+                <Form.Item label="Intensity" name={[field.name, "intensity"]}> 
+                
+                  
+                  <Select onChange={(value,name)=>handleChange(value,field.name)} mode = "multiple" placeholder = "Select an Intensity">
+                    <Select.Option value="Ambient">Ambient</Select.Option>
+                    <Select.Option value="Tension">Tension</Select.Option>
+                    <Select.Option value="Action">Action</Select.Option>
+                    <Select.Option value="High Action">
+                      High Action
+                    </Select.Option>
+                    <Select.Option value="Heavy Action">
+                      Heavy Action
+                    </Select.Option>
+                    <Select.Option value="Light Action">
+                      Light Action
+                    </Select.Option>
+                    <Select.Option value="Soundtrack Edition">
+                      Soundtrack Edition
+                    </Select.Option>
+                  </Select>
+                
+                </Form.Item>
+                <Form.Item label="Additional Layers" name={[field.name, "add_layers"]}> 
+                  <Select onChange={(value,name)=>handleChange(value,field.name)} mode = "multiple" placeholder = "Select additional layers">
+                    <Select.Option value="+Action Layer">+Action Layer</Select.Option>
+                    <Select.Option value="+High Action Layer">+High Action Layer</Select.Option>
+                    <Select.Option value="+Heavy Action Layer">+Heavy Action Layer</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Space>
+                  <Form.Item
+                    label="Alternate Version Title"
+                    name={[field.name, "version_title"]}
+                  >
+                    <Input></Input>
+                  </Form.Item>
+                  <Form.Item
+                    label="Is it an official release"
+                    name={[field.name, "is_official"]}
+                    valuePropName="checked"
+                  >
+                    <Checkbox></Checkbox>
+                  </Form.Item>
+                </Space>
+                
 
 									<Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} required>
 
