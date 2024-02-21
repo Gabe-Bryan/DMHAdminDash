@@ -89,6 +89,76 @@ async function deleteSong(_id, dataCopy, refreshFunction) {
     }
 }
 
+<<<<<<< Updated upstream
+=======
+function addSong() {
+    console.log('addsong stuff goes here')
+}
+
+
+
+// let fakeData = []
+// for (let i = 1; i < 100; i++) {
+//     fakeData.push({
+//         key: `${i}`,
+//         title: `Song ${i}`,
+//         game: `Destiny ${i%2===0?'1':'2'}`
+//     })
+// }
+
+let uriAddress = 'http://127.0.0.1:5000'
+let data = await fetch(uriAddress+'/music/songs').then( res => res.json() ).catch( () => [] )
+
+let cols = [
+    {
+        title: 'Title',
+        dataIndex: 'title',
+        key: 'title',
+        sorter: sortStringKey('title'),
+        defaultSortOrder: 'ascend',
+    },
+    {
+        title: 'Lead Composer',
+        dataIndex: ['meta_data','lead_composer'],
+        key: 'lead_composer',
+        sorter: sortStringMetaKey('lead_composer')
+    },
+    {
+        title: 'Soundtrack ID',
+        dataIndex: 'soundtrack_id',
+        key: 'soundtrack_id',
+        sorter: sortStringKey('soundtrack_id')
+    },
+    {
+        title: 'Game',
+        dataIndex: ['meta_data','game'],
+        key: 'game',
+        sorter: sortStringMetaKey('game')
+    },
+    {
+        title: 'Release Year',
+        dataIndex: ['meta_data','release_year'],
+        key: 'release_year',
+        sorter: sortStringMetaKey('release_year')
+    },
+    {
+        title: 'Action',
+        dataIndex: '',
+        key: 'action',
+        render: (text, record, index) => (
+            <Space size='middle'>
+                <Button onClick={ () => { editSong(record._id) } }>
+                    edit
+                </Button>
+                <Button onClick={ () => { deleteSong(record._id) } }>
+                    delete
+                </Button>
+            </Space>
+        ),
+    },
+]
+
+>>>>>>> Stashed changes
 function SongDataTable() {
     let [filteredData, setFilteredData] = useState(data);
     let [filterString, setStringFilter] = useState('');
