@@ -237,7 +237,7 @@ function SongForm({
 							// onFinish={(values) => onFinish(values, _id)}
 							labelCol={{ span: 8 }}
 							wrapperCol={{ span: 12 }}
-							style={{maxWidth: "100%"}}
+							// style={{maxWidth: "100%"}}
 							
 							onFinishFailed={onFinishFailed}
 							initialValues={contents}
@@ -260,12 +260,12 @@ function SongForm({
 								label="Composers"
 								name="lead_composer"
 								valuePropName="value"
-								rules={[
-									{
-										required: true,
-										message: "Please input your Composers!",
-									},
-								]}
+								// rules={[
+								// 	{
+								// 		required: true,
+								// 		message: "Please input your Composers!",
+								// 	},
+								// ]}
 							>
 								<Input placeholder="Composers" style={inputStyle} />
 							</Form.Item>
@@ -307,16 +307,18 @@ function SongForm({
 								name="game"
 								label="Game"
 								valuePropName="value"
-								rules={[
-									{
-										required: true,
-										message: "Please input the Game!",
-									},
-								]}
+								// rules={[
+								// 	{
+								// 		required: true,
+								// 		message: "Please input the Game!",
+								// 	},
+								// ]}
+								
 							>
 								<Radio.Group>
 									<Radio value="1">Destiny 1</Radio>
 									<Radio value="2">Destiny 2</Radio>
+									<Radio value="0" checked>Other</Radio>
 								</Radio.Group>
 							</Form.Item>
 							<Form.Item
