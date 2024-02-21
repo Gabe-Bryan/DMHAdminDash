@@ -113,7 +113,7 @@ function SongDataTable() {
             title: 'Soundtrack',
             dataIndex: ['soundtrack'],
             key: 'soundtrack',
-            sorter: sortStringKey('soundtrack_id')
+            sorter: sortStringKey('soundtrack')
         },
         {
             title: 'Game',
