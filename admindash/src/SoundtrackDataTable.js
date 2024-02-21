@@ -1,25 +1,25 @@
 import React from "react"
-import {useState} from "react"
-import {Table, Button, Input, Space} from "antd"
-import {ReloadOutlined} from "@ant-design/icons"
+import { useState } from "react"
+import { Table, Button, Input, Space } from "antd"
+import { ReloadOutlined } from "@ant-design/icons"
 import AddSoundtrackForm from './AddSoundtrackForm'
-import {getAllSoundtracks, deleteSoundtrackRequest} from "./APICalls";
+import { getAllSoundtracks, deleteSoundtrackRequest } from "./APICalls";
 
 let data = await getAllSoundtracks()
 
 function sortStringKey(key) {
-    return function(a, b) {
-        if  ( 
-                a[key] === null       || 
-                a[key] === undefined  ||
-                b[key] === null       ||
-                b[key] === undefined
-            ) return ''
-        
+    return function (a, b) {
+        if (
+            a[key] === null ||
+            a[key] === undefined ||
+            b[key] === null ||
+            b[key] === undefined
+        ) return ''
+
         let strA = a[key].toString(),
             strB = b[key].toString()
-            
-        return strA.localeCompare(strB)
+
+        return strA.localeCompare(strB);
     }
 }
 
@@ -31,30 +31,24 @@ function sortStringKey(key) {
 //             b['meta_data'][key] === null       ||
 //             b['meta_data'][key] === undefined
 //         ) return ''
-        
+
 //         let strA = a['meta_data'][key].toString(),
 //             strB = b['meta_data'][key].toString()
-        
+
 //         return strA.localeCompare(strB)
 //     }
 // }
 
 async function deleteSoundtrack(_id, dataCopy, refreshFunction) {
-    console.log('delete soundtrack, id:',_id)
-    let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "")
+    console.log('delete soundtrack, id:', _id);
+    let apiKey = prompt("Please enter the api key to confirm soundtrack deletion", "");
     if (apiKey == null) {
-        console.log(`user cancelled deletion of id ${_id}`)
+        console.log(`user cancelled deletion of id ${_id}`);
     } else {
-        let res = await deleteSoundtrackRequest(_id, apiKey)
-        if (res.errors)
-            console.log('incorrect api key. please check and try again')
-        else {
-            //dataCopy = dataCopy.filter( item => item._id !== _id)
-            // data = await getAllSoundtracks()
-            // dataCopy = [...data]
-            // setFunction(dataCopy)
-            // console.log(`success! item id ${_id} removed from database.`)
-            //console.log(dataCopy)
+        let res = await deleteSoundtrackRequest(_id, apiKey);
+        if (res.errors) {
+            console.log('incorrect api key. please check and try again');
+        } else {
             refreshFunction();
         }
     }
@@ -67,7 +61,7 @@ function SoundtrackDataTable() {
     const refreshDataTable = async () => {
         data = await getAllSoundtracks();
         filterDataTable();
-    }
+    };
 
     let cols = [
         {
@@ -95,45 +89,45 @@ function SoundtrackDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-                    <AddSoundtrackForm edit_id={record._id} refreshFunction={refreshDataTable}/>
-                    <Button onClick={ () => { deleteSoundtrack(record._id, filteredData, refreshDataTable) } }>
+                    <AddSoundtrackForm edit_id={record._id} refreshFunction={refreshDataTable} />
+                    <Button onClick={() => { deleteSoundtrack(record._id, filteredData, refreshDataTable) }}>
                         delete
                     </Button>
                 </Space>
             ),
         },
-    ]
+    ];
 
     function filterDataTable(value = undefined) {
         let currFilter = filterString;
-        if(value !== undefined){
+        if (value !== undefined) {
             setStringFilter(value);
             currFilter = value;
         }
-        filteredData = data.filter( (obj) => {
+        filteredData = data.filter((obj) => {
             if (
                 obj.title.toLowerCase().includes(currFilter.toLowerCase())
-            ) return true
+            ) return true;
 
-            return false
+            return false;
         })
-        setFilteredData(filteredData)
+        setFilteredData(filteredData);
     }
 
     return (
         <>
-        <div style={{textAlign: 'center', margin: '2em'}}>
-            <h2 style={{textAlign: 'left'}}>Soundtracks:</h2>
-            <div style={{display: 'block', margin: '1rem'}}>
-                <div style={{display: 'inline-block', width: '50%', textAlign: 'left'}}>
-                    <AddSoundtrackForm refreshFunction={refreshDataTable}/>
+            <div style={{ textAlign: 'center', margin: '2em' }}>
+                <h2 style={{ textAlign: 'left' }}>Soundtracks:</h2>
+                <div style={{ display: 'block', margin: '1rem' }}>
+                    <div style={{ display: 'inline-block', width: '50%', textAlign: 'left' }}>
+                        <AddSoundtrackForm refreshFunction={refreshDataTable} />
+                    </div>
+                    <div style={{ display: 'inline-block', width: '50%', textAlign: 'right' }}>
+                        <Button icon={<ReloadOutlined />} onClick={refreshDataTable} />
+                    </div>
                 </div>
-                <div style={{display: 'inline-block', width: '50%', textAlign: 'right'}}>
-                    <Button icon={<ReloadOutlined/>} onClick={refreshDataTable}/>
-                </div>
-            </div>
-            <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title"/>
-            
+                <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title" />
+
                 <Table
                     bordered
                     pagination={false}
@@ -143,9 +137,9 @@ function SoundtrackDataTable() {
                     columns={cols}
                     rowKey="_id"
                 />
-        </div>
+            </div>
         </>
     )
 }
 
-export default SoundtrackDataTable
+export default SoundtrackDataTable;
