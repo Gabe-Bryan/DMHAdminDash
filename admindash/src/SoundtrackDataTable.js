@@ -60,49 +60,6 @@ async function deleteSoundtrack(_id, dataCopy, refreshFunction) {
     }
 }
 
-<<<<<<< Updated upstream
-=======
-let uriAddress = 'http://127.0.0.1:5000'
-let data = await fetch(uriAddress+'/music/soundtracks').then( res => res.json() ).catch( () => [] )
-
-let cols = [
-    {
-        title: 'Title',
-        dataIndex: 'title',
-        key: 'title',
-        sorter: sortStringKey('title'),
-        defaultSortOrder: 'ascend'
-    },
-    {
-        title: 'Game',
-        dataIndex: ['game'],
-        key: 'game',
-        sorter: sortStringKey('game')
-    },
-    {
-        title: 'Release Date',
-        dataIndex: ['release_date'],
-        key: 'release_year',
-        sorter: sortStringKey('release_date')
-    },
-    {
-        title: 'Action',
-        dataIndex: '',
-        key: 'action',
-        render: (text, record, index) => (
-            <Space size='middle'>
-                <Button onClick={ () => { editSoundtrack(record._id) } }>
-                    edit
-                </Button>
-                <Button onClick={ () => { deleteSoundtrack(record._id) } }>
-                    delete
-                </Button>
-            </Space>
-        ),
-    },
-]
-
->>>>>>> Stashed changes
 function SoundtrackDataTable() {
 
     let [filteredData, setFilteredData] = useState(data);
