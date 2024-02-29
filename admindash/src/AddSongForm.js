@@ -479,6 +479,9 @@ function SourceForm({ soundtrackOptions, songObject }) {
                                             <Select.Option value="Soundtrack Edition">
                                                 Soundtrack Edition
                                             </Select.Option>
+                                            <Select.Option value="Game Version">
+                                                Game Version
+                                            </Select.Option>
                                         </Select>
 
                                     </Form.Item>
