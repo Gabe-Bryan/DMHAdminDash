@@ -2,7 +2,7 @@ import React from "react"
 import { useState } from "react"
 import { Table, Button, Input, Space } from "antd"
 import { ReloadOutlined } from "@ant-design/icons"
-import AddSoundtrackForm from './AddSoundtrackForm'
+import SoundtrackFormButton from './SoundtrackForm'
 import { getAllSoundtracks, deleteSoundtrackRequest } from "./APICalls";
 
 let data = await getAllSoundtracks()
@@ -89,7 +89,7 @@ function SoundtrackDataTable() {
             key: 'action',
             render: (text, record, index) => (
                 <Space size='middle'>
-                    <AddSoundtrackForm edit_id={record._id} refreshFunction={refreshDataTable} />
+                    <SoundtrackFormButton edit_id={record._id} refreshFunction={refreshDataTable} />
                     <Button onClick={() => { deleteSoundtrack(record._id, filteredData, refreshDataTable) }}>
                         delete
                     </Button>
@@ -120,7 +120,7 @@ function SoundtrackDataTable() {
                 <h2 style={{ textAlign: 'left' }}>Soundtracks:</h2>
                 <div style={{ display: 'block', margin: '1rem' }}>
                     <div style={{ display: 'inline-block', width: '50%', textAlign: 'left' }}>
-                        <AddSoundtrackForm refreshFunction={refreshDataTable} />
+                        <SoundtrackFormButton refreshFunction={refreshDataTable} />
                     </div>
                     <div style={{ display: 'inline-block', width: '50%', textAlign: 'right' }}>
                         <Button icon={<ReloadOutlined />} onClick={refreshDataTable} />

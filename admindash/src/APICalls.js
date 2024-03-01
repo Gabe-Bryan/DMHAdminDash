@@ -163,6 +163,21 @@ const getVideoDuration = async (videoId) => {
 
 }
 
+const getParsedTags = async () => {
+    const uriGet = uri + "/tags";
+    const result = await fetch(uriGet).then(async (resp) => await resp.json());
+    const tags = [];
+    for(let tag in result) {
+        delete tag._id;
+        const newTag = {
+            value: tag,
+            label: tag.tag
+        }
+        tags.push(newTag);
+    }
+    return result;
+}
+
 //this is a simple call for frontend
 //const newSong=addNewSongTitleSimple("test5","12313123",{lead_composer:'mozart', game:2, release_year: 1000})
 //addNewSongURL("https://www.youtube.com/watch?v=lzYg5d2KDF0",newSong,"Youtube","Ambient","Thirsty_Bois")
@@ -171,5 +186,5 @@ const getVideoDuration = async (videoId) => {
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
 export {
     getSongs, getSong, getAllSongs, editSong, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack, getAllSoundtracks,
-    getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest, getVideoDuration
+    getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest, getVideoDuration, getParsedTags
 };
