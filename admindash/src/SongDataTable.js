@@ -3,11 +3,12 @@ import { useState } from "react"
 import { Table, Button, Input, Space, Select } from "antd"
 import { ReloadOutlined } from "@ant-design/icons"
 import SongFormButton from "./SongForm"
-import { getAllSongs, deleteSongRequest, getAllSoundtracks } from "./APICalls"
+import { getAllSongs, deleteSongRequest, getAllSoundtracks, getParsedTags } from "./APICalls"
 
 let soundtrackData = await getAllSoundtracks();
 let data = processSongData(await getAllSongs());
-
+let tags = await getParsedTags();
+console.log(tags);
 
 function processSongData(data) {
     for (let i = 0; i < data.length; i++) {
@@ -141,6 +142,7 @@ function SongDataTable() {
                     <Button onClick={() => { deleteSong(record._id, filteredData, refreshDataTable) }}>
                         delete
                     </Button>
+
                 </Space>
             ),
         },
@@ -162,9 +164,9 @@ function SongDataTable() {
                 obj.soundtrack.toLowerCase().includes(currFilter.toLowerCase())
             ) return true;
 
-            return false
+            return false;
         })
-        setFilteredData(filteredData)
+        setFilteredData(filteredData);
     }
     return (
         <>
@@ -215,4 +217,4 @@ function SongDataTable() {
     )
 }
 
-export default SongDataTable
+export default SongDataTable;
