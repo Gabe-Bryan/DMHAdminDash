@@ -29,7 +29,7 @@ export function SourceForm({ soundtrackOptions }) {
             bordered={false}
         >
             <center>
-                <Form.List name="sources" style={{ border: "solid 1rem lime", width: "900px" }}>
+                <Form.List name="sources" style={{ border: "solid 1rem lime", width: "90%" }}>
                     {(fields, { add, remove }) => (
                         <Space style={{ rowGap: 32 }} direction="vertical">
                             {fields.map((field) => (
@@ -93,21 +93,19 @@ export function SourceForm({ soundtrackOptions }) {
                                             <Select.Option value="+Heavy Action Layer">+Heavy Action Layer</Select.Option>
                                         </Select>
                                     </Form.Item>
-                                    <Space>
-                                        <Form.Item
-                                            label="Alternate Version Title"
-                                            name={[field.name, "version_title"]}
-                                        >
-                                            <Input></Input>
-                                        </Form.Item>
-                                        <Form.Item
-                                            label="Is it an official release"
-                                            name={[field.name, "is_official"]}
-                                            valuePropName="checked"
-                                        >
-                                            <Checkbox></Checkbox>
-                                        </Form.Item>
-                                    </Space>
+                                    <Form.Item
+                                        label="Alternate Version Title"
+                                        name={[field.name, "version_title"]}
+                                    >
+                                        <Input></Input>
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Is it an official release"
+                                        name={[field.name, "is_official"]}
+                                        valuePropName="checked"
+                                    >
+                                        <Checkbox></Checkbox>
+                                    </Form.Item>
 
 
                                     <Form.Item label="Soundtrack" name={[field.name, "soundtrack_id"]} initialValue={false} required>

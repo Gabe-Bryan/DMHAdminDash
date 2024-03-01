@@ -157,58 +157,47 @@ function SongForm({
                         initialValues={contents}
                         autoComplete="off"
                     >
-                        <Row>
-                            <Col span={12}>
-                                <Form.Item
-                                label="Track group title"
-                                name="song_title"
-                                valuePropName="value"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please input your Song Title!",
-                                    },
-                                ]}
-                                >
-                                    <Input placeholder="Track group title"  />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                label="Composers"
-                                name="lead_composer"
-                                valuePropName="value"
-                                >
-                                    <Input placeholder="Composers" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                        <Form.Item >
-                            <Form.Item
-                                name="release_year"
-                                label="Release Year"
-                                valuePropName="value"
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: "Please select the Release Year!",
-                                    }
-                                ]}
-                                style = {{display: 'inline-block'}}
-                            >
-                                <YearPicker />
-                            </Form.Item>
-                        
-                            <Form.Item
-                                name="implementation_year"
-                                label="Add-to-game Year"
-                                valuePropName="value"
-                                {...config}
-                                style = {{display: 'inline-block'}}
-                            >
-                                <YearPicker />
-                            </Form.Item>
-
+                        <Form.Item
+                        label="Track group title"
+                        name="song_title"
+                        valuePropName="value"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input your Song Title!",
+                            },
+                        ]}
+                        >
+                            <Input placeholder="Track group title"  />
+                        </Form.Item>
+                        <Form.Item
+                        label="Composers"
+                        name="lead_composer"
+                        valuePropName="value"
+                        >
+                            <Input placeholder="Composers" />
+                        </Form.Item>
+                        <Form.Item
+                            name="release_year"
+                            label="Release Year"
+                            valuePropName="value"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Please select the Release Year!",
+                                }
+                            ]}
+                        >
+                            <YearPicker />
+                        </Form.Item>
+                    
+                        <Form.Item
+                            name="implementation_year"
+                            label="Add-to-game Year"
+                            valuePropName="value"
+                            {...config}
+                        >
+                            <YearPicker />
                         </Form.Item>
 
                         <Form.Item
