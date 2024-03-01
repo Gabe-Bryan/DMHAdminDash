@@ -53,7 +53,7 @@ function SoundtrackForm({open, onCancel, onFinish, contents}) {
     )
 }
 
-function AddSoundtrackForm ({edit_id = undefined, refreshFunction}) {
+function SoundtrackFormButton ({edit_id = undefined, refreshFunction}) {
     const [open, setOpen] = useState(false);
     const [contents, setContents] = useState({});
     const submitSoundtrack = async (values, form) => {
@@ -120,4 +120,4 @@ function AddSoundtrackForm ({edit_id = undefined, refreshFunction}) {
       );
 }
 
-export default AddSoundtrackForm
+export default SoundtrackFormButton
