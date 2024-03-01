@@ -167,15 +167,15 @@ const getParsedTags = async () => {
     const uriGet = uri + "/tags";
     const result = await fetch(uriGet).then(async (resp) => await resp.json());
     const tags = [];
-    for(let tag in result) {
+    for(let tag of result) {
         delete tag._id;
         const newTag = {
-            value: tag,
+            value: tag.tag,
             label: tag.tag
         }
         tags.push(newTag);
     }
-    return result;
+    return tags;
 }
 
 //this is a simple call for frontend
