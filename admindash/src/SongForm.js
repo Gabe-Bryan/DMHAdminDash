@@ -3,18 +3,20 @@ import {
     Button, Input, Space,
     ConfigProvider, theme,
     Form, DatePicker, Radio,
-    notification, Modal, Row,
-    Col,
+    notification, Modal, Select
 } from "antd";
 import {
     editSong,
     addNewSongTitleSimple,
     getVideoDuration,
+    getTags
 } from "./APICalls";
 import dayjs from "dayjs";
 import { SourceForm } from "./SourceForm";
 
 const { YearPicker } = DatePicker;
+
+const tags = [];
 
 const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
     const notifKey = 'submission'
@@ -222,6 +224,10 @@ function SongForm({
 
                         <Form.Item name="faction" label="Faction" valuePropName="value">
                             <Input placeholder="Faction" ></Input>
+                        </Form.Item>
+
+                        <Form.Item name="tags" label="Tags" valuePropName="value">
+                            <Select mode = 'tags' options = {tags}/>
                         </Form.Item>
 
                         <Space
