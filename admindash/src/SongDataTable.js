@@ -1,12 +1,13 @@
 import React from "react"
 import { useState } from "react"
-import { Table, Button, Input, Space } from "antd"
+import { Table, Button, Input, Space, Select } from "antd"
 import { ReloadOutlined } from "@ant-design/icons"
 import AddSongForm from "./AddSongForm"
 import { getAllSongs, deleteSongRequest, getAllSoundtracks, getSong } from "./APICalls"
 
 let soundtrackData = await getAllSoundtracks();
 let data = processSongData(await getAllSongs());
+
 
 function processSongData(data) {
     for (let i = 0; i < data.length; i++) {
@@ -106,10 +107,6 @@ function SongDataTable() {
             sorter: sortStringMetaKey('lead_composer')
         },
         {
-            /*
-                TEST THIS AFTER MERGING BRANCH UP TO MAIN
-                (is dataIndex set correctly for whats in database?)
-            */
             title: 'Soundtrack',
             dataIndex: ['soundtrack'],
             key: 'soundtrack',
@@ -126,6 +123,11 @@ function SongDataTable() {
             dataIndex: ['meta_data', 'release_year'],
             key: 'release_year',
             sorter: sortStringMetaKey('release_year')
+        },
+        {
+            title: 'Tags',
+            dataIndex: ['meta_data', 'tags'],
+            key: 'tags',
         },
         {
             title: 'Action',
@@ -178,7 +180,26 @@ function SongDataTable() {
                     </div>
                 </div>
 
-                <Input onChange={(evt) => filterDataTable(evt.target.value)} placeholder="Filter by title, lead composer, soundtrack" />
+                <div style={{ display: 'block' }}>
+                    <div style={{ display: 'inline-block', width: '50%' }}>
+                        <Input
+                            style={{ textAlign: 'center' }}
+                            placeholder="Filter by title, lead composer, soundtrack"
+                            onChange={(evt) => filterDataTable(evt.target.value)}
+                        />
+                    </div>
+
+                    {/* <div style={{ display: 'inline-block' }}>
+                    </div> */}
+
+                    <div style={{ display: 'inline-block', width: '50%' }}>
+                        <Select
+                            style={{ width: '100%' }}
+                            mode="tags"
+                            placeholder="Filter by tags"
+                        />
+                    </div>
+                </div>
 
                 <Table
                     bordered
