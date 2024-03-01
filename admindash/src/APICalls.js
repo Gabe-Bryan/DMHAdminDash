@@ -163,9 +163,18 @@ const getVideoDuration = async (videoId) => {
 
 }
 
-const getTags = async () => {
+const getParsedTags = async () => {
     const uriGet = uri + "/tags";
     const result = await fetch(uriGet).then(async (resp) => await resp.json());
+    const tags = [];
+    for(let tag in result) {
+        delete tag._id;
+        const newTag = {
+            value: tag,
+            label: tag.tag
+        }
+        tags.push(newTag);
+    }
     return result;
 }
 
@@ -177,5 +186,5 @@ const getTags = async () => {
 //addNewSongTitleSimple(0,null,{lead_composer:0, game:0, release_year:0},[],0)
 export {
     getSongs, getSong, getAllSongs, editSong, addNewSongTitleSimple, addNewSongURL, addNewSoundtrack, getAllSoundtracks,
-    getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest, getVideoDuration, getTags
+    getSoundtrack, editSoundtrack, deleteSongRequest, deleteSoundtrackRequest, getVideoDuration, getParsedTags
 };
