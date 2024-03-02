@@ -3,18 +3,20 @@ import {
     Button, Input, Space,
     ConfigProvider, theme,
     Form, DatePicker, Radio,
-    notification, Modal, Row,
-    Col,
+    notification, Modal, Select
 } from "antd";
 import {
     editSong,
     addNewSongTitleSimple,
     getVideoDuration,
+    getParsedTags
 } from "./APICalls";
 import dayjs from "dayjs";
 import { SourceForm } from "./SourceForm";
 
 const { YearPicker } = DatePicker;
+
+const tags = await getParsedTags();
 
 const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
     const notifKey = 'submission'
@@ -27,7 +29,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
     //process all sources if they exist
     //extracts video id from a url
     let sourcesArray = await processSources(values.sources);
-    
+    console.log('tags:', values.tags);
     const metaData = {
         lead_composer: values.lead_composer,
         game: values.game,
@@ -35,6 +37,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
         implementation_year: values.implementation_year === undefined ? undefined : values.implementation_year.format("YYYY"),
         destination: values.destination,
         faction: values.faction,
+        tags: values.tags,
     };
 
     console.log("sources:", sourcesArray);
@@ -224,6 +227,10 @@ function SongForm({
                             <Input placeholder="Faction" ></Input>
                         </Form.Item>
 
+                        <Form.Item name="tags" label="Tags" valuePropName="value">
+                            <Select mode = 'tags' options = {tags}/>
+                        </Form.Item>
+
                         <Space
                             direction="vertical"
                             size="large"
@@ -257,6 +264,7 @@ function SongFormButton({ edit_id = undefined, refreshFunction, soundtrackData, 
                 sources: values.sources,
                 destination: values.meta_data.destination,
                 faction: values.meta_data.faction,
+                tags: values.meta_data.tags
             });
         } else {
             console.log(edit_id);
