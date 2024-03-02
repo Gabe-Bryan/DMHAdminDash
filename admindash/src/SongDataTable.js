@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { Table, Button, Input, Space, Select } from "antd"
+import { Table, Button, Input, Space, Select, Tag } from "antd"
 import { ReloadOutlined } from "@ant-design/icons"
 import SongFormButton from "./SongForm"
 import { getAllSongs, deleteSongRequest, getAllSoundtracks, getParsedTags } from "./APICalls"
@@ -90,7 +90,7 @@ function SongDataTable() {
     const refreshDataTable = async () => {
         data = processSongData(await getAllSongs());
         filterDataTable();
-    }
+    };
 
     let cols = [
         {
@@ -128,6 +128,25 @@ function SongDataTable() {
             title: 'Tags',
             dataIndex: ['meta_data', 'tags'],
             key: 'tags',
+            render: (_, songItem) => {
+
+                let songTags = songItem.meta_data.tags;
+
+                if (songTags) {
+
+                    let labelDivs = [];
+
+                    for (let tag of songTags) {
+                        labelDivs.push(
+                            <Tag>{tag}</Tag>
+                        );
+                    }
+
+                    return (
+                        <>{labelDivs}</>
+                    );
+                }
+            },
         },
         {
             title: 'Action',
@@ -136,11 +155,11 @@ function SongDataTable() {
             render: (text, record, index) => (
                 <Space size='middle'>
 
-                    <SongFormButton 
-                        edit_id={record._id} 
-                        soundtrackData={[...soundtrackData]} 
-                        refreshFunction={refreshDataTable} 
-                        songObject={getSongObject(record._id)} 
+                    <SongFormButton
+                        edit_id={record._id}
+                        soundtrackData={[...soundtrackData]}
+                        refreshFunction={refreshDataTable}
+                        songObject={getSongObject(record._id)}
                     />
 
                     <Button onClick={() => { deleteSong(record._id, filteredData, refreshDataTable) }}>
@@ -158,20 +177,48 @@ function SongDataTable() {
             setStringFilter(value);
             currFilter = value;
         }
-        filteredData = data.filter((obj) => {
+        filteredData = data.filter((song) => {
             if (
                 /*
                     ADD MORE FILTERS HERE IF NEEDED
                 */
-                obj.title.toLowerCase().includes(currFilter.toLowerCase()) ||
-                obj.meta_data.lead_composer?.toLowerCase().includes(currFilter.toLowerCase()) ||
-                obj.soundtrack.toLowerCase().includes(currFilter.toLowerCase())
+                song.title.toLowerCase().includes(currFilter.toLowerCase()) ||
+                song.meta_data.lead_composer?.toLowerCase().includes(currFilter.toLowerCase()) ||
+                song.soundtrack.toLowerCase().includes(currFilter.toLowerCase())
             ) return true;
 
             return false;
         })
         setFilteredData(filteredData);
     }
+
+    function tagFilterDataTable(tagValues = undefined) {
+
+        /*
+            FIGURE THIS OUT
+        */
+
+
+
+        // if (tagValues.length === 0) {
+        //     console.log("## no tag filters ##");
+        //     setFilteredData(filteredData);
+        // } else {
+        //     console.log('## TAGVALUES ##', tagValues);
+        //     // let filteredWithTags = { ...filteredData };
+        //     let filteredWithTags = filteredData.filter((song) => {
+
+
+        //         for (let tag of tagValues) {
+
+        //         }
+
+        //         return song.meta_data.tags?.includes();
+        //     });
+        //     setFilteredData(filteredWithTags);
+        // }
+    }
+
     return (
         <>
             <div style={{ textAlign: 'center', margin: '2em' }}>
@@ -205,6 +252,7 @@ function SongDataTable() {
                             placeholder="Filter by tags"
                             tokenSeparators={[',']}
                             options={tags}
+                            onChange={tagFilterDataTable}
                         />
                     </div>
                 </div>
