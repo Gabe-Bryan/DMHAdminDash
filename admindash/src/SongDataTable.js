@@ -8,7 +8,6 @@ import { getAllSongs, deleteSongRequest, getAllSoundtracks, getParsedTags } from
 let soundtrackData = await getAllSoundtracks();
 let data = processSongData(await getAllSongs());
 let tags = await getParsedTags();
-console.log(tags);
 
 function processSongData(data) {
     for (let i = 0; i < data.length; i++) {
@@ -137,7 +136,12 @@ function SongDataTable() {
             render: (text, record, index) => (
                 <Space size='middle'>
 
-                    <SongFormButton edit_id={record._id} soundtrackData={[...soundtrackData]} refreshFunction={refreshDataTable} songObject={getSongObject(record._id)} />
+                    <SongFormButton 
+                        edit_id={record._id} 
+                        soundtrackData={[...soundtrackData]} 
+                        refreshFunction={refreshDataTable} 
+                        songObject={getSongObject(record._id)} 
+                    />
 
                     <Button onClick={() => { deleteSong(record._id, filteredData, refreshDataTable) }}>
                         delete
@@ -197,8 +201,10 @@ function SongDataTable() {
                     <div style={{ display: 'inline-block', width: '50%' }}>
                         <Select
                             style={{ width: '100%' }}
-                            mode="tags"
+                            mode="multiple"
                             placeholder="Filter by tags"
+                            tokenSeparators={[',']}
+                            options={tags}
                         />
                     </div>
                 </div>
