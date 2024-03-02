@@ -156,7 +156,7 @@ function SongDataTable() {
                     ADD MORE FILTERS HERE IF NEEDED
                 */
                 obj.title.toLowerCase().includes(currFilter.toLowerCase()) ||
-                obj.meta_data.lead_composer.toLowerCase().includes(currFilter.toLowerCase()) ||
+                obj.meta_data.lead_composer?.toLowerCase().includes(currFilter.toLowerCase()) ||
                 obj.soundtrack.toLowerCase().includes(currFilter.toLowerCase())
             ) return true;
 
