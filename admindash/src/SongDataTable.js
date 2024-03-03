@@ -232,6 +232,7 @@ function SongDataTable() {
                         display: 'block',
                         marginBottom: '1rem',
                         padding: '0.5rem',
+                        paddingTop: '0rem',
                         textAlign: 'left',
                         width: '100%',
                     }}
@@ -241,11 +242,12 @@ function SongDataTable() {
                         style={{
                             font: '0.9rem monospace',
                             display: 'inline-block',
-                            marginRight: '0.5rem',
-                            marginBottom: '0.5rem',
+                            margin: '0.5rem',
+                            // marginRight: '0.5rem',
+                            // marginBottom: '0.5rem',
                         }}
                     >
-                        &nbsp;Filter Mode:
+                        Filter Mode:
                     </div>
 
                     <div style={{ display: 'inline-block' }}>
