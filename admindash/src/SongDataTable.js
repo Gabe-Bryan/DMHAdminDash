@@ -1,6 +1,6 @@
 import React from "react"
 import { useState } from "react"
-import { Table, Button, Input, Space, Select, Tag } from "antd"
+import { Table, Button, Input, Space, Select, Tag, Radio } from "antd"
 import { ReloadOutlined } from "@ant-design/icons"
 import SongFormButton from "./SongForm"
 import { getAllSongs, deleteSongRequest, getAllSoundtracks, getParsedTags } from "./APICalls"
@@ -85,8 +85,11 @@ async function deleteSong(_id, dataCopy, refreshFunction) {
 }
 
 function SongDataTable() {
+
     let [filteredData, setFilteredData] = useState(data);
     let [filterString, setStringFilter] = useState('');
+    let [searchType, setSearchType] = useState(2);  // 1 - Filter string search, 2 - Tag search
+
     const refreshDataTable = async () => {
         data = processSongData(await getAllSongs());
         filterDataTable();
@@ -173,22 +176,23 @@ function SongDataTable() {
 
     function filterDataTable(value = undefined) {
         let currFilter = filterString;
+
         if (value !== undefined) {
             setStringFilter(value);
             currFilter = value;
         }
+
         filteredData = data.filter((song) => {
-            if (
-                /*
-                    ADD MORE FILTERS HERE IF NEEDED
-                */
+            /*
+                    ADD MORE FILTERS INSIDE RETURN BELOW IF NEEDED
+            */
+            return (
                 song.title.toLowerCase().includes(currFilter.toLowerCase()) ||
                 song.meta_data.lead_composer?.toLowerCase().includes(currFilter.toLowerCase()) ||
                 song.soundtrack.toLowerCase().includes(currFilter.toLowerCase())
-            ) return true;
+            );
+        });
 
-            return false;
-        })
         setFilteredData(filteredData);
     }
 
@@ -198,7 +202,7 @@ function SongDataTable() {
             FIGURE THIS OUT
         */
 
-
+        
 
         // if (tagValues.length === 0) {
         //     console.log("## no tag filters ##");
@@ -233,28 +237,48 @@ function SongDataTable() {
                     </div>
                 </div>
 
-                <div style={{ display: 'block' }}>
-                    <div style={{ display: 'inline-block', width: '50%' }}>
-                        <Input
-                            style={{ textAlign: 'center' }}
-                            placeholder="Filter by title, lead composer, soundtrack"
-                            onChange={(evt) => filterDataTable(evt.target.value)}
-                        />
+
+                <div style={{ display: 'block', width: '100%', textAlign: 'left'}}>
+
+                    <div
+                        style={{
+                            font: '0.9rem monospace',
+                            display: 'inline-block',
+                            marginRight: '0.5rem',
+                        }}
+                    >
+                        &nbsp;Filter Mode:
                     </div>
 
-                    {/* <div style={{ display: 'inline-block' }}>
-                    </div> */}
-
-                    <div style={{ display: 'inline-block', width: '50%' }}>
-                        <Select
-                            style={{ width: '100%' }}
-                            mode="multiple"
-                            placeholder="Filter by tags"
-                            tokenSeparators={[',']}
-                            options={tags}
-                            onChange={tagFilterDataTable}
-                        />
+                    <div style={{ display: 'inline-block' }}>
+                        <Radio.Group defaultValue={2} onChange={(evt) =>{setSearchType(evt.target.value);filterDataTable("");}}>
+                            <Radio value={1} style={{ font: '0.9rem monospace' }}> Text </Radio>
+                            <Radio value={2} style={{ font: '0.9rem monospace' }}> Tag </Radio>
+                        </Radio.Group>
                     </div>
+
+                    {searchType === 1 &&
+                        <div style={{ display: 'inline-block', width: '100%' }}>
+                            <Input
+                                style={{ font: '0.9rem monospace', height: '2rem' }}
+                                placeholder="Filter by title, lead composer, soundtrack"
+                                onChange={(evt) => filterDataTable(evt.target.value)}
+                            />
+                        </div>
+                    }
+
+                    {searchType === 2 &&
+                        <div style={{ display: 'inline-block', width: '100%' }}>
+                            <Select
+                                style={{ height: '2rem', width: '100%', textAlign: 'left', font: '0.9rem monospace' }}
+                                mode="multiple"
+                                placeholder="Filter by tags"
+                                tokenSeparators={[',']}
+                                options={tags}
+                                onChange={tagFilterDataTable}
+                            />
+                        </div>
+                    }
                 </div>
 
                 <Table
