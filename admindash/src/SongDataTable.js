@@ -141,7 +141,7 @@ function SongDataTable() {
 
                     for (let tag of songTags) {
                         labelDivs.push(
-                            <Tag>{tag}</Tag>
+                            <Tag key={tag}>{tag}</Tag>
                         );
                     }
 
@@ -197,30 +197,16 @@ function SongDataTable() {
     }
 
     function tagFilterDataTable(tagValues = undefined) {
+        filteredData = data.filter((song) => {
+            for (let tag of tagValues) {
+                if (!song.meta_data.tags?.includes(tag)) {
+                    return false;
+                }
+            }
+            return true;
+        });
 
-        /*
-            FIGURE THIS OUT
-        */
-
-        
-
-        // if (tagValues.length === 0) {
-        //     console.log("## no tag filters ##");
-        //     setFilteredData(filteredData);
-        // } else {
-        //     console.log('## TAGVALUES ##', tagValues);
-        //     // let filteredWithTags = { ...filteredData };
-        //     let filteredWithTags = filteredData.filter((song) => {
-
-
-        //         for (let tag of tagValues) {
-
-        //         }
-
-        //         return song.meta_data.tags?.includes();
-        //     });
-        //     setFilteredData(filteredWithTags);
-        // }
+        setFilteredData(filteredData);
     }
 
     return (
@@ -238,20 +224,32 @@ function SongDataTable() {
                 </div>
 
 
-                <div style={{ display: 'block', width: '100%', textAlign: 'left'}}>
+                <div
+                    style={{
+                        backgroundColor: '#f0f0f0',
+                        border: 'solid 1px #d9d9d9',
+                        borderRadius: '0.5rem',
+                        display: 'block',
+                        marginBottom: '1rem',
+                        padding: '0.5rem',
+                        textAlign: 'left',
+                        width: '100%',
+                    }}
+                >
 
                     <div
                         style={{
                             font: '0.9rem monospace',
                             display: 'inline-block',
                             marginRight: '0.5rem',
+                            marginBottom: '0.5rem',
                         }}
                     >
                         &nbsp;Filter Mode:
                     </div>
 
                     <div style={{ display: 'inline-block' }}>
-                        <Radio.Group defaultValue={2} onChange={(evt) =>{setSearchType(evt.target.value);filterDataTable("");}}>
+                        <Radio.Group defaultValue={2} onChange={(evt) => { setSearchType(evt.target.value); filterDataTable(""); }}>
                             <Radio value={1} style={{ font: '0.9rem monospace' }}> Text </Radio>
                             <Radio value={2} style={{ font: '0.9rem monospace' }}> Tag </Radio>
                         </Radio.Group>
