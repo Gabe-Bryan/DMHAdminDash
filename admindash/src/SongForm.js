@@ -118,7 +118,7 @@ const customDarkTheme = {
 function SongForm({
     open, setOpen,
     onFinish, onCancel, refreshFunction,
-    contents = {},
+    contents = undefined,
     _id = undefined, songObject, soundtrackData,
 }) {
     const [form] = Form.useForm();
@@ -207,8 +207,10 @@ function SongForm({
                             name="game"
                             label="Game"
                             valuePropName="value"
+                            required
+                            initialValue={"0"}
                         >
-                            <Radio.Group defaultValue={"0"}>
+                            <Radio.Group>
                                 <Radio value="1">Destiny 1</Radio>
                                 <Radio value="2">Destiny 2</Radio>
                                 <Radio value="0">Other</Radio>
@@ -243,7 +245,7 @@ function SongForm({
 function SongFormButton({ edit_id = undefined, refreshFunction, soundtrackData, songObject }) {
 
     const [open, setOpen] = useState(false);
-    const [contents, setContents] = useState({});
+    const [contents, setContents] = useState({tags: ['incomplete']});
     const openForm = async () => {
         if (edit_id) {
             const values = songObject;
@@ -256,7 +258,7 @@ function SongFormButton({ edit_id = undefined, refreshFunction, soundtrackData, 
                 sources: values.sources,
                 destination: values.meta_data.destination,
                 faction: values.meta_data.faction,
-                tags: values.meta_data.tags
+                tags: values.meta_data.tags ? values.meta_data.tags : []
             });
         } else {
             console.log(edit_id);

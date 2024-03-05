@@ -88,7 +88,7 @@ function SongDataTable() {
 
     let [filteredData, setFilteredData] = useState(data);
     let [filterString, setStringFilter] = useState('');
-    let [searchType, setSearchType] = useState(2);  // 1 - Filter string search, 2 - Tag search
+    let [searchType, setSearchType] = useState(1);  // 1 - Filter string search, 2 - Tag search
 
     const refreshDataTable = async () => {
         data = processSongData(await getAllSongs());
@@ -251,7 +251,7 @@ function SongDataTable() {
                     </div>
 
                     <div style={{ display: 'inline-block' }}>
-                        <Radio.Group defaultValue={2} onChange={(evt) => { setSearchType(evt.target.value); filterDataTable(""); }}>
+                        <Radio.Group defaultValue={1} onChange={(evt) => { setSearchType(evt.target.value); filterDataTable(""); }}>
                             <Radio value={1} style={{ font: '0.9rem monospace' }}> Text </Radio>
                             <Radio value={2} style={{ font: '0.9rem monospace' }}> Tag </Radio>
                         </Radio.Group>
