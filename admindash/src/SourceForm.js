@@ -17,26 +17,30 @@ export function SourceForm({ soundtrackOptions }) {
 
     }
     return (
-
+        
         <Card
             title="Sources"
             headStyle={{
                 backgroundColor: "#E8D8E6",
                 color: "#7458e2",
-                borderColor: "#E8D8E6",
+                // borderColor: "#E8D8E6",
             }}
-            bodyStyle={{ backgroundColor: "#E8D8E6", borderColor: "#E8D8E6" }}
+            bodyStyle={{ 
+                backgroundColor: "#E8D8E6", 
+                // borderColor: "#E8D8E6" 
+            }}
             bordered={false}
+            // style={{padding: "auto"}}
         >
             <center>
-                <Form.List name="sources" style={{ border: "solid 1rem lime", width: "90%" }}>
+                <Form.List name="sources" style={{ border: "solid 1rem lime", width: "90%"}}>
                     {(fields, { add, remove }) => (
-                        <Space style={{ rowGap: 32 }} direction="vertical">
+                        <div>
                             {fields.map((field) => (
-                                <Card key={field.key}>
-                                    <center align="right">
+                                <Card key={field.key} style = {{width: "80%", marginBottom: "2rem" }}>
+                                    <div align="right">
                                         <CloseOutlined onClick={() => remove(field.name)} />
-                                    </center>
+                                    </div>
                                     {/* <Space> */}
                                     <Form.Item
                                         label="video id/url"
@@ -133,7 +137,7 @@ export function SourceForm({ soundtrackOptions }) {
                             >
                                 Add New Source
                             </Button>
-                        </Space>
+                        </div>
                     )}
                 </Form.List>
             </center>

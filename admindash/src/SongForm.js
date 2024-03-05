@@ -98,9 +98,9 @@ const lightMode = {
     token: {
         colorText: "#7458e2",
         // Seed Token
-        colorPrimary: "#7458e2",
+        // colorPrimary: "#7458e2",
         // Alias Token
-        colorBgContainer: "#fbf3ff",
+        // colorBgContainer: "#fbf3ff",
         algorithm: theme.compactAlgorithm,
     },
 };
@@ -208,10 +208,10 @@ function SongForm({
                             label="Game"
                             valuePropName="value"
                         >
-                            <Radio.Group>
+                            <Radio.Group defaultValue={"0"}>
                                 <Radio value="1">Destiny 1</Radio>
                                 <Radio value="2">Destiny 2</Radio>
-                                <Radio value="0" checked>Other</Radio>
+                                <Radio value="0">Other</Radio>
                             </Radio.Group>
                         </Form.Item>
 
@@ -230,16 +230,8 @@ function SongForm({
                         <Form.Item name="tags" label="Tags" valuePropName="value">
                             <Select mode = 'tags' options = {tags}/>
                         </Form.Item>
-
-                        <Space
-                            direction="vertical"
-                            size="large"
-                            style={{ display: "flex" }}
-                        >
-                            <div style={{ width: "90%" }}>
-                                <SourceForm soundtrackOptions={soundtrackOptions} songObject={songObject} />
-                            </div>
-                        </Space>
+                        
+                        <SourceForm soundtrackOptions={soundtrackOptions} songObject={songObject} />
                     </Form>
                 </ConfigProvider>
             </div>
