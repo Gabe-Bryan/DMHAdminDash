@@ -234,7 +234,7 @@ function SongDataTable() {
                         padding: '0.5rem',
                         paddingTop: '0rem',
                         textAlign: 'left',
-                        width: '100%',
+                        width: '99%',
                     }}
                 >
 
