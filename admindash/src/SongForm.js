@@ -59,7 +59,7 @@ const onFinish = async (values, _id, refreshFunction, setOpen, resetFields) => {
             resetFields();
         }
     } else {
-        console.error("A song form submission error was caught!!! :(");
+        console.error("A song form submission error was caught!!! :(", response.errors);
         let errorString = "";
         for (let error of response.errors) {
             let newError = "";

@@ -148,15 +148,33 @@ const deleteSoundtrackRequest = async (itemId, apiKey=url_api_key) => {
 }
 
 const getVideoDuration = async (videoId) => {
+    console.log("video id:", videoId);
     const uri = "https://www.googleapis.com/youtube/v3/videos?id=" + videoId + "&part=contentDetails&key=" + ytApiKey;
     const contentDetails = await fetch(uri).then(async (resp) => await resp.json());
     console.log(contentDetails);
     if (contentDetails !== undefined && contentDetails.items && contentDetails.items[0]) {
         const rawDuration = contentDetails.items[0].contentDetails.duration;
-        const reg = /PT([0-9]+)M([0-9]+)S/;
+        const reg = /PT([0-9]*M)?([0-9]*S)?/;
         const match = rawDuration.match(reg);
+        console.log('regex:', match);
+        let duration = 0;
+        for (let i = 1; i < match.length; i++){
+            //Ensure that it isn't undefined
+            if (!match[i]){
+                continue;
+            }
+            
+            let lastIndex = match[i].length - 1;
+            if (match[i][lastIndex] === 'M'){
+                duration += parseInt(match[i].substring(0, lastIndex)) * 60;
+            }
+            if (match[i][lastIndex] === 'S'){
+                duration += parseInt(match[i].substring(0, lastIndex));
+            }
+            console.log("duration:", duration);
+        }
 
-        return parseInt(match[1]) * 60 + parseInt(match[2]);
+        return duration;
     } else {
         return { error: "Invalid video id, not on youtube!" };
     }

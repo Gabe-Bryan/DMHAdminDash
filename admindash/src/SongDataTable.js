@@ -92,6 +92,7 @@ function SongDataTable() {
 
     const refreshDataTable = async () => {
         data = processSongData(await getAllSongs());
+        tags = await getParsedTags();
         filterDataTable();
     };
 
